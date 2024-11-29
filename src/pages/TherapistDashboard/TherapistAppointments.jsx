@@ -22,6 +22,12 @@ const TherapistAppointments = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
+    // try {
+
+    // } catch (error) {
+
+    // }
+
     console.log(formData);
     setToggleModel(false);
   };

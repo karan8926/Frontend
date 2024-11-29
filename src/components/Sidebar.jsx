@@ -35,7 +35,7 @@ const Sidebar = () => {
         path: "/admin/allAppointment",
       },
       {
-        label: "Users",
+        label: "Patient",
         path: "/admin/patientsList",
       },
       {

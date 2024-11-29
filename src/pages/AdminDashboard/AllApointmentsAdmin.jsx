@@ -121,6 +121,7 @@ const AllApointmentsAdmin = () => {
                   <tr className="h-10">
                     <th className="font-bold p-2 text-left">sr no</th>
                     <th className="font-bold p-2 text-left">Name</th>
+                    <th className="font-bold p-2 text-left">Therapist Name</th>
                     <th className="font-bold p-2 text-left">Date</th>
                     <th className="font-bold p-2 text-left">Time</th>
                     <th className="font-bold p-2 text-left">Status</th>
@@ -131,6 +132,7 @@ const AllApointmentsAdmin = () => {
                     <tr key={index} className="border-t">
                       <td className="p-2">{data.srNo}</td>
                       <td className="p-2">{data.name}</td>
+                      <td className="p-2">{"data.therapistName"}</td>
                       <td className="p-2">{data.date}</td>
                       <td className="p-2">{data.time}</td>
                       <td className="p-2">

@@ -11,11 +11,17 @@ const UserLoggedin = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const userDate = await axios.post(baseUrl, accessCode);
-      localStorage.setItem("userDetails", {
-        userType: "patient",
-        name: "adom",
-      });
+      const reqbody = {
+        accessCode : accessCode
+      }
+      const PatientResult = await axios.post(`${baseUrl}api/patient-signin`, reqbody);
+      localStorage.setItem(
+        "userDetails",
+        JSON.stringify({
+          userType: "patient",
+          accessToken: PatientResult.data.accessToken,
+        })
+      );
       toast.success("logged in successfully");
       navigate("/patient/allAppointment");
     } catch (error) {

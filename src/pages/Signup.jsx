@@ -1,13 +1,34 @@
 import React, { useState } from "react";
+import { baseUrl } from "../App";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [number, setNumber] = useState("");
   const [name, setName] = useState("");
-  const handleSubmit = (event) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     // Handle form submission logic here
     console.log({ email, number, name });
+    try {
+      const formData = {
+        name,
+        phone_number: number,
+        email,
+      };
+      const response = await axios.post(`${baseUrl}api/patient-signup`, formData);
+      toast.success("Patient added successfully");
+      navigate("/signin");
+      console.log("patient data",response)
+    } catch (error) {
+      toast.error("failed to add");
+      console.log(error);
+    }
+   
   };
 
   return (

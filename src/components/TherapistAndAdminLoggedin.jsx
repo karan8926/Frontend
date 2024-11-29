@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../App";
 import { toast } from "react-toastify";
 
-const TherapistAndAdminLoggedin = () => {
+const TherapistAndAdminLoggedin = (props) => {
+  const userType = props?.userType;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -12,17 +13,27 @@ const TherapistAndAdminLoggedin = () => {
     event.preventDefault();
     try {
       const reqbody = {
-        name : email,
+        name: email,
         email: email,
-        password: password
+        password: password,
+      };
+
+      let Result;
+      if (userType === "admin") {
+        Result = await axios.post(`${baseUrl}api/admin-login`, reqbody);
+      } else {
+        Result = await axios.post(`${baseUrl}api/therapist-login`, reqbody);
       }
-      const adminResult = await axios.post(`${baseUrl}api/admin-login`, reqbody);
+
+      console.log(Result, "result data");
 
       localStorage.setItem(
         "userDetails",
         JSON.stringify({
-          userType: "Admin",
-          data: adminResult.data.token
+          userType: Result.data.data.type,
+          userEmail: Result.data.data.email,
+          userName: Result.data.data.name,
+          data: Result.data.token,
         })
       );
       toast.success("logged in successfully");

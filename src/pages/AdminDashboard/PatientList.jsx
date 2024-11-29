@@ -4,22 +4,25 @@ import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { baseUrl } from "../../App";
 
 const PatientList = () => {
   const [patientList, setPatientList] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://api.example.com/data");
-      setPatientList(response.data);
+      const response = await axios.get( `${baseUrl}api/getpatient`);
+      // console.log("response---", response.data)
+      setPatientList(response.data.patients);
     } catch (err) {
       console.log(err);
       toast.error("Error while Fetching Data");
     }
   };
 
-  // useEffect(()=>{
-  //  fetchData()
-  // },[])
+  useEffect(()=>{
+   fetchData()
+  },[])
+
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -36,17 +39,23 @@ const PatientList = () => {
                   <tr className="h-10">
                     <th className="font-bold p-2 text-left">sr no</th>
                     <th className="font-bold p-2 text-left">Name</th>
-                    <th className="font-bold p-2 text-left">Date</th>
-                    <th className="font-bold p-2 text-left">Time</th>
+                    <th className="font-bold p-2 text-left">Email</th>
+                    <th className="font-bold p-2 text-left">Number</th>
+                    <th className="font-bold p-2 text-left">Type</th>
+                    {/* <th className="font-bold p-2 text-left">Date</th>
+                    <th className="font-bold p-2 text-left">Time</th> */}
                   </tr>
                 </thead>
                 <tbody>
                   {patientList.map((data, index) => (
                     <tr key={index} className="border-t">
-                      <td className="p-2">{data.srNo}</td>
+                      <td className="p-2">{index + 1}</td>
                       <td className="p-2">{data.name}</td>
-                      <td className="p-2">{data.date}</td>
-                      <td className="p-2">{data.time}</td>
+                      <td className="p-2">{data.email}</td>
+                      <td className="p-2">{data.phone_number}</td>
+                      <td className="p-2">{data.type}</td>
+                      {/* <td className="p-2">{data.date}</td>
+                      <td className="p-2">{data.time}</td> */}
                     </tr>
                   ))}
                 </tbody>

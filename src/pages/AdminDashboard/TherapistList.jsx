@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Pagination from "../../components/Pagination";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
@@ -30,9 +30,10 @@ const TherapistList = () => {
     // console.log(formData);
     try {
       const therapistData = await axios.post(
-        `${baseUrl}/AddTherapist`,
+        `${baseUrl}api/AddTherapist`,
         formData
       );
+      console.log("therapistData", therapistData)
       toast.success("Therapist added successfully");
     } catch (error) {
       toast.error("failed to add");
@@ -43,17 +44,19 @@ const TherapistList = () => {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://api.example.com/data");
-      setTherapistList(response.data);
+      const response = await axios.get( `${baseUrl}api/getTherapist`);
+      // console.log("response--", response.data.availability)
+      setTherapistList(response.data.availability);
     } catch (err) {
       console.log(err);
       toast.error("Error while Fetching Data");
     }
   };
 
-  // useEffect(()=>{
-  //  fetchData()
-  // },[])
+  useEffect(()=>{
+   fetchData()
+  },[])
+
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -203,10 +206,9 @@ const TherapistList = () => {
                     <td className="p-2">98989898989</td>
                     <td className="p-2">US(WEST)</td>
                   </tr> */}
-
                   {therapistList.map((data, index) => (
                     <tr key={index} className="border-t">
-                      <td className="p-2">{data.srNo}</td>
+                      <td className="p-2">{index + 1}</td>
                       <td className="p-2">{data.name}</td>
                       <td className="p-2">{data.email}</td>
                       <td className="p-2">{data.number}</td>

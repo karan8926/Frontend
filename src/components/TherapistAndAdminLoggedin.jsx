@@ -11,11 +11,20 @@ const TherapistAndAdminLoggedin = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const userDate = await axios.post(baseUrl, { email, password });
-      localStorage.setItem("userDetails", {
-        userType: "admin",
-        name: "alice",
-      });
+      const reqbody = {
+        name : email,
+        email: email,
+        password: password
+      }
+      const adminResult = await axios.post(`${baseUrl}api/admin-login`, reqbody);
+
+      localStorage.setItem(
+        "userDetails",
+        JSON.stringify({
+          userType: "Admin",
+          data: adminResult.data.token
+        })
+      );
       toast.success("logged in successfully");
       navigate("/patient/allAppointment");
     } catch (error) {

@@ -1,15 +1,27 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { baseUrl } from "../App";
+import { toast } from "react-toastify";
 
 const TherapistAndAdminLoggedin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Handle form submission logic here
-    console.log({ email, password });
-    navigate("/admin/allAppointment");
+    try {
+      const userDate = await axios.post(baseUrl, { email, password });
+      localStorage.setItem("userDetails", {
+        userType: "admin",
+        name: "alice",
+      });
+      toast.success("logged in successfully");
+      navigate("/patient/allAppointment");
+    } catch (error) {
+      toast.error("Authentication failed");
+      console.log(error);
+    }
   };
   return (
     <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>

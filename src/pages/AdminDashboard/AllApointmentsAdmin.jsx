@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Pagination from "../../components/Pagination";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const AllApointmentsAdmin = () => {
   const [appointments, setAppointments] = useState([
@@ -76,7 +78,15 @@ const AllApointmentsAdmin = () => {
       status: "Pending",
     },
   ]);
-
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("https://api.example.com/data");
+      setAppointments(response.data);
+    } catch (err) {
+      console.log(err);
+      toast.error("Error while Fetching Data");
+    }
+  };
   const getStatusColor = (status) => {
     switch (status) {
       case "Pending":
@@ -91,6 +101,10 @@ const AllApointmentsAdmin = () => {
         return "bg-gray-200";
     }
   };
+
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -141,141 +155,6 @@ const AllApointmentsAdmin = () => {
       </div>
     </div>
   );
-  // return (
-  //   <div className="w-full h-full p-0 m-0 border-2 border-black overflow-hidden ">
-  //     <div className="flex h-[50%]">
-  //       <div className="w-[50%] h-full border-2 border-black  ">
-  //         <div className="w-full h-8 border-2 border-black dark:bg-gray-900">
-  //           <h1 className="text-white">Appointments</h1>
-  //         </div>
-  //         {/* header */}
-  //         <div className="w-full h-10  flex space-x-28">
-  //           <h3 className="font-bold">sr no</h3>
-  //           <h3 className="font-bold">Name</h3>
-  //           <h3 className="font-bold">Date</h3>
-  //           <h3 className="font-bold">Time</h3>
-  //         </div>
-  //         <div className="w-full h-10 border-2 border-black flex space-x-28">
-  //           <h3>1</h3>
-  //           <h3>Adom</h3>
-  //           <h3>29Nov24</h3>
-  //           <h3>18:30</h3>
-  //         </div>
-  //         <div className="w-full h-10 border-2 border-black flex space-x-28">
-  //           <h3>2</h3>
-  //           <h3>Alice</h3>
-  //           <h3>30Nov24</h3>
-  //           <h3>14:30</h3>
-  //         </div>
-  //         <div className="w-full h-10 border-2 border-black flex space-x-28">
-  //           <h3>1</h3>
-  //           <h3>Adom</h3>
-  //           <h3>29Nov24</h3>
-  //           <h3>18:30</h3>
-  //         </div>
-  //         <div className="w-full h-10 border-2 border-black flex space-x-28">
-  //           <h3>1</h3>
-  //           <h3>Adom</h3>
-  //           <h3>29Nov24</h3>
-  //           <h3>18:30</h3>
-  //         </div>
-  //         <div className="w-full h-10 border-2 border-black flex space-x-28">
-  //           <h3>1</h3>
-  //           <h3>Adom</h3>
-  //           <h3>29Nov24</h3>
-  //           <h3>18:30</h3>
-  //         </div>
-  //         <div className="w-full h-10 border-2 border-black flex space-x-28">
-  //           <h3>1</h3>
-  //           <h3>Adom</h3>
-  //           <h3>29Nov24</h3>
-  //           <h3>18:30</h3>
-  //         </div>
-
-  //         <Pagination />
-  //       </div>
-  //       <div className="w-[50%] h-[30%] border-2 border-black  ">
-  //         <div className="w-full h-8 border-2 border-black dark:bg-gray-900">
-  //           <h1 className="text-white">Users</h1>
-  //         </div>
-  //         {/* header */}
-  //         <table className="w-full h-10  flex space-x-28">
-  //           <tr>
-  //             <th className="font-bold">sr no</th>
-  //             <th className="font-bold">Name</th>
-  //             <th className="font-bold">Date</th>
-  //             <th className="font-bold">Time</th>
-  //           </tr>
-  //           <tr className="w-full h-10 border-2 border-black flex space-x-28">
-  //             <td>1</td>
-  //             <td>Adom</td>
-  //             <td>29Nov24</td>
-  //             <td>18:30</td>
-  //           </tr>
-  //           <tr className="w-full h-10 border-2 border-black flex space-x-28">
-  //             <td>2</td>
-  //             <td>Alice</td>
-  //             <td>30Nov24</td>
-  //             <td>14:30</td>
-  //           </tr>
-  //           <tr className="w-full h-10 border-2 border-black flex space-x-28">
-  //             <td>1</td>
-  //             <td>Adom</td>
-  //             <td>29Nov24</td>
-  //             <td>18:30</td>
-  //           </tr>
-  //         </table>
-
-  //         <Pagination />
-  //       </div>
-  //     </div>
-  //     <div className="w-full h-[50%] border-2 border-black  mt-10">
-  //       <div className="w-full h-16 border-2 border-black dark:bg-gray-900 flex items-center justify-between">
-  //         <div className="flex justify-center flex-grow">
-  //           <h1 className="text-white">Therapist</h1>
-  //         </div>
-  //         <div className="flex justify-end ">
-  //           <button className="bg-blue-600 rounded-md px-4 py-2">ADD</button>
-  //         </div>
-  //       </div>
-
-  //       <table className="w-full h-10  flex space-x-60">
-  //         <tr>
-  //           <th className="font-bold">sr no</th>
-  //           <th className="font-bold">Name</th>
-  //           <th className="font-bold">Date</th>
-  //           <th className="font-bold">Time</th>
-  //         </tr>
-  //         <tr className="w-full h-10 border-2 border-black flex space-x-60">
-  //           <td>1</td>
-  //           <td>Adom</td>
-  //           <td>29Nov24</td>
-  //           <td>18:30</td>
-  //         </tr>
-  //         <tr className="w-full h-10 border-2 border-black flex space-x-60">
-  //           <td>2</td>
-  //           <td>Alice</td>
-  //           <td>30Nov24</td>
-  //           <td>14:30</td>
-  //         </tr>
-  //         <tr className="w-full h-10 border-2 border-black flex space-x-60">
-  //           <td>2</td>
-  //           <td>Alice</td>
-  //           <td>30Nov24</td>
-  //           <td>14:30</td>
-  //         </tr>
-  //         <tr className="w-full h-10 border-2 border-black flex space-x-60">
-  //           <td>2</td>
-  //           <td>Alice</td>
-  //           <td>30Nov24</td>
-  //           <td>14:30</td>
-  //         </tr>
-  //       </table>
-
-  //       <Pagination />
-  //     </div>
-  //   </div>
-  // );
 };
 
 export default AllApointmentsAdmin;

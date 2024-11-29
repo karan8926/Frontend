@@ -2,9 +2,13 @@ import React, { useState } from "react";
 import Pagination from "../../components/Pagination";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import axios from "axios";
+import { toast } from "react-toastify";
+import { baseUrl } from "../../App";
 
 const TherapistList = () => {
   const [toggleModel, setToggleModel] = useState(false);
+  const [therapistList, setTherapistList] = useState([]);
   const [formData, setFormData] = useState({
     region: "",
     name: "",
@@ -19,11 +23,37 @@ const TherapistList = () => {
       [name]: value,
     });
   };
-  const handleSubmit = (e) => {
+
+  // post api add therapist here
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
+    // console.log(formData);
+    try {
+      const therapistData = await axios.post(
+        `${baseUrl}/AddTherapist`,
+        formData
+      );
+      toast.success("Therapist added successfully");
+    } catch (error) {
+      toast.error("failed to add");
+      console.log(error);
+    }
     setToggleModel(false);
   };
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("https://api.example.com/data");
+      setTherapistList(response.data);
+    } catch (err) {
+      console.log(err);
+      toast.error("Error while Fetching Data");
+    }
+  };
+
+  // useEffect(()=>{
+  //  fetchData()
+  // },[])
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -166,13 +196,23 @@ const TherapistList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-t">
+                  {/* <tr className="border-t">
                     <td className="p-2">1</td>
                     <td className="p-2">Adom</td>
                     <td className="p-2">adom12@gmail.com</td>
                     <td className="p-2">98989898989</td>
                     <td className="p-2">US(WEST)</td>
-                  </tr>
+                  </tr> */}
+
+                  {therapistList.map((data, index) => (
+                    <tr key={index} className="border-t">
+                      <td className="p-2">{data.srNo}</td>
+                      <td className="p-2">{data.name}</td>
+                      <td className="p-2">{data.email}</td>
+                      <td className="p-2">{data.number}</td>
+                      <td className="p-2">{data.region}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
               <Pagination />

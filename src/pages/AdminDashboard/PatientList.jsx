@@ -1,9 +1,25 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Pagination from "../../components/Pagination";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const PatientList = () => {
+  const [patientList, setPatientList] = useState([]);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get("https://api.example.com/data");
+      setPatientList(response.data);
+    } catch (err) {
+      console.log(err);
+      toast.error("Error while Fetching Data");
+    }
+  };
+
+  // useEffect(()=>{
+  //  fetchData()
+  // },[])
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -25,12 +41,14 @@ const PatientList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="border-t">
-                    <td className="p-2">1</td>
-                    <td className="p-2">Adom</td>
-                    <td className="p-2">29Nov24</td>
-                    <td className="p-2">18:30</td>
-                  </tr>
+                  {patientList.map((data, index) => (
+                    <tr key={index} className="border-t">
+                      <td className="p-2">{data.srNo}</td>
+                      <td className="p-2">{data.name}</td>
+                      <td className="p-2">{data.date}</td>
+                      <td className="p-2">{data.time}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
 

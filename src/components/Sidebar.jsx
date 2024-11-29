@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
-  const [userType, setUserType] = useState("patient");
+  const [userType, setUserType] = useState("admin");
   const [activeItem, setActiveItem] = useState(null);
   const navigate = useNavigate();
   const location = useLocation(); // Get the current path

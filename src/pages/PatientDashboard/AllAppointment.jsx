@@ -11,9 +11,8 @@ import axios from "axios";
 
 const AllAppointment = () => {
   // const dateVA = new Date();
-  const [nameval, setName] = useState("adom");
-  const [emailval, setEmail] = useState("adom12@gmail");
-  const [dateval, setDate] = useState("28-nov-24");
+  const [availabilityData, setAvailabilityData] = useState([]);
+
   const [startDate, setStartDate] = useState(new Date());
   const [calenderView, setCalenderView] = useState(false);
   const [therapists, setTherapists] = useState([]);
@@ -21,6 +20,9 @@ const AllAppointment = () => {
   const [selectedRegion, setSelectedRegion] = useState("");
   const [selectedTherapist, setSelectedTherapist] = useState("");
 
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const userEmail = userDetails?.userEmail 
+   
   console.log(startDate, "seleted date is");
   const currentDate = new Date();
 
@@ -36,7 +38,18 @@ const AllAppointment = () => {
     }
   };
 
+  const TherapistAvailability = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}api/getTherapistAvailability?status=pending`);
+      console.log("response", response.data.AvailabilityData)
 
+        setAvailabilityData(response.data.AvailabilityData); 
+
+    } catch (error) {
+      console.error("Error fetching dropdown data:", error);
+    }
+  };
+  
   // Function to format the date
   const formatDate = (date) => {
     if (!date) return "Select Date"; // Default text if no date is selected
@@ -46,6 +59,7 @@ const AllAppointment = () => {
 
   useEffect(() => {
     fetchDropdownData()
+    TherapistAvailability()
   }, [])
 
   return (
@@ -162,26 +176,18 @@ const AllAppointment = () => {
 
               {/* show cards here for book appointment */}
               <div className="flex flex-row flex-1 space-x-2 h-full pt-4">
-                <CardForAppointment
-                  name={nameval}
-                  email={emailval}
-                  date={dateval}
+                {availabilityData.map((item, index) => (
+                  <CardForAppointment
+                  key={item.therapistsId}
+                  therapistsId={item.therapistsId}
+                  name={item.name || ""} 
+                  email={item.email || ""}
+                  date={new Date(item.date).toLocaleDateString()} 
+                  status={item.status || "Unknown"}
+                  time={item.time || "Unspecified"} 
+                  userEmail={userEmail}
                 />
-                <CardForAppointment
-                  name={nameval}
-                  email={emailval}
-                  date={dateval}
-                />
-                <CardForAppointment
-                  name={nameval}
-                  email={emailval}
-                  date={dateval}
-                />
-                <CardForAppointment
-                  name={nameval}
-                  email={emailval}
-                  date={dateval}
-                />
+                ))}
               </div>
 
               {/* pagination */}

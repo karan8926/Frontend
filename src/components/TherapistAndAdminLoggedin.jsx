@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../App";
 import { toast } from "react-toastify";
 
-const TherapistAndAdminLoggedin = () => {
+const TherapistAndAdminLoggedin = (props) => {
+  const userType = props?.userType;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("Admin"); 

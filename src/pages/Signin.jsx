@@ -7,7 +7,7 @@ import { baseUrl } from "../App";
 const Signin = () => {
   const [accessCode, setAccessCode] = useState("");
   const [userType, SetUserType] = useState(null);
- 
+
   return (
     <section className="bg-gray-50 dark:bg-gray-900 w-full h-screen ">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-[90vh] lg:h-[90vh] lg:py-0">
@@ -50,7 +50,7 @@ const Signin = () => {
             ) : userType === "patient" ? (
               <UserLoggedin />
             ) : (
-              <TherapistAndAdminLoggedin />
+              <TherapistAndAdminLoggedin userType={userType} />
             )}
           </div>
         </div>

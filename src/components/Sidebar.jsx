@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
-  const [userType, setUserType] = useState("admin");
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [userType, setUserType] = useState(userDetails.userType);
   const [activeItem, setActiveItem] = useState(null);
   const navigate = useNavigate();
   const location = useLocation(); // Get the current path
-
   const menulist = {
     patient: [
       {

@@ -7,33 +7,67 @@ import { toast } from "react-toastify";
 const TherapistAndAdminLoggedin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState("Admin"); 
   const navigate = useNavigate();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
       const reqbody = {
-        name : email,
         email: email,
-        password: password
-      }
-      const adminResult = await axios.post(`${baseUrl}api/admin-login`, reqbody);
+        password: password,
+      };
+
+      // Determine the endpoint based on the selected role
+      const endpoint = role === "Admin" 
+        ? `${baseUrl}api/admin-login`
+        : `${baseUrl}api/therapist-login`;
+
+      const response = await axios.post(endpoint, reqbody);
 
       localStorage.setItem(
         "userDetails",
         JSON.stringify({
-          userType: "Admin",
-          data: adminResult.data.token
+          userType: role,
+          data: response.data.token,
         })
       );
-      toast.success("logged in successfully");
-      navigate("/patient/allAppointment");
+
+      toast.success("Logged in successfully");
+      
+      // Navigate based on the user role
+      if (role === "Admin") {
+        navigate("/patient/allAppointment");
+      } else if (role === "Therapist") {
+        navigate("/therapist/allAppointment");
+      }
     } catch (error) {
       toast.error("Authentication failed");
-      console.log(error);
+      console.error(error);
     }
   };
+
   return (
     <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+      <div>
+        <label
+          htmlFor="role"
+          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+        >
+          Select Role
+        </label>
+        <select
+          id="role"
+          name="role"
+          value={role}
+          onChange={(e) => setRole(e.target.value)}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+        >
+          <option value="Admin">Admin</option>
+          <option value="Therapist">Therapist</option>
+        </select>
+      </div>
+
       <div>
         <label
           htmlFor="email"
@@ -71,22 +105,13 @@ const TherapistAndAdminLoggedin = () => {
           required
         />
       </div>
-      <div className="flex items-start"></div>
+
       <button
         type="submit"
         className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
       >
         Signin
       </button>
-      {/* <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-        Don't have an account?{" "}
-        <a
-          href="/"
-          className="font-medium text-primary-600 hover:underline dark:text-primary-500"
-        >
-          Register here
-        </a>
-      </p> */}
     </form>
   );
 };

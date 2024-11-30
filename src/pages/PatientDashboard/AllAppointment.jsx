@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CardForAppointment from "../../components/CardForAppointment";
 import Pagination from "../../components/Pagination";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import { baseUrl } from "../../App";
+import axios from "axios";
+
+
 const AllAppointment = () => {
   // const dateVA = new Date();
   const [nameval, setName] = useState("adom");
@@ -12,8 +16,26 @@ const AllAppointment = () => {
   const [dateval, setDate] = useState("28-nov-24");
   const [startDate, setStartDate] = useState(new Date());
   const [calenderView, setCalenderView] = useState(false);
+  const [therapists, setTherapists] = useState([]);
+  const [regions, setRegions] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState("");
+  const [selectedTherapist, setSelectedTherapist] = useState("");
+
   console.log(startDate, "seleted date is");
   const currentDate = new Date();
+
+  const fetchDropdownData = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}api/getTherapistNameRegion`);
+      if (response.data.success) {
+        setTherapists(response.data.name || []);
+        setRegions(response.data.region || []);
+      }
+    } catch (error) {
+      console.error("Error fetching dropdown data:", error);
+    }
+  };
+
 
   // Function to format the date
   const formatDate = (date) => {
@@ -21,6 +43,11 @@ const AllAppointment = () => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return date.toLocaleDateString(undefined, options); // Format as "Month Day, Year"
   };
+
+  useEffect(() => {
+    fetchDropdownData()
+  }, [])
+
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -36,30 +63,41 @@ const AllAppointment = () => {
               </div>
               {/* search bar */}
               <div className="w-full p-2 space-x-4 flex items-center relative">
-                <select className="w-[15%] h-[2rem] bg-slate-300 rounded-sm">
-                  <option value="" disabled selected>
+                <select
+                  className="w-[15%] h-[2rem] bg-slate-300 rounded-sm"
+                  value={selectedRegion}
+                  onChange={(e) => setSelectedRegion(e.target.value)}
+                >
+                  <option value="" disabled>
                     Region
                   </option>
-                  <option value="Northeast">Northeast</option>
-                  <option value="South">South</option>
-                  <option value="Midwest">Midwest</option>
-                  <option value="West">West</option>
+                  {regions.map((region, index) => (
+                    <option key={index} value={region}>
+                      {region}
+                    </option>
+                  ))}
                 </select>
-                <select className="w-[15%] h-[2rem] bg-slate-300 rounded-sm">
+                {/* <select className="w-[15%] h-[2rem] bg-slate-300 rounded-sm">
                   <option value="" disabled selected>
                     Soonest Availability
                   </option>
 
                   <option value="12 hours">12 hours</option>
                   <option value="24 hours">24 hours</option>
-                </select>
-                <select className="w-[15%] h-[2rem] bg-slate-300 rounded-sm">
-                  <option value="" disabled selected>
+                </select> */}
+                <select
+                  className="w-[15%] h-[2rem] bg-slate-300 rounded-sm"
+                  value={selectedTherapist}
+                  onChange={(e) => setSelectedTherapist(e.target.value)}
+                >
+                  <option value="" disabled>
                     Therapist
                   </option>
-
-                  <option value="12 hours">Alice</option>
-                  <option value="24 hours">Bob</option>
+                  {therapists.map((therapist, index) => (
+                    <option key={index} value={therapist}>
+                      {therapist}
+                    </option>
+                  ))}
                 </select>
                 {/* <button
                   className="w-[15%] h-[2rem] bg-slate-300 rounded-sm"

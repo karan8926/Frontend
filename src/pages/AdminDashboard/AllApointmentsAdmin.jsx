@@ -22,7 +22,7 @@ const AllApointmentsAdmin = () => {
   };
   const getStatusColor = (status) => {
     switch (status) {
-      case "Pending":
+      case "none":
         return "bg-yellow-300";
       case "Confirmed":
         return "bg-green-300";

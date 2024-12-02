@@ -37,12 +37,13 @@ const TherapistList = () => {
         formData
       );
       console.log("therapistData", therapistData);
+      setToggleModel(false);
       toast.success("Therapist added successfully");
     } catch (error) {
       toast.error(error.response.data.error, "failed to add");
       console.log(error, "error value");
+      setToggleModel(true);
     }
-    setToggleModel(false);
     fetchData(currentPage);
   };
 

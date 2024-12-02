@@ -8,21 +8,33 @@ import { baseUrl } from "../../App";
 
 const PatientList = () => {
   const [patientList, setPatientList] = useState([]);
-  const fetchData = async () => {
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalNoOfPatient, setTotalNoOfPatient] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const fetchData = async (pageNo) => {
     try {
-      const response = await axios.get( `${baseUrl}api/getpatient`);
-      // console.log("response---", response.data)
+      const response = await axios.get(
+        `${baseUrl}api/getpatient/?pageNo=${pageNo}`
+      );
       setPatientList(response.data.patients);
+      setTotalPages(response.data.noOfPages);
+      setTotalNoOfPatient(response.data.noOfPatient);
     } catch (err) {
       console.log(err);
       toast.error("Error while Fetching Data");
     }
   };
 
-  useEffect(()=>{
-   fetchData()
-  },[])
-
+  useEffect(() => {
+    fetchData(currentPage);
+  }, [currentPage]);
+  const handlePageChange = (pageNo) => {
+    if (pageNo >= 1 && pageNo <= totalPages) {
+      fetchData(pageNo);
+      setCurrentPage(pageNo);
+    }
+  };
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -61,7 +73,11 @@ const PatientList = () => {
                 </tbody>
               </table>
 
-              <Pagination />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </div>
           </div>
         </div>

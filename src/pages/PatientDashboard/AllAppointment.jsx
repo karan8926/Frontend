@@ -22,7 +22,7 @@ const AllAppointment = () => {
   const userEmail = userDetails?.userEmail;
   const [selectedSpecialty, setSelectSpecialty] = useState("");
   const [seletectedDateValue, setSelectedDateValue] = useState("");
-  const [patientNumber,setPatientNumber] = useState(userDetails?.userPhone)
+  const [patientNumber, setPatientNumber] = useState(userDetails?.userPhone);
   console.log(startDate, "seleted date is");
   const currentDate = new Date();
   const hasMounted = useRef(false);
@@ -151,7 +151,7 @@ const AllAppointment = () => {
                     key={item._id}
                     therapistsId={item.therapistsId}
                     name={item.name || ""}
-                    date={new Date(item.date).toLocaleDateString()}
+                    date={item.date}
                     status={item.status || "Unknown"}
                     time={item.time || "Unspecified"}
                     userEmail={userEmail}

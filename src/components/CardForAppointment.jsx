@@ -3,6 +3,7 @@ import header from "../assets/header.jpg";
 import { baseUrl } from "../App";
 import axios from "axios";
 import { IoMdArrowRoundForward } from "react-icons/io";
+import { toast } from "react-toastify";
 const CardForAppointment = (props) => {
   const { therapistsId, name, date, time, userEmail, patientNumber } = props;
   console.log(props, "props45555555555555555555555555555555555");
@@ -24,13 +25,13 @@ const CardForAppointment = (props) => {
       );
 
       if (response.status === 200) {
-        alert("Appointment booked successfully!");
+        toast.success("Appointment booked successfully!");
       } else {
-        alert("Failed to book the appointment.");
+        toast.error("Failed to book the appointment.");
       }
     } catch (error) {
       console.error("Error booking the appointment:", error);
-      alert("An error occurred while booking the appointment.");
+      toast.error("An error occurred while booking the appointment.");
     }
   };
 

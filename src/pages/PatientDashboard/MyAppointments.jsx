@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import Pagination from "../../components/Pagination";
@@ -14,14 +14,17 @@ const MyAppointments = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [calenderView, setCalenderView] = useState(false);
   const [appointmentData, setAppointmentData] = useState([]);
-  // async function myAppointmentsList() {
-  //   try {
-  //     const myAppointmentList = await axios.get(`${baseUrl}/`);
-  //     setAppointmentData();
-  //   } catch (error) {
-  //     toast.error("");
-  //   }
-  // }
+  async function myAppointmentsList() {
+    try {
+      const myAppointmentList = await axios.get(`${baseUrl}api/allAppointment`);
+      setAppointmentData(myAppointmentList.data.AppointmentData);
+    } catch (error) {
+      toast.error(error, "error");
+    }
+  }
+  useEffect(() => {
+    myAppointmentsList();
+  }, []);
   return (
     <div className="w-full h-screen flex">
       <Sidebar />
@@ -33,23 +36,24 @@ const MyAppointments = () => {
               <div className="w-full h-8 ">
                 <h1 className="font-bold text-3xl">My Appointments</h1>
               </div>
-              <table className="">
+              <table className="table-auto w-full ">
                 <thead>
-                  <tr className="w-full h-10  flex space-x-80 p-4">
-                    <th className="font-bold">sr no</th>
-                    <th className="font-bold">Name</th>
-                    <th className="font-bold">Date</th>
-                    <th className="font-bold">Time</th>
+                  <tr className="h-10">
+                    <th className="font-bold p-2 text-left">sr no</th>
+                    <th className="font-bold p-2 text-left">
+                      Appointment Type
+                    </th>
+                    <th className="font-bold p-2 text-left">Date</th>
+                    <th className="font-bold p-2 text-left">Time</th>
                   </tr>
                 </thead>
                 <tbody>
                   {appointmentData.map((data, index) => (
                     <tr key={index} className="border-t">
                       <td className="p-2">{index + 1}</td>
-                      <td className="p-2">{data.name}</td>
-                      <td className="p-2">{data.email}</td>
-                      <td className="p-2">{data.phone_number}</td>
-                      <td className="p-2">{data.type}</td>
+                      <td className="p-2">{data?.appointmentType}</td>
+                      <td className="p-2">{data.date}</td>
+                      <td className="p-2">{data.time}</td>
                       {/* <td className="p-2">{data.date}</td>
                       <td className="p-2">{data.time}</td> */}
                     </tr>

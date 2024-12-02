@@ -33,6 +33,7 @@ const TherapistAndAdminLoggedin = (props) => {
           userType: response.data.data.type,
           userEmail: response.data.data.email,
           userName: response.data.data.name,
+          userId: response.data.data.id,
           data: response.data.token,
         })
       );

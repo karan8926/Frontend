@@ -25,6 +25,7 @@ const UserLoggedin = () => {
           userType: PatientResult.data.result.type,
           userEmail: PatientResult.data.result.email,
           userName: PatientResult.data.result.name,
+          userPhone: PatientResult.data.result.phone_number,
           accessToken: PatientResult.data.accessToken,
         })
       );

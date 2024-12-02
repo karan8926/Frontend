@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import header from "../assets/header.jpg";
 import { baseUrl } from "../App";
 import axios from "axios";
-
+import { IoMdArrowRoundForward } from "react-icons/io";
 const CardForAppointment = (props) => {
-  const { therapistsId, name, email, date, time, userEmail } = props;
-  console.log(props, "props");
+  const { therapistsId, name, date, time, userEmail, patientNumber } = props;
+  console.log(props, "props45555555555555555555555555555555555");
   const formattedDate = new Date(date).toISOString().split("T")[0];
 
   const handleBookAppointment = async () => {
@@ -14,10 +14,10 @@ const CardForAppointment = (props) => {
         therapistsId,
         date: formattedDate,
         time,
-        email,
-        status: "booked",
-        PatientEmail: userEmail,
+        patientEmail: userEmail,
+        patientNumber: patientNumber,
       };
+      console.log(requestBody, "request body");
       const response = await axios.post(
         `${baseUrl}api/book-appointment`,
         requestBody
@@ -41,17 +41,16 @@ const CardForAppointment = (props) => {
       </div>
       <div className="space-y-4 h-[30%] p-2">
         <h2 className="text-start font-bold text-xl">{name}</h2>
-        <h3 className="text-start font-medium text-xl">{email}</h3>
+        <h3 className="text-start font-medium text-xl">{userEmail}</h3>
         <h3 className="text-start font-medium text-xl">{date}</h3>
         <h3 className="text-start font-medium text-xl">{time}</h3>
       </div>
-      <div className=" bg-blue-700 rounded-md  p-4 mt-2 cursor-pointer">
-        <button
-          className="text-white font-bold"
-          onClick={handleBookAppointment}
-        >
-          Book Appointment
-        </button>
+      <div
+        onClick={handleBookAppointment}
+        className=" bg-blue-700 rounded-md  p-4 mt-2 cursor-pointer flex justify-between hover:bg-blue-600"
+      >
+        <button className="text-white font-bold">Book Appointment</button>
+        <IoMdArrowRoundForward className="w-8 h-8 text-2xl text-white cursor-pointer" />
       </div>
     </div>
   );

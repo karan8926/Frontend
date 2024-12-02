@@ -9,27 +9,32 @@ import { baseUrl } from "../../App";
 import axios from "axios";
 
 const AllAppointment = () => {
-  // const dateVA = new Date();
   const [availabilityData, setAvailabilityData] = useState([]);
 
   const [startDate, setStartDate] = useState(new Date());
   const [calenderView, setCalenderView] = useState(false);
-  const [therapists, setTherapists] = useState([]);
+  const [specialty, setSpecialty] = useState([]);
   const [regions, setRegions] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState("");
   const [selectedTherapist, setSelectedTherapist] = useState("");
   const [minDate, setMinDate] = useState("");
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const userEmail = userDetails?.userEmail;
-  const buttonRef = useRef(null); // Create a ref for the button
+  const [selectedSpecialty, setSelectSpecialty] = useState("");
+  const [seletectedDateValue, setSelectedDateValue] = useState("");
+  const [patientNumber,setPatientNumber] = useState(userDetails?.userPhone)
   console.log(startDate, "seleted date is");
   const currentDate = new Date();
+  const hasMounted = useRef(false);
 
   const fetchDropdownData = async () => {
     try {
-      const response = await axios.get(`${baseUrl}api/getTherapistNameRegion`);
+      const response = await axios.get(
+        `${baseUrl}api/getTherapistSpecialtyRegion`
+      );
+      console.log(response, "response data value");
       if (response.data.success) {
-        setTherapists(response.data.name || []);
+        setSpecialty(response.data.specialty || []);
         setRegions(response.data.region || []);
       }
     } catch (error) {
@@ -40,11 +45,10 @@ const AllAppointment = () => {
   const TherapistAvailability = async () => {
     try {
       const response = await axios.get(
-        `${baseUrl}api/getTherapistAvailability?status=none`
+        `${baseUrl}api/getTherapistAvailability?status=none&specialty=${selectedSpecialty}&region=${selectedRegion}&date=${seletectedDateValue}`
       );
-      console.log("response", response.data.AvailabilityData);
-
-      setAvailabilityData(response.data.AvailabilityData);
+      console.log(response, "response from thera");
+      setAvailabilityData(response.data.appointmentData);
     } catch (error) {
       console.error("Error fetching dropdown data:", error);
     }
@@ -56,9 +60,20 @@ const AllAppointment = () => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return date.toLocaleDateString(undefined, options); // Format as "Month Day, Year"
   };
+
+  useEffect(() => {
+    if (!hasMounted.current) {
+      hasMounted.current = true;
+      return;
+    }
+
+    if (selectedSpecialty || selectedRegion || seletectedDateValue) {
+      TherapistAvailability();
+    }
+  }, [selectedSpecialty, selectedRegion, seletectedDateValue]);
+
   useEffect(() => {
     fetchDropdownData();
-    TherapistAvailability();
     const currentDate = new Date().toISOString().split("T")[0];
     setMinDate(currentDate);
   }, []);
@@ -102,15 +117,15 @@ const AllAppointment = () => {
                 </select> */}
                 <select
                   className="w-[15%] h-[2rem] bg-slate-300 rounded-md"
-                  value={selectedTherapist}
-                  onChange={(e) => setSelectedTherapist(e.target.value)}
+                  value={selectedSpecialty}
+                  onChange={(e) => setSelectSpecialty(e.target.value)}
                 >
                   <option value="" disabled>
-                    Therapist
+                    Specialities
                   </option>
-                  {therapists.map((therapist, index) => (
-                    <option key={index} value={therapist}>
-                      {therapist}
+                  {specialty.map((specialty, index) => (
+                    <option key={index} value={specialty}>
+                      {specialty}
                     </option>
                   ))}
                 </select>
@@ -118,6 +133,8 @@ const AllAppointment = () => {
                   type="date"
                   className="w-[15%] pl-4 pr-4 h-[2.3rem] bg-slate-300 text-black rounded-md  focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all duration-300"
                   min={minDate}
+                  onChange={(e) => setSelectedDateValue(e.target.value)}
+                  value={seletectedDateValue}
                 />
 
                 <input
@@ -131,14 +148,14 @@ const AllAppointment = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-4 max-h-[580px] overflow-y-auto">
                 {availabilityData.map((item, index) => (
                   <CardForAppointment
-                    key={item.therapistsId}
+                    key={item._id}
                     therapistsId={item.therapistsId}
                     name={item.name || ""}
-                    email={item.email || ""}
                     date={new Date(item.date).toLocaleDateString()}
                     status={item.status || "Unknown"}
                     time={item.time || "Unspecified"}
                     userEmail={userEmail}
+                    patientNumber={patientNumber}
                   />
                 ))}
               </div>

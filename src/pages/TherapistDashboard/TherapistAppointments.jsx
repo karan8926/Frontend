@@ -1,15 +1,23 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Pagination from "../../components/Pagination";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
+import axios from "axios";
+import { baseUrl } from "../../App";
+import { toast } from "react-toastify";
 
 const TherapistAppointments = () => {
+  const therapistDetails = JSON.parse(localStorage.getItem("userDetails"));
+  console.log(therapistDetails, "ther data=33333333333333333333");
   const [toggleModel, setToggleModel] = useState(false);
+  const [email, setEmail] = useState(therapistDetails.userEmail);
+  const [userId, setUserId] = useState(therapistDetails.userId);
+  const [appointments, setAppointments] = useState([]);
   const [formData, setFormData] = useState({
     availableDate: "",
     timeSlot: "",
-    name: "",
-    email: "",
+    // name: "",
+    // email: "",
     appointmentType: "setup",
   });
 
@@ -20,101 +28,124 @@ const TherapistAppointments = () => {
       [name]: value,
     });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // try {
-
-    // } catch (error) {
-
-    // }
+    try {
+      console.log(email, "email da data");
+      const { availableDate, timeSlot, appointmentType } = formData;
+      const data = await axios.post(`${baseUrl}api/AddTherapistAvailability`, {
+        email: email,
+        date: availableDate,
+        time: timeSlot,
+        appointmentType,
+      });
+      toast.success("Appointment Added SuccessFully");
+    } catch (error) {
+      console.log(error, "error");
+    }
 
     console.log(formData);
     setToggleModel(false);
   };
 
-  const appointments = [
-    {
-      srNo: 1,
-      name: "Alice Green",
-      email: "alice.green@example.com",
-      date: "2024-12-01",
-      timeSlot: "10:00 AM",
-      appointmentType: "Consultation",
-    },
-    {
-      srNo: 2,
-      name: "Bob White",
-      email: "bob.white@example.com",
-      date: "2024-12-02",
-      timeSlot: "01:30 PM",
-      appointmentType: "Follow-up",
-    },
-    {
-      srNo: 3,
-      name: "Charlie Brown",
-      email: "charlie.brown@example.com",
-      date: "2024-12-03",
-      timeSlot: "11:00 AM",
-      appointmentType: "Consultation",
-    },
-    {
-      srNo: 4,
-      name: "Daisy Blue",
-      email: "daisy.blue@example.com",
-      date: "2024-12-04",
-      timeSlot: "02:15 PM",
-      appointmentType: "Consultation",
-    },
-    {
-      srNo: 5,
-      name: "Ethan Black",
-      email: "ethan.black@example.com",
-      date: "2024-12-05",
-      timeSlot: "03:30 PM",
-      appointmentType: "Consultation",
-    },
-    {
-      srNo: 6,
-      name: "Fiona Pink",
-      email: "fiona.pink@example.com",
-      date: "2024-12-06",
-      timeSlot: "09:00 AM",
-      appointmentType: "Consultation",
-    },
-    {
-      srNo: 7,
-      name: "Greg Yellow",
-      email: "greg.yellow@example.com",
-      date: "2024-12-07",
-      timeSlot: "12:45 PM",
-      appointmentType: "Consultation",
-    },
-    {
-      srNo: 8,
-      name: "Hannah Red",
-      email: "hannah.red@example.com",
-      date: "2024-12-08",
-      timeSlot: "04:00 PM",
-      appointmentType: "Follow-up",
-    },
-    {
-      srNo: 9,
-      name: "Ian Purple",
-      email: "ian.purple@example.com",
-      date: "2024-12-09",
-      timeSlot: "10:30 AM",
-      appointmentType: "Consultation",
-    },
-    {
-      srNo: 10,
-      name: "Julia Orange",
-      email: "julia.orange@example.com",
-      date: "2024-12-10",
-      timeSlot: "02:00 PM",
-      appointmentType: "Consultation",
-    },
-  ];
+  const getTherapistData = async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}api/getTherapistAvailability?therapistsId=${userId}`
+      );
+      console.log(response, "reponse are:----");
+      setAppointments(response.data.appointmentData);
+    } catch (err) {
+      console.log(err);
+      toast.error("Error while Fetching Data");
+    }
+  };
+  // const appointments = [
+  //   {
+  //     srNo: 1,
+  //     name: "Alice Green",
+  //     email: "alice.green@example.com",
+  //     date: "2024-12-01",
+  //     timeSlot: "10:00 AM",
+  //     appointmentType: "Consultation",
+  //   },
+  //   {
+  //     srNo: 2,
+  //     name: "Bob White",
+  //     email: "bob.white@example.com",
+  //     date: "2024-12-02",
+  //     timeSlot: "01:30 PM",
+  //     appointmentType: "Follow-up",
+  //   },
+  //   {
+  //     srNo: 3,
+  //     name: "Charlie Brown",
+  //     email: "charlie.brown@example.com",
+  //     date: "2024-12-03",
+  //     timeSlot: "11:00 AM",
+  //     appointmentType: "Consultation",
+  //   },
+  //   {
+  //     srNo: 4,
+  //     name: "Daisy Blue",
+  //     email: "daisy.blue@example.com",
+  //     date: "2024-12-04",
+  //     timeSlot: "02:15 PM",
+  //     appointmentType: "Consultation",
+  //   },
+  //   {
+  //     srNo: 5,
+  //     name: "Ethan Black",
+  //     email: "ethan.black@example.com",
+  //     date: "2024-12-05",
+  //     timeSlot: "03:30 PM",
+  //     appointmentType: "Consultation",
+  //   },
+  //   {
+  //     srNo: 6,
+  //     name: "Fiona Pink",
+  //     email: "fiona.pink@example.com",
+  //     date: "2024-12-06",
+  //     timeSlot: "09:00 AM",
+  //     appointmentType: "Consultation",
+  //   },
+  //   {
+  //     srNo: 7,
+  //     name: "Greg Yellow",
+  //     email: "greg.yellow@example.com",
+  //     date: "2024-12-07",
+  //     timeSlot: "12:45 PM",
+  //     appointmentType: "Consultation",
+  //   },
+  //   {
+  //     srNo: 8,
+  //     name: "Hannah Red",
+  //     email: "hannah.red@example.com",
+  //     date: "2024-12-08",
+  //     timeSlot: "04:00 PM",
+  //     appointmentType: "Follow-up",
+  //   },
+  //   {
+  //     srNo: 9,
+  //     name: "Ian Purple",
+  //     email: "ian.purple@example.com",
+  //     date: "2024-12-09",
+  //     timeSlot: "10:30 AM",
+  //     appointmentType: "Consultation",
+  //   },
+  //   {
+  //     srNo: 10,
+  //     name: "Julia Orange",
+  //     email: "julia.orange@example.com",
+  //     date: "2024-12-10",
+  //     timeSlot: "02:00 PM",
+  //     appointmentType: "Consultation",
+  //   },
+  // ];
 
+  useEffect(() => {
+    getTherapistData();
+  }, []);
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -176,7 +207,7 @@ const TherapistAppointments = () => {
                         />
                       </div>
 
-                      <div>
+                      {/* <div>
                         <label
                           htmlFor="name"
                           className="block text-sm font-medium text-gray-700"
@@ -208,7 +239,7 @@ const TherapistAppointments = () => {
                           onChange={handleChange}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
-                      </div>
+                      </div> */}
 
                       <div>
                         <label
@@ -265,12 +296,14 @@ const TherapistAppointments = () => {
                 <tbody>
                   {appointments.map((data, index) => (
                     <tr key={index} className="border-t">
-                      <td className="p-2">{data.srNo}</td>
-                      <td className="p-2">{data.name}</td>
-                      <td className="p-2">{data.email}</td>
+                      <td className="p-2">{index}</td>
+                      <td className="p-2">{data.therapistDetails[0].name}</td>
+                      <td className="p-2">{data.therapistDetails[0].email}</td>
                       <td className="p-2">{data.date}</td>
-                      <td className="p-2">{data.timeSlot}</td>
-                      <td className="p-2">{data.appointmentType}</td>
+                      <td className="p-2">{data.time}</td>
+                      <td className="p-2">
+                        {data.therapistDetails[0].appointmentType}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

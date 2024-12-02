@@ -45,6 +45,13 @@ const TherapistList = () => {
       setToggleModel(true);
     }
     fetchData(currentPage);
+    setFormData({
+      region: "",
+      name: "",
+      number: "",
+      email: "",
+      password: "",
+    });
   };
 
   const handlePageChange = (pageNo) => {

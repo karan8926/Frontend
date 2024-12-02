@@ -10,11 +10,9 @@ const AllApointmentsAdmin = () => {
   const [appointments, setAppointments] = useState([]);
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        `${baseUrl}api/getTherapistAvailability`
-      );
+      const response = await axios.get(`${baseUrl}api/allAppointment`);
       console.log(response, "reponse are:----");
-      setAppointments(response.data.AvailabilityData);
+      setAppointments(response.data.AppointmentData);
     } catch (err) {
       console.log(err);
       toast.error("Error while Fetching Data");
@@ -60,7 +58,7 @@ const AllApointmentsAdmin = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {appointments.map((data, index) => (
+                  {appointments?.map((data, index) => (
                     <tr key={index} className="border-t">
                       <td className="p-2">{index + 1}</td>
                       {/* <td className="p-2">{data.name}</td> */}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CardForAppointment from "../../components/CardForAppointment";
 import Pagination from "../../components/Pagination";
 import DatePicker from "react-datepicker";
@@ -18,10 +18,10 @@ const AllAppointment = () => {
   const [regions, setRegions] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState("");
   const [selectedTherapist, setSelectedTherapist] = useState("");
-
+  const [minDate, setMinDate] = useState("");
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const userEmail = userDetails?.userEmail;
-
+  const buttonRef = useRef(null); // Create a ref for the button
   console.log(startDate, "seleted date is");
   const currentDate = new Date();
 
@@ -56,10 +56,11 @@ const AllAppointment = () => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return date.toLocaleDateString(undefined, options); // Format as "Month Day, Year"
   };
-
   useEffect(() => {
     fetchDropdownData();
     TherapistAvailability();
+    const currentDate = new Date().toISOString().split("T")[0];
+    setMinDate(currentDate);
   }, []);
 
   return (
@@ -78,7 +79,7 @@ const AllAppointment = () => {
               {/* search bar */}
               <div className="w-full p-2 space-x-4 flex items-center relative">
                 <select
-                  className="w-[15%] h-[2rem] bg-slate-300 rounded-sm"
+                  className="w-[15%] h-[2rem] bg-slate-300 rounded-md"
                   value={selectedRegion}
                   onChange={(e) => setSelectedRegion(e.target.value)}
                 >
@@ -100,7 +101,7 @@ const AllAppointment = () => {
                   <option value="24 hours">24 hours</option>
                 </select> */}
                 <select
-                  className="w-[15%] h-[2rem] bg-slate-300 rounded-sm"
+                  className="w-[15%] h-[2rem] bg-slate-300 rounded-md"
                   value={selectedTherapist}
                   onChange={(e) => setSelectedTherapist(e.target.value)}
                 >
@@ -113,60 +114,12 @@ const AllAppointment = () => {
                     </option>
                   ))}
                 </select>
-                {/* <button
-                  className="w-[15%] h-[2rem] bg-slate-300 rounded-sm"
-                  onClick={() => setCalenderView(!calenderView)}
-                >
-                  Calendar
-                </button>
+                <input
+                  type="date"
+                  className="w-[15%] pl-4 pr-4 h-[2.3rem] bg-slate-300 text-black rounded-md  focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all duration-300"
+                  min={minDate}
+                />
 
-                {calenderView && (
-                  <div className="absolute top-[3rem] left-0 z-10">
-                    <DatePicker
-                      selected={startDate}
-                      onChange={(date) => {
-                        setStartDate(date);
-                        setCalenderView(!calenderView);
-                      }}
-                      minDate={currentDate}
-                    />
-                  </div>
-                )} */}
-
-                <button
-                  className="w-[15%] h-[2.5rem] bg-slate-500 text-white rounded-md hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all duration-300"
-                  onClick={() => setCalenderView(!calenderView)}
-                >
-                  Calendar
-                </button>
-
-                {calenderView && (
-                  <>
-                    <div
-                      className="fixed inset-0 bg-gray-500 bg-opacity-50 z-20"
-                      onClick={() => setCalenderView(false)}
-                    ></div>
-
-                    <div className="fixed inset-0 flex justify-center items-center z-30">
-                      <div className="w-[90%] sm:w-[350px] bg-white shadow-xl rounded-lg p-6">
-                        <DatePicker
-                          selected={startDate}
-                          onChange={(date) => {
-                            setStartDate(date);
-                            setCalenderView(false);
-                          }}
-                          minDate={currentDate}
-                          calendarClassName="rounded-lg shadow-lg"
-                          dayClassName={(date) =>
-                            date.getDate() === startDate?.getDate()
-                              ? "bg-blue-500 text-white"
-                              : "text-gray-700"
-                          }
-                        />
-                      </div>
-                    </div>
-                  </>
-                )}
                 <input
                   type="text"
                   placeholder="search"
@@ -175,7 +128,7 @@ const AllAppointment = () => {
               </div>
 
               {/* show cards here for book appointment */}
-              <div className="flex flex-row flex-1 space-x-2 h-full pt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-4 max-h-[580px] overflow-y-auto">
                 {availabilityData.map((item, index) => (
                   <CardForAppointment
                     key={item.therapistsId}

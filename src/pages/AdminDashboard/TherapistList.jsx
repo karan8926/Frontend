@@ -9,6 +9,9 @@ import { baseUrl } from "../../App";
 const TherapistList = () => {
   const [toggleModel, setToggleModel] = useState(false);
   const [therapistList, setTherapistList] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalNoOfTherapist, setTotalTherapist] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [formData, setFormData] = useState({
     region: "",
     name: "",
@@ -33,7 +36,7 @@ const TherapistList = () => {
         `${baseUrl}api/AddTherapist`,
         formData
       );
-      console.log("therapistData", therapistData)
+      console.log("therapistData", therapistData);
       toast.success("Therapist added successfully");
     } catch (error) {
       toast.error("failed to add");
@@ -42,20 +45,29 @@ const TherapistList = () => {
     setToggleModel(false);
   };
 
-  const fetchData = async () => {
+  const handlePageChange = (pageNo) => {
+    if (pageNo >= 1 && pageNo <= totalPages) {
+      fetchData(pageNo);
+      setCurrentPage(pageNo);
+    }
+  };
+  const fetchData = async (pageNo) => {
     try {
-      const response = await axios.get( `${baseUrl}api/getTherapist`);
+      const response = await axios.get(
+        `${baseUrl}api/getTherapist/?pageNo=${pageNo}`
+      );
       // console.log("response--", response.data.availability)
       setTherapistList(response.data.availability);
+      setTotalPages(response.data.noOfPages);
     } catch (err) {
       console.log(err);
       toast.error("Error while Fetching Data");
     }
   };
 
-  useEffect(()=>{
-   fetchData()
-  },[])
+  useEffect(() => {
+    fetchData(currentPage);
+  }, [currentPage]);
 
   return (
     <div className="w-full h-screen flex ">
@@ -217,7 +229,11 @@ const TherapistList = () => {
                   ))}
                 </tbody>
               </table>
-              <Pagination />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </div>
           </div>
         </div>

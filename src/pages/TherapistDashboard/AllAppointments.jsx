@@ -227,7 +227,6 @@ const AllAppointments = () => {
                 onChange={(e) => setNewStatus(e.target.value)}
                 className="p-2 border rounded w-full mb-4"
               >
-                <option value="Pending">Pending</option>
                 <option value="Confirmed">Confirmed</option>
                 <option value="Completed">Completed</option>
                 <option value="Cancelled">Cancelled</option>
@@ -235,13 +234,13 @@ const AllAppointments = () => {
             </div>
             <div className="flex justify-between">
               <button
-                // onClick={() => setShowModal(false)} // Close modal
+                onClick={() => setShowModal(false)} 
                 className="p-2 bg-gray-400 text-white rounded"
               >
                 Cancel
               </button>
               <button
-                onClick={handleStatusChange} // Update status
+                onClick={handleStatusChange} 
                 className="p-2 bg-blue-500 text-white rounded"
               >
                 Save Changes

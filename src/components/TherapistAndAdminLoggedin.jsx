@@ -8,7 +8,7 @@ const TherapistAndAdminLoggedin = (props) => {
   const userType = props?.userType;
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("Admin"); 
+  // const [role, setRole] = useState("Admin");
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
@@ -20,26 +20,29 @@ const TherapistAndAdminLoggedin = (props) => {
       };
 
       // Determine the endpoint based on the selected role
-      const endpoint = role === "Admin" 
-        ? `${baseUrl}api/admin-login`
-        : `${baseUrl}api/therapist-login`;
+      const endpoint =
+        userType === "admin"
+          ? `${baseUrl}api/admin-login`
+          : `${baseUrl}api/therapist-login`;
 
       const response = await axios.post(endpoint, reqbody);
-
+      console.log(response, "response from admin");
       localStorage.setItem(
         "userDetails",
         JSON.stringify({
-          userType: role,
+          userType: response.data.data.type,
+          userEmail: response.data.data.email,
+          userName: response.data.data.name,
           data: response.data.token,
         })
       );
 
       toast.success("Logged in successfully");
-      
+
       // Navigate based on the user role
-      if (role === "Admin") {
-        navigate("/patient/allAppointment");
-      } else if (role === "Therapist") {
+      if (userType === "admin") {
+        navigate("/admin/allAppointment");
+      } else if (userType === "therapist") {
         navigate("/therapist/allAppointment");
       }
     } catch (error) {
@@ -50,7 +53,7 @@ const TherapistAndAdminLoggedin = (props) => {
 
   return (
     <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
-      <div>
+      {/* <div>
         <label
           htmlFor="role"
           className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -67,7 +70,7 @@ const TherapistAndAdminLoggedin = (props) => {
           <option value="Admin">Admin</option>
           <option value="Therapist">Therapist</option>
         </select>
-      </div>
+      </div> */}
 
       <div>
         <label

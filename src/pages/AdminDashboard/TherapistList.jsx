@@ -39,10 +39,11 @@ const TherapistList = () => {
       console.log("therapistData", therapistData);
       toast.success("Therapist added successfully");
     } catch (error) {
-      toast.error("failed to add");
-      console.log(error);
+      toast.error(error.response.data.error, "failed to add");
+      console.log(error, "error value");
     }
     setToggleModel(false);
+    fetchData(currentPage);
   };
 
   const handlePageChange = (pageNo) => {

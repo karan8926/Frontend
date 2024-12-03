@@ -10,7 +10,8 @@ import PatientList from "../pages/AdminDashboard/PatientList";
 import TherapistList from "../pages/AdminDashboard/TherapistList";
 import AllAppointments from "../pages/TherapistDashboard/AllAppointments";
 import TherapistAppointments from "../pages/TherapistDashboard/TherapistAppointments";
-
+import AvailabilityCalendar from "../components/AvailabilityCalendar";
+import ManageAvailability from '../pages/TherapistDashboard/ManageAvailability'
 const AllRoutes = () => {
   // const [userType, setUserType] = useState("thera");
   return (
@@ -32,6 +33,10 @@ const AllRoutes = () => {
       <Route
         path="/therapist/myAppointmnet"
         element={<TherapistAppointments />}
+      ></Route>
+      <Route
+        path="/therapist/manageAvailability"
+        element={<ManageAvailability />}
       ></Route>
 
       {/* patient */}

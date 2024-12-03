@@ -7,9 +7,11 @@ import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import { baseUrl } from "../../App";
 import axios from "axios";
+import Loader from "../../components/Loader";
+import { toast } from "react-toastify";
 
 const AllAppointment = () => {
-  const [availabilityData, setAvailabilityData] = useState([]);
+  const [availabilityData, setAvailabilityData] = useState(null);
 
   const [startDate, setStartDate] = useState(new Date());
   const [calenderView, setCalenderView] = useState(false);
@@ -23,6 +25,8 @@ const AllAppointment = () => {
   const [selectedSpecialty, setSelectSpecialty] = useState("");
   const [seletectedDateValue, setSelectedDateValue] = useState("");
   const [patientNumber, setPatientNumber] = useState(userDetails?.userPhone);
+  const [isLoading, setIsLoading] = useState(false);
+  const [dataFound, setDataFound] = useState(false);
   console.log(startDate, "seleted date is");
   const currentDate = new Date();
   const hasMounted = useRef(false);
@@ -43,12 +47,23 @@ const AllAppointment = () => {
   };
 
   const TherapistAvailability = async () => {
+    setIsLoading(true);
+    setAvailabilityData(null);
+    console.log(
+      { selectedSpecialty, selectedRegion, seletectedDateValue },
+      "abcdnlnlnlnl99090"
+    );
     try {
       const response = await axios.get(
         `${baseUrl}api/getTherapistAvailability?status=none&specialty=${selectedSpecialty}&region=${selectedRegion}&date=${seletectedDateValue}`
       );
-      console.log(response, "response from thera");
+      console.log(
+        response.data.appointmentData.length === 0,
+        "response from thera"
+      );
       setAvailabilityData(response.data.appointmentData);
+      setIsLoading(false);
+      setDataFound(response.data.appointmentData.length === 0);
     } catch (error) {
       console.error("Error fetching dropdown data:", error);
     }
@@ -61,17 +76,24 @@ const AllAppointment = () => {
     return date.toLocaleDateString(undefined, options); // Format as "Month Day, Year"
   };
 
-  useEffect(() => {
-    if (!hasMounted.current) {
-      hasMounted.current = true;
-      return;
-    }
+  // useEffect(() => {
+  //   if (!hasMounted.current) {
+  //     hasMounted.current = true;
+  //     return;
+  //   }
 
+  //   if (selectedSpecialty || selectedRegion || seletectedDateValue) {
+  //     TherapistAvailability();
+  //   }
+  // }, [selectedSpecialty, selectedRegion, seletectedDateValue]);
+
+  function searchButton() {
     if (selectedSpecialty || selectedRegion || seletectedDateValue) {
       TherapistAvailability();
+    } else {
+      toast.error("Add key to Search Data");
     }
-  }, [selectedSpecialty, selectedRegion, seletectedDateValue]);
-
+  }
   useEffect(() => {
     fetchDropdownData();
     const currentDate = new Date().toISOString().split("T")[0];
@@ -91,8 +113,7 @@ const AllAppointment = () => {
                   All Appointments
                 </h1>
               </div>
-              {/* search bar */}
-              <div className="w-full p-2 space-x-4 flex items-center relative">
+              <div className="w-full p-2 flex items-center space-x-4">
                 <select
                   className="w-[15%] h-[2rem] bg-slate-300 rounded-md"
                   value={selectedRegion}
@@ -107,14 +128,7 @@ const AllAppointment = () => {
                     </option>
                   ))}
                 </select>
-                {/* <select className="w-[15%] h-[2rem] bg-slate-300 rounded-sm">
-                  <option value="" disabled selected>
-                    Soonest Availability
-                  </option>
 
-                  <option value="12 hours">12 hours</option>
-                  <option value="24 hours">24 hours</option>
-                </select> */}
                 <select
                   className="w-[15%] h-[2rem] bg-slate-300 rounded-md"
                   value={selectedSpecialty}
@@ -129,38 +143,50 @@ const AllAppointment = () => {
                     </option>
                   ))}
                 </select>
+
                 <input
                   type="date"
-                  className="w-[15%] pl-4 pr-4 h-[2.3rem] bg-slate-300 text-black rounded-md  focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all duration-300"
+                  className="w-[15%] pl-4 pr-4 h-[2.3rem] bg-slate-300 text-black rounded-md focus:outline-none focus:ring-2 focus:ring-slate-400 transition-all duration-300"
                   min={minDate}
                   onChange={(e) => setSelectedDateValue(e.target.value)}
                   value={seletectedDateValue}
                 />
 
-                <input
-                  type="text"
-                  placeholder="search"
-                  className="w-[15%] h-[2.5rem] text-center border-2 rounded-md "
-                />
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => searchButton()}
+                    className="ml-auto h-[2.5rem] bg-blue-500 text-white rounded-md px-4"
+                  >
+                    Search
+                  </button>
+                </div>
               </div>
 
               {/* show cards here for book appointment */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-4 max-h-[580px] overflow-y-auto">
-                {availabilityData.map((item, index) => (
-                  <CardForAppointment
-                    key={item._id}
-                    therapistsId={item.therapistsId}
-                    name={item.name || ""}
-                    date={item.date}
-                    status={item.status || "Unknown"}
-                    time={item.time || "Unspecified"}
-                    userEmail={userEmail}
-                    patientNumber={patientNumber}
-                  />
-                ))}
-              </div>
+              {isLoading && <Loader />}
+              {availabilityData && !isLoading ? (
+                availabilityData.length > 0 ? (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-4 max-h-[580px] overflow-y-auto">
+                    {availabilityData.map((item, index) => (
+                      <CardForAppointment
+                        key={item._id}
+                        therapistsId={item.therapistsId}
+                        name={item.name || ""}
+                        date={item.date}
+                        status={item.status || "Unknown"}
+                        time={item.time || "Unspecified"}
+                        userEmail={userEmail}
+                        patientNumber={patientNumber}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div>
+                    <h1>Data is Not Available</h1>
+                  </div>
+                )
+              ) : null}
 
-              {/* pagination */}
               <Pagination />
             </div>
           </div>

@@ -109,14 +109,7 @@ const AllAppointment = () => {
     }
   };
 
-  function DateTime(data) {
-    const date = new Date(data);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() is zero-based, so add 1
-    const day = String(date.getDate()).padStart(2, "0");
 
-    return `${month}/${day}/${year}`;
-  }
 
   function timeSlotFunction(startTime, appointmentType) {
     const [hours, minutes] = startTime.split(":").map(Number);
@@ -208,7 +201,7 @@ const AllAppointment = () => {
                         key={item._id}
                         therapistsId={item.therapistsId}
                         name={item.therapistDetails[0].name || ""}
-                        date={DateTime(item.date)}
+                        date={item.date}
                         status={item.status || "Unknown"}
                         startTime={item.time}
                         endTime={timeSlotFunction(

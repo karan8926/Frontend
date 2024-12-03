@@ -16,9 +16,15 @@ const CardForAppointment = (props) => {
     region,
     therapistEmail,
   } = props;
-  console.log(props, "props45555555555555555555555555555555555");
   const formattedDate = new Date(date).toISOString().split("T")[0];
+  function DateTime(data) {
+    const date = new Date(data);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() is zero-based, so add 1
+    const day = String(date.getDate()).padStart(2, "0");
 
+    return `${month}/${day}/${year}`;
+  }
   const handleBookAppointment = async () => {
     try {
       const requestBody = {
@@ -72,7 +78,8 @@ const CardForAppointment = (props) => {
         </div>
         <div className="flex items-center space-x-2">
           <h3 className="text-start font-medium text-lg text-gray-500">
-            <span className="font-semibold text-gray-700">Date:</span> {date}
+            <span className="font-semibold text-gray-700">Date:</span>{" "}
+            {formattedDate}
           </h3>
         </div>
         <div className="flex items-center space-x-2">

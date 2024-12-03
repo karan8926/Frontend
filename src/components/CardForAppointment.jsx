@@ -5,7 +5,17 @@ import axios from "axios";
 import { IoMdArrowRoundForward } from "react-icons/io";
 import { toast } from "react-toastify";
 const CardForAppointment = (props) => {
-  const { therapistsId, name, date, time, userEmail, patientNumber } = props;
+  const {
+    therapistsId,
+    name,
+    date,
+    startTime,
+    endTime,
+    userEmail,
+    patientNumber,
+    region,
+    therapistEmail,
+  } = props;
   console.log(props, "props45555555555555555555555555555555555");
   const formattedDate = new Date(date).toISOString().split("T")[0];
 
@@ -14,7 +24,7 @@ const CardForAppointment = (props) => {
       const requestBody = {
         therapistsId,
         date: formattedDate,
-        time,
+        startTime,
         patientEmail: userEmail,
         patientNumber: patientNumber,
       };
@@ -36,22 +46,50 @@ const CardForAppointment = (props) => {
   };
 
   return (
-    <div className="w-[26rem] border-1 border-gray-400 p-4 shadow-lg bg-gray-100">
-      <div className="w-full h-[50%]">
-        <img src={header} alt="" className="w-full h-full" />
+    <div className="w-[26rem] tracking-wide border-2 border-gray-300 p-6 shadow-xl bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg hover:shadow-2xl transition-all">
+      <div className="w-full h-[50%] overflow-hidden rounded-t-lg">
+        <img
+          src={header}
+          alt="Therapist"
+          className="w-full h-full object-cover"
+        />
       </div>
-      <div className="space-y-4 h-[30%] p-2">
-        <h2 className="text-start font-bold text-xl">{name}</h2>
-        <h3 className="text-start font-medium text-xl">{userEmail}</h3>
-        <h3 className="text-start font-medium text-xl">{date}</h3>
-        <h3 className="text-start font-medium text-xl">{time}</h3>
+      <div className="space-y-2 p-4">
+        <h2 className="text-start font-bold text-2xl text-gray-800 mb-2">
+          {name}
+        </h2>
+        <div className="flex items-center space-x-2">
+          <h3 className="text-start font-medium text-lg text-gray-500">
+            <span className="text-gray-700 font-semibold">Email:</span>{" "}
+            {therapistEmail}
+          </h3>
+        </div>
+        <div className="flex items-center space-x-2">
+          <h3 className="text-start font-medium text-lg text-gray-500">
+            <span className="font-semibold text-gray-700">Region:</span>{" "}
+            {region}
+          </h3>
+        </div>
+        <div className="flex items-center space-x-2">
+          <h3 className="text-start font-medium text-lg text-gray-500">
+            <span className="font-semibold text-gray-700">Date:</span> {date}
+          </h3>
+        </div>
+        <div className="flex items-center space-x-2">
+          <h3 className="text-start font-medium text-lg text-gray-500">
+            <span className="font-semibold text-gray-700">Time Slot:</span>{" "}
+            {startTime} - {endTime}
+          </h3>
+        </div>
       </div>
       <div
         onClick={handleBookAppointment}
-        className=" bg-blue-700 rounded-md  p-4 mt-2 cursor-pointer flex justify-between hover:bg-blue-600"
+        className="bg-blue-600 rounded-md p-4 mt-4 cursor-pointer flex justify-between items-center hover:bg-blue-500 transition-colors"
       >
-        <button className="text-white font-bold">Book Appointment</button>
-        <IoMdArrowRoundForward className="w-8 h-8 text-2xl text-white cursor-pointer" />
+        <button className="text-white font-semibold text-lg">
+          Book Appointment
+        </button>
+        <IoMdArrowRoundForward className="w-6 h-6 text-white" />
       </div>
     </div>
   );

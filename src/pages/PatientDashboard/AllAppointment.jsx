@@ -59,10 +59,7 @@ const AllAppointment = () => {
       const response = await axios.get(
         `${baseUrl}api/getTherapistAvailability?status=none&specialty=${selectedSpecialty}&region=${selectedRegion}&date=${seletectedDateValue}&pageNo=${pageNo}`
       );
-      console.log(
-        response.data.appointmentData.length === 0,
-        "response from thera"
-      );
+      console.log(response.data.appointmentData, "response from thera");
       setAvailabilityData(response.data.appointmentData);
       setTotalPages(
         Math.ceil(response.data.totalItems / response.data.pageSize)
@@ -111,6 +108,34 @@ const AllAppointment = () => {
       setCurrentPage(pageNo);
     }
   };
+
+  function DateTime(data) {
+    const date = new Date(data);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() is zero-based, so add 1
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${month}/${day}/${year}`;
+  }
+
+  function timeSlotFunction(startTime, appointmentType) {
+    const [hours, minutes] = startTime.split(":").map(Number);
+
+    let duration = 30;
+    if (appointmentType === "Consultation(45min)") {
+      duration = 45;
+    }
+
+    let endMinutes = minutes + duration;
+    let endHours = hours + Math.floor(endMinutes / 60);
+    endMinutes = endMinutes % 60;
+
+    const endTimeFormatted = `${endHours}:${
+      endMinutes < 10 ? "0" : ""
+    }${endMinutes}`;
+
+    return endTimeFormatted;
+  }
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -124,9 +149,9 @@ const AllAppointment = () => {
                   All Appointments
                 </h1>
               </div>
-              <div className="w-full p-2 flex items-center space-x-4">
+              <div className="w-full p-2 flex items-center space-x-4 ">
                 <select
-                  className="w-[15%] h-[2rem] bg-slate-300 rounded-md"
+                  className="w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4"
                   value={selectedRegion}
                   onChange={(e) => setSelectedRegion(e.target.value)}
                 >
@@ -141,7 +166,7 @@ const AllAppointment = () => {
                 </select>
 
                 <select
-                  className="w-[15%] h-[2rem] bg-slate-300 rounded-md"
+                  className="w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4"
                   value={selectedSpecialty}
                   onChange={(e) => setSelectSpecialty(e.target.value)}
                 >
@@ -182,10 +207,16 @@ const AllAppointment = () => {
                       <CardForAppointment
                         key={item._id}
                         therapistsId={item.therapistsId}
-                        name={item.name || ""}
-                        date={item.date}
+                        name={item.therapistDetails[0].name || ""}
+                        date={DateTime(item.date)}
                         status={item.status || "Unknown"}
-                        time={item.time || "Unspecified"}
+                        startTime={item.time}
+                        endTime={timeSlotFunction(
+                          item.time,
+                          item.appointmentType
+                        )}
+                        region={item.therapistDetails[0].region}
+                        therapistEmail={item.therapistDetails[0].email}
                         userEmail={userEmail}
                         patientNumber={patientNumber}
                       />

@@ -20,15 +20,16 @@ const Signup = () => {
         phone_number: number,
         email,
       };
-      const response = await axios.post(`${baseUrl}api/patient-signup`, formData);
-      toast.success("Patient added successfully");
+      const response = await axios.post(
+        `${baseUrl}api/patient-signup`,
+        formData
+      );
+      toast.success("Patient Registered successfully");
       navigate("/signin");
-      console.log("patient data",response)
     } catch (error) {
-      toast.error("failed to add");
-      console.log(error);
+      toast.error(error.response.data.error);
+      console.log(error.response.data.error);
     }
-   
   };
 
   return (

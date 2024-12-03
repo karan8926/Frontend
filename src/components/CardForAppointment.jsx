@@ -24,7 +24,7 @@ const CardForAppointment = (props) => {
       const requestBody = {
         therapistsId,
         date: formattedDate,
-        startTime,
+        time: startTime,
         patientEmail: userEmail,
         patientNumber: patientNumber,
       };

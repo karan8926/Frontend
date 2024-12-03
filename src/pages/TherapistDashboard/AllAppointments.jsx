@@ -162,7 +162,7 @@ const AllAppointments = () => {
         <div className="flex-1 bg-gray-100 p-6">
           <div className="w-full overflow-hidden ">
             <div className="w-full h-[30%]  ">
-              <div className="w-full h-8 ">
+              <div className="w-full flex-grow ">
                 <h1 className="font-bold text-3xl">Scheduled Appointments</h1>
               </div>
               <table className="w-full table-auto">
@@ -234,13 +234,13 @@ const AllAppointments = () => {
             </div>
             <div className="flex justify-between">
               <button
-                onClick={() => setShowModal(false)} 
+                onClick={() => setShowModal(false)}
                 className="p-2 bg-gray-400 text-white rounded"
               >
                 Cancel
               </button>
               <button
-                onClick={handleStatusChange} 
+                onClick={handleStatusChange}
                 className="p-2 bg-blue-500 text-white rounded"
               >
                 Save Changes

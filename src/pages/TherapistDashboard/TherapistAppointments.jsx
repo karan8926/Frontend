@@ -255,8 +255,12 @@ const TherapistAppointments = () => {
                           onChange={handleChange}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         >
-                          <option value="setup">Consultation (45min)</option>
-                          <option value="follow-up">Follow-up (30min)</option>
+                          <option value="Consultation(45min)">
+                            Consultation (45min)
+                          </option>
+                          <option value="Follow-up(30min)">
+                            Follow-up (30min)
+                          </option>
                         </select>
                       </div>
 

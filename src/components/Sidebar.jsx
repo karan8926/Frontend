@@ -27,6 +27,10 @@ const Sidebar = () => {
         label: "My Appointment",
         path: "/therapist/myAppointmnet",
       },
+      {
+        label:"Manage Availability",
+        path: "/therapist/manageAvailability"
+      }
     ],
 
     admin: [

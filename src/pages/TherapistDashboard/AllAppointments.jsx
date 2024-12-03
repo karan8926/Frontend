@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Pagination from "../../components/Pagination";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
+import { toast } from "react-toastify";
 
 const AllAppointments = () => {
   const [appointments, setAppointments] = useState([
@@ -93,7 +94,7 @@ const AllAppointments = () => {
       return await response.json(); // If successful, return the updated data
     } catch (error) {
       console.error(error);
-      alert("Error updating appointment status");
+      toast.error("Error updating appointment status");
     }
   };
   const fetchAppointments = async () => {
@@ -103,7 +104,7 @@ const AllAppointments = () => {
       setAppointments(data);
     } catch (error) {
       console.error("Error fetching appointments", error);
-      alert("Error fetching appointments");
+      toast.error("Error fetching appointments");
     }
   };
   const [showModal, setShowModal] = useState(false);
@@ -145,9 +146,9 @@ const AllAppointments = () => {
     if (result) {
       // If successful, close the modal
       setShowModal(false);
-      alert("Status updated successfully");
+      toast.success("Status updated successfully");
     } else {
-      alert("Failed to update status");
+      toast.error("Failed to update status");
     }
   };
 

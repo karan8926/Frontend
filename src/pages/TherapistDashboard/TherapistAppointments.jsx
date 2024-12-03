@@ -32,12 +32,13 @@ const TherapistAppointments = () => {
     e.preventDefault();
     try {
       console.log(email, "email da data");
-      const { availableDate, timeSlot, appointmentType } = formData;
+      const { availableDate, timeSlot, appointmentType, specialty } = formData;
       const data = await axios.post(`${baseUrl}api/AddTherapistAvailability`, {
         email: email,
         date: availableDate,
         time: timeSlot,
         appointmentType,
+        specialty,
       });
       toast.success("Appointment Added SuccessFully");
     } catch (error) {
@@ -47,7 +48,14 @@ const TherapistAppointments = () => {
     console.log(formData);
     setToggleModel(false);
   };
+  function DateTime(data) {
+    const date = new Date(data);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() is zero-based, so add 1
+    const day = String(date.getDate()).padStart(2, "0");
 
+    return `${month}/${day}/${year}`;
+  }
   const getTherapistData = async () => {
     try {
       const response = await axios.get(
@@ -146,6 +154,25 @@ const TherapistAppointments = () => {
   useEffect(() => {
     getTherapistData();
   }, []);
+
+  function timeSlotFunction(startTime, appointmentType) {
+    const [hours, minutes] = startTime.split(":").map(Number);
+
+    let duration = 30;
+    if (appointmentType === "Consultation(45min)") {
+      duration = 45;
+    }
+
+    let endMinutes = minutes + duration;
+    let endHours = hours + Math.floor(endMinutes / 60);
+    endMinutes = endMinutes % 60;
+
+    const endTimeFormatted = `${endHours}:${
+      endMinutes < 10 ? "0" : ""
+    }${endMinutes}`;
+
+    return endTimeFormatted;
+  }
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -263,7 +290,32 @@ const TherapistAppointments = () => {
                           </option>
                         </select>
                       </div>
-
+                      <div>
+                        <label
+                          htmlFor="specialty"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Specialty
+                        </label>
+                        <select
+                          id="specialty"
+                          name="specialty"
+                          value={formData.specialty}
+                          onChange={handleChange}
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        >
+                          <option value="CognitiveBehavioralTherapy(CBT)">
+                            Cognitive Behavioral Therapy (CBT)
+                          </option>
+                          <option value="TraumaTherapy">Trauma Therapy</option>
+                          <option value="MarriageandFamilyTherapy(MFT)">
+                            Marriage and Family Therapy (MFT)
+                          </option>
+                          <option value="BehaviorTherapy(DBT)">
+                            Behavior Therapy (DBT)
+                          </option>
+                        </select>
+                      </div>
                       <div className="flex justify-end mt-4">
                         <button
                           type="submit"
@@ -300,14 +352,15 @@ const TherapistAppointments = () => {
                 <tbody>
                   {appointments.map((data, index) => (
                     <tr key={index} className="border-t">
-                      <td className="p-2">{index}</td>
+                      <td className="p-2">{index + 1}</td>
                       <td className="p-2">{data.therapistDetails[0].name}</td>
                       <td className="p-2">{data.therapistDetails[0].email}</td>
-                      <td className="p-2">{data.date}</td>
-                      <td className="p-2">{data.time}</td>
+                      <td className="p-2">{DateTime(data.date)}</td>
                       <td className="p-2">
-                        {data.therapistDetails[0].appointmentType}
+                        {data.time}-
+                        {timeSlotFunction(data.time, data.appointmentType)}
                       </td>
+                      <td className="p-2">{data.appointmentType}</td>
                     </tr>
                   ))}
                 </tbody>

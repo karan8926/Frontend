@@ -12,6 +12,8 @@ import { toast } from "react-toastify";
 
 const AllAppointment = () => {
   const [availabilityData, setAvailabilityData] = useState(null);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [startDate, setStartDate] = useState(new Date());
   const [calenderView, setCalenderView] = useState(false);
@@ -46,7 +48,7 @@ const AllAppointment = () => {
     }
   };
 
-  const TherapistAvailability = async () => {
+  const TherapistAvailability = async (pageNo) => {
     setIsLoading(true);
     setAvailabilityData(null);
     console.log(
@@ -55,13 +57,16 @@ const AllAppointment = () => {
     );
     try {
       const response = await axios.get(
-        `${baseUrl}api/getTherapistAvailability?status=none&specialty=${selectedSpecialty}&region=${selectedRegion}&date=${seletectedDateValue}`
+        `${baseUrl}api/getTherapistAvailability?status=none&specialty=${selectedSpecialty}&region=${selectedRegion}&date=${seletectedDateValue}&pageNo=${pageNo}`
       );
       console.log(
         response.data.appointmentData.length === 0,
         "response from thera"
       );
       setAvailabilityData(response.data.appointmentData);
+      setTotalPages(
+        Math.ceil(response.data.totalItems / response.data.pageSize)
+      );
       setIsLoading(false);
       setDataFound(response.data.appointmentData.length === 0);
     } catch (error) {
@@ -89,7 +94,7 @@ const AllAppointment = () => {
 
   function searchButton() {
     if (selectedSpecialty || selectedRegion || seletectedDateValue) {
-      TherapistAvailability();
+      TherapistAvailability(currentPage);
     } else {
       toast.error("Add key to Search Data");
     }
@@ -100,6 +105,12 @@ const AllAppointment = () => {
     setMinDate(currentDate);
   }, []);
 
+  const handlePageChange = (pageNo) => {
+    if (pageNo >= 1 && pageNo <= totalPages) {
+      TherapistAvailability(pageNo);
+      setCurrentPage(pageNo);
+    }
+  };
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -187,7 +198,11 @@ const AllAppointment = () => {
                 )
               ) : null}
 
-              <Pagination />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </div>
           </div>
         </div>

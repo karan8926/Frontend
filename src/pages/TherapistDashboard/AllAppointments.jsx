@@ -3,95 +3,26 @@ import Pagination from "../../components/Pagination";
 import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
 import { toast } from "react-toastify";
+import { baseUrl } from "../../App";
+import axios from "axios";
 
 const AllAppointments = () => {
-  const [appointments, setAppointments] = useState([
-    {
-      srNo: 1,
-      name: "John Doe",
-      date: "2024-12-01",
-      time: "10:00 AM",
-      status: "Confirmed",
-    },
-    {
-      srNo: 2,
-      name: "Jane Smith",
-      date: "2024-12-02",
-      time: "01:30 PM",
-      status: "Pending",
-    },
-    {
-      srNo: 3,
-      name: "Michael Johnson",
-      date: "2024-12-03",
-      time: "11:00 AM",
-      status: "Confirmed",
-    },
-    {
-      srNo: 4,
-      name: "Emily Davis",
-      date: "2024-12-04",
-      time: "02:15 PM",
-      status: "Cancelled",
-    },
-    {
-      srNo: 5,
-      name: "Sarah Lee",
-      date: "2024-12-05",
-      time: "03:30 PM",
-      status: "Confirmed",
-    },
-    {
-      srNo: 6,
-      name: "David Brown",
-      date: "2024-12-06",
-      time: "09:00 AM",
-      status: "Pending",
-    },
-    {
-      srNo: 7,
-      name: "Olivia Green",
-      date: "2024-12-07",
-      time: "12:45 PM",
-      status: "Confirmed",
-    },
-    {
-      srNo: 8,
-      name: "Liam White",
-      date: "2024-12-08",
-      time: "04:00 PM",
-      status: "Cancelled",
-    },
-    {
-      srNo: 9,
-      name: "Ava Clark",
-      date: "2024-12-09",
-      time: "10:30 AM",
-      status: "Confirmed",
-    },
-    {
-      srNo: 10,
-      name: "James Taylor",
-      date: "2024-12-10",
-      time: "02:00 PM",
-      status: "Pending",
-    },
-  ]);
-  const updateAppointmentStatus = async (appointmentId, newStatus) => {
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const userId = userDetails.userId;
+  const [appointments, setAppointments] = useState([]);
+  const [updateDataId, setUpdateDataId] = useState("");
+
+  const updateAppointmentStatus = async () => {
     try {
-      const response = await fetch("/api/updateAppointment", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ appointmentId, newStatus }),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update appointment status");
-      }
-
-      return await response.json(); // If successful, return the updated data
+      console.log(newStatus, updateDataId, "newstatsus");
+      const response = await axios.post(
+        `${baseUrl}api/updateAppointmentStatus`,
+        { id: updateDataId, status: newStatus }
+      );
+      console.log(response);
+      toast.success("Status Updated SuccessFully");
+      setShowModal(false);
+      fetchAppointments();
     } catch (error) {
       console.error(error);
       toast.error("Error updating appointment status");
@@ -99,9 +30,11 @@ const AllAppointments = () => {
   };
   const fetchAppointments = async () => {
     try {
-      const response = await fetch("/api/getAppointments");
-      const data = await response.json();
-      setAppointments(data);
+      const response = await axios.get(
+        `${baseUrl}api/getTherapistDetailsByIdAndStatus?therapistId=${userId}`
+      );
+      console.log(response, "res94555555555555555555555555555555555555555555");
+      setAppointments(response.data.result);
     } catch (error) {
       console.error("Error fetching appointments", error);
       toast.error("Error fetching appointments");
@@ -112,7 +45,7 @@ const AllAppointments = () => {
   const [newStatus, setNewStatus] = useState("");
   const getStatusColor = (status) => {
     switch (status) {
-      case "Pending":
+      case "pending":
         return "bg-yellow-300";
       case "Confirmed":
         return "bg-green-300";
@@ -125,36 +58,36 @@ const AllAppointments = () => {
     }
   };
 
-  const handleStatusChange = async () => {
-    if (!selectedAppointment || !newStatus) return;
+  useEffect(() => {
+    fetchAppointments();
+  }, []);
+  function timeSlotFunction(startTime, appointmentType) {
+    const [hours, minutes] = startTime.split(":").map(Number);
 
-    const updatedAppointment = { ...selectedAppointment, status: newStatus };
-
-    // Optimistically update the UI with the new status
-    const updatedAppointments = appointments.map((appointment) =>
-      appointment.id === selectedAppointment.id
-        ? { ...appointment, status: newStatus }
-        : appointment
-    );
-    setAppointments(updatedAppointments);
-
-    // Update status in the backend API
-    const result = await updateAppointmentStatus(
-      updatedAppointment.id,
-      newStatus
-    );
-    if (result) {
-      // If successful, close the modal
-      setShowModal(false);
-      toast.success("Status updated successfully");
-    } else {
-      toast.error("Failed to update status");
+    let duration = 30;
+    if (appointmentType === "Consultation(45min)") {
+      duration = 45;
     }
-  };
 
-  // useEffect(() => {
-  //   fetchAppointments();
-  // }, []);
+    let endMinutes = minutes + duration;
+    let endHours = hours + Math.floor(endMinutes / 60);
+    endMinutes = endMinutes % 60;
+
+    const endTimeFormatted = `${endHours}:${
+      endMinutes < 10 ? "0" : ""
+    }${endMinutes}`;
+
+    return endTimeFormatted;
+  }
+
+  function DateTime(data) {
+    const date = new Date(data);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0"); // getMonth() is zero-based, so add 1
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${month}/${day}/${year}`;
+  }
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -170,19 +103,32 @@ const AllAppointments = () => {
                 <thead>
                   <tr className="h-10">
                     <th className="font-bold p-2 text-left">sr no</th>
-                    <th className="font-bold p-2 text-left">Name</th>
+                    <th className="font-bold p-2 text-left">Patient Name</th>
+                    <th className="font-bold p-2 text-left">Patient Email</th>
+                    <th className="font-bold p-2 text-left">
+                      Appointment Type
+                    </th>
+                    <th className="font-bold p-2 text-left">Specialty</th>
                     <th className="font-bold p-2 text-left">Date</th>
-                    <th className="font-bold p-2 text-left">Time</th>
+                    <th className="font-bold p-2 text-left">Time Slot</th>
                     <th className="font-bold p-2 text-left">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {appointments.map((data, index) => (
                     <tr key={index} className="border-t">
-                      <td className="p-2">{data.srNo}</td>
+                      <td className="p-2">{index + 1}</td>
                       <td className="p-2">{data.name}</td>
-                      <td className="p-2">{data.date}</td>
-                      <td className="p-2">{data.time}</td>
+                      <td className="p-2">{data.email}</td>
+                      <td className="p-2">{data.appointmentType}</td>
+                      <td className="p-2">
+                        {data.therapistDetails[0].specialty}
+                      </td>
+                      <td className="p-2">{DateTime(data.date)}</td>
+                      <td className="p-2">
+                        {data.time}-
+                        {timeSlotFunction(data.time, data.appointmentType)}
+                      </td>
                       <td className="p-2">
                         {/* Status Label with background color and fixed width */}
                         <span
@@ -196,9 +142,8 @@ const AllAppointments = () => {
                       <td className="p-2">
                         <button
                           onClick={() => {
-                            setSelectedAppointment(data);
-                            setNewStatus(data.status); // Default to current status
                             setShowModal(true); // Open the modal
+                            setUpdateDataId(data._id);
                           }}
                           className="p-2 bg-blue-500 text-white rounded"
                         >
@@ -228,6 +173,7 @@ const AllAppointments = () => {
                 onChange={(e) => setNewStatus(e.target.value)}
                 className="p-2 border rounded w-full mb-4"
               >
+                <option value="">Select a status</option>
                 <option value="Confirmed">Confirmed</option>
                 <option value="Completed">Completed</option>
                 <option value="Cancelled">Cancelled</option>
@@ -241,7 +187,7 @@ const AllAppointments = () => {
                 Cancel
               </button>
               <button
-                onClick={handleStatusChange}
+                onClick={updateAppointmentStatus}
                 className="p-2 bg-blue-500 text-white rounded"
               >
                 Save Changes

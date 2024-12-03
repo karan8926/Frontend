@@ -14,9 +14,15 @@ const MyAppointments = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [calenderView, setCalenderView] = useState(false);
   const [appointmentData, setAppointmentData] = useState([]);
-  async function myAppointmentsList() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+
+  async function myAppointmentsList(pageNo) {
     try {
-      const myAppointmentList = await axios.get(`${baseUrl}api/allAppointment`);
+      const myAppointmentList = await axios.get(
+        `${baseUrl}api/allAppointment?pageNo=${pageNo}`
+      );
+      setTotalPages(myAppointmentList.data.noOfPages);
       console.log(myAppointmentList, "list data==========================");
       setAppointmentData(myAppointmentList.data.AppointmentData);
     } catch (error) {
@@ -32,7 +38,7 @@ const MyAppointments = () => {
     return `${month}/${day}/${year}`;
   }
   useEffect(() => {
-    myAppointmentsList();
+    myAppointmentsList(currentPage);
   }, []);
 
   function timeSlotFunction(startTime, appointmentType) {
@@ -53,6 +59,13 @@ const MyAppointments = () => {
 
     return endTimeFormatted;
   }
+
+  const handlePageChange = (pageNo) => {
+    if (pageNo >= 1 && pageNo <= totalPages) {
+      myAppointmentsList(pageNo);
+      setCurrentPage(pageNo);
+    }
+  };
   return (
     <div className="w-full h-screen flex">
       <Sidebar />
@@ -102,7 +115,11 @@ const MyAppointments = () => {
                 </tbody>
               </table>
 
-              <Pagination />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </div>
           </div>
         </div>

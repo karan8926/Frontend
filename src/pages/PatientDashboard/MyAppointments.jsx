@@ -16,15 +16,16 @@ const MyAppointments = () => {
   const [appointmentData, setAppointmentData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const userId = userDetails?.userId;
   async function myAppointmentsList(pageNo) {
     try {
       const myAppointmentList = await axios.get(
-        `${baseUrl}api/allAppointment?pageNo=${pageNo}`
+        `${baseUrl}api/getPatientById?pageNo=${pageNo}&patientId=${userId}`
       );
-      setTotalPages(myAppointmentList.data.noOfPages);
+      setTotalPages(myAppointmentList.data.totalPages);
       console.log(myAppointmentList, "list data==========================");
-      setAppointmentData(myAppointmentList.data.AppointmentData);
+      setAppointmentData(myAppointmentList.data.result);
     } catch (error) {
       toast.error(error, "error");
     }

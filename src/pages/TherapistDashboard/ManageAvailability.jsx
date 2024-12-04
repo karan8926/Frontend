@@ -5,14 +5,19 @@ import AvailabilityCalendar from "../../components/AvailabilityCalendar";
 import axios from "axios";
 import { baseUrl } from "../../App";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 const ManageAvailability = () => {
   const [toggleModel, setToggleModel] = useState("");
   const [minDate, setMinDate] = useState("");
+  const [eventListData, setEventListData] = useState([]);
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const userId = userDetails.userId;
   const [formData, setFormData] = useState({
     availability: "",
     startTime: "",
     endTime: "",
+    therapistId: userId,
   });
   function handleChange(e) {
     const { name, value } = e.target;
@@ -24,13 +29,43 @@ const ManageAvailability = () => {
   }
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(formData, "formdata");
-    // try {
-    //   const response = await axios.post(`${baseUrl}`);
-    //   toast.success("Availbility Added Successfully");
-    // } catch (error) {
-    //   toast.error(error);
-    // }
+    try {
+      const response = await axios.post(
+        `${baseUrl}api/addCalendarAvailability`,
+        formData
+      );
+      setFormData({
+        availability: "",
+        startTime: "",
+        endTime: "",
+      });
+      setToggleModel(false);
+      getCalendarData();
+      toast.success("Availbility Added Successfully");
+    } catch (error) {
+      toast.error(error);
+    }
+  }
+  async function getCalendarData() {
+    try {
+      const response = await axios.get(
+        `${baseUrl}api/getCalendarAvailabilityById?therapistId=${userId}`
+      );
+      console.log(response.data.data);
+      // const {title,start,end}=
+      const mappedData = response?.data?.data.map((data) => ({
+        title: data.availability,
+        start: moment(data.startTime).toDate(),
+        end: moment(data.endTime).toDate(),
+      }));
+      setEventListData(mappedData);
+      console.log(
+        response.data.data,
+        "res data999999999999999222222222222222222222"
+      );
+    } catch (error) {
+      toast.error(error);
+    }
   }
   useEffect(() => {
     const currentDate = new Date();
@@ -40,6 +75,7 @@ const ManageAvailability = () => {
       .split("T")[1]
       .substring(0, 5); // Get HH:mm
     setMinDate(`${formattedDate}T${formattedTime}`);
+    getCalendarData();
   }, []);
   return (
     <div className="w-full h-screen flex ">
@@ -144,7 +180,7 @@ const ManageAvailability = () => {
                 </div>
               )}
               <div className="">
-                <AvailabilityCalendar />
+                <AvailabilityCalendar eventListData={eventListData} />
               </div>
             </div>
           </div>

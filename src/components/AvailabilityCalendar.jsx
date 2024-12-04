@@ -31,15 +31,18 @@ const myEventsList = [
   },
 ];
 
+
 function onSelectEventFunction() {
   console.log("i am available");
 }
-const AvailabilityCalendar = () => {
+const AvailabilityCalendar = (props) => {
+  const { eventListData } = props;
+  console.log(props, "pop");
   return (
     <div>
       <Calendar
         localizer={localizer}
-        events={myEventsList}
+        events={eventListData}
         startAccessor="start"
         endAccessor="end"
         style={{ height: 600 }}

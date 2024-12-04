@@ -10,12 +10,13 @@ const ManageAvailability = () => {
   const [toggleModel, setToggleModel] = useState("");
   const [minDate, setMinDate] = useState("");
   const [formData, setFormData] = useState({
-    title: "",
+    availability: "",
     startTime: "",
     endTime: "",
   });
   function handleChange(e) {
     const { name, value } = e.target;
+    console.log(name, value);
     setFormData({
       ...formData,
       [name]: value,
@@ -71,19 +72,22 @@ const ManageAvailability = () => {
                     <form onSubmit={handleSubmit} className="space-y-4">
                       <div>
                         <label
-                          htmlFor="title"
+                          htmlFor="availability"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Title
+                          Availability
                         </label>
-                        <input
-                          type="text"
-                          id="title"
-                          name="title"
-                          value={formData.title}
+
+                        <select
+                          value={formData.availability}
+                          name="availability"
                           onChange={handleChange}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-                        />
+                        >
+                          <option value="">Select Availability</option>
+                          <option value="Available">Available</option>
+                          <option value="NotAvailable">Not Available</option>
+                        </select>
                       </div>
 
                       <div>

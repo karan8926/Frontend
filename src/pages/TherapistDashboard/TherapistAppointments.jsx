@@ -219,32 +219,7 @@ const TherapistAppointments = () => {
                           </option>
                         </select>
                       </div>
-                      <div>
-                        <label
-                          htmlFor="specialty"
-                          className="block text-sm font-medium text-gray-700"
-                        >
-                          Specialty
-                        </label>
-                        <select
-                          id="specialty"
-                          name="specialty"
-                          value={formData.specialty}
-                          onChange={handleChange}
-                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-                        >
-                          <option value="CognitiveBehavioralTherapy(CBT)">
-                            Cognitive Behavioral Therapy (CBT)
-                          </option>
-                          <option value="TraumaTherapy">Trauma Therapy</option>
-                          <option value="MarriageandFamilyTherapy(MFT)">
-                            Marriage and Family Therapy (MFT)
-                          </option>
-                          <option value="BehaviorTherapy(DBT)">
-                            Behavior Therapy (DBT)
-                          </option>
-                        </select>
-                      </div>
+                      
                       <div className="flex justify-end mt-4">
                         <button
                           type="submit"

@@ -39,8 +39,8 @@ const AllAppointments = () => {
       setAppointments(response.data.result);
       setTotalPages(response.data.totalPages);
     } catch (error) {
-      console.error("Error fetching appointments", error);
-      toast.error("Error fetching appointments");
+      console.error("Error fetching appointments", error.data.error);
+      toast.error(error.data);
     }
   };
   const [showModal, setShowModal] = useState(false);
@@ -48,7 +48,7 @@ const AllAppointments = () => {
   const [newStatus, setNewStatus] = useState("");
   const getStatusColor = (status) => {
     switch (status) {
-      case "pending":
+      case "Pending":
         return "bg-yellow-300";
       case "Confirmed":
         return "bg-green-300";
@@ -129,8 +129,8 @@ const AllAppointments = () => {
                   {appointments.map((data, index) => (
                     <tr key={index} className="border-t">
                       <td className="p-2">{index + 1}</td>
-                      <td className="p-2">{data.name}</td>
-                      <td className="p-2">{data.email}</td>
+                      <td className="p-2">{data.patientDetails[0].name}</td>
+                      <td className="p-2">{data.patientDetails[0].email}</td>
                       <td className="p-2">{data.appointmentType}</td>
                       <td className="p-2">
                         {data.therapistDetails[0].specialty}

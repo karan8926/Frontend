@@ -119,14 +119,27 @@ const TherapistList = () => {
                         >
                           Region
                         </label>
-                        <input
-                          type="text"
+                        <select
                           id="region"
                           name="region"
                           value={formData.region}
                           onChange={handleChange}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-                        />
+                        >
+                          <option value="">Select</option>
+                          <option value="Northeast">Northeast</option>
+                          <option value="Midwest">Midwest</option>
+                          <option value="South">South</option>
+                          <option value="West">West</option>
+                          <option value="Southeast">Southeast</option>
+                          <option value="PacificNorthwest">
+                            Pacific Northwest
+                          </option>
+                          <option value="GreatPlains">Great Plains</option>
+                          <option value="RockyMountainRegion">
+                            Rocky Mountain Region
+                          </option>
+                        </select>
                       </div>
 
                       <div>
@@ -159,6 +172,7 @@ const TherapistList = () => {
                           onChange={handleChange}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         >
+                          <option value="">Select</option>
                           <option value="CognitiveBehavioralTherapy(CBT)">
                             Cognitive Behavioral Therapy (CBT)
                           </option>

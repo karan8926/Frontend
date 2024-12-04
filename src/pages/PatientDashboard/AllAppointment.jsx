@@ -61,9 +61,7 @@ const AllAppointment = () => {
       );
       console.log(response.data.appointmentData, "response from thera");
       setAvailabilityData(response.data.appointmentData);
-      setTotalPages(
-        Math.ceil(response.data.totalItems / response.data.pageSize)
-      );
+      setTotalPages(response.data.totalPages);
       setIsLoading(false);
       setDataFound(response.data.appointmentData.length === 0);
     } catch (error) {
@@ -108,8 +106,6 @@ const AllAppointment = () => {
       setCurrentPage(pageNo);
     }
   };
-
-
 
   function timeSlotFunction(startTime, appointmentType) {
     const [hours, minutes] = startTime.split(":").map(Number);

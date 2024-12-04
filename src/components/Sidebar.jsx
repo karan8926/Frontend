@@ -6,7 +6,7 @@ const Sidebar = () => {
   const [userType, setUserType] = useState(userDetails.userType);
   const [activeItem, setActiveItem] = useState(null);
   const navigate = useNavigate();
-  const location = useLocation(); // Get the current path
+  const location = useLocation();
   const menulist = {
     patient: [
       {
@@ -28,9 +28,9 @@ const Sidebar = () => {
         path: "/therapist/myAppointmnet",
       },
       {
-        label:"Manage Availability",
-        path: "/therapist/manageAvailability"
-      }
+        label: "Manage Availability",
+        path: "/therapist/manageAvailability",
+      },
     ],
 
     admin: [

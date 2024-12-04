@@ -11,6 +11,8 @@ const AllAppointments = () => {
   const userId = userDetails.userId;
   const [appointments, setAppointments] = useState([]);
   const [updateDataId, setUpdateDataId] = useState("");
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const updateAppointmentStatus = async () => {
     try {
@@ -28,13 +30,14 @@ const AllAppointments = () => {
       toast.error("Error updating appointment status");
     }
   };
-  const fetchAppointments = async () => {
+  const fetchAppointments = async (pageNo) => {
     try {
       const response = await axios.get(
-        `${baseUrl}api/getTherapistDetailsByIdAndStatus?therapistId=${userId}`
+        `${baseUrl}api/getTherapistDetailsByIdAndStatus?therapistId=${userId}&pageNo=${pageNo}`
       );
       console.log(response, "res94555555555555555555555555555555555555555555");
       setAppointments(response.data.result);
+      setTotalPages(response.data.totalPages);
     } catch (error) {
       console.error("Error fetching appointments", error);
       toast.error("Error fetching appointments");
@@ -59,8 +62,9 @@ const AllAppointments = () => {
   };
 
   useEffect(() => {
-    fetchAppointments();
+    fetchAppointments(currentPage);
   }, []);
+
   function timeSlotFunction(startTime, appointmentType) {
     const [hours, minutes] = startTime.split(":").map(Number);
 
@@ -88,6 +92,13 @@ const AllAppointments = () => {
 
     return `${month}/${day}/${year}`;
   }
+
+  const handlePageChange = (pageNo) => {
+    if (pageNo >= 1 && pageNo <= totalPages) {
+      fetchAppointments(pageNo);
+      setCurrentPage(pageNo);
+    }
+  };
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -155,7 +166,11 @@ const AllAppointments = () => {
                 </tbody>
               </table>
 
-              <Pagination />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </div>
           </div>
         </div>

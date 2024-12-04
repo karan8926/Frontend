@@ -54,14 +54,6 @@ const AvailabilityCalendar = () => {
           },
         })}
       />
-
-      {/* <Calendar
-        localizer={localizer}
-        events={myEventsList}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: 500 }}
-      /> */}
     </div>
   );
 };

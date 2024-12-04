@@ -13,6 +13,8 @@ const TherapistAppointments = () => {
   const [email, setEmail] = useState(therapistDetails.userEmail);
   const [userId, setUserId] = useState(therapistDetails.userId);
   const [appointments, setAppointments] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
   const [formData, setFormData] = useState({
     availableDate: "",
     timeSlot: "",
@@ -56,103 +58,22 @@ const TherapistAppointments = () => {
 
     return `${month}/${day}/${year}`;
   }
-  const getTherapistData = async () => {
+  const getTherapistData = async (pageNo) => {
     try {
       const response = await axios.get(
-        `${baseUrl}api/getTherapistAvailability?therapistsId=${userId}`
+        `${baseUrl}api/getTherapistAvailability?therapistsId=${userId}&pageNo=${pageNo}`
       );
       console.log(response, "reponse are:----");
       setAppointments(response.data.appointmentData);
+      setTotalPages(response.data.totalPages);
     } catch (err) {
       console.log(err);
       toast.error("Error while Fetching Data");
     }
   };
-  // const appointments = [
-  //   {
-  //     srNo: 1,
-  //     name: "Alice Green",
-  //     email: "alice.green@example.com",
-  //     date: "2024-12-01",
-  //     timeSlot: "10:00 AM",
-  //     appointmentType: "Consultation",
-  //   },
-  //   {
-  //     srNo: 2,
-  //     name: "Bob White",
-  //     email: "bob.white@example.com",
-  //     date: "2024-12-02",
-  //     timeSlot: "01:30 PM",
-  //     appointmentType: "Follow-up",
-  //   },
-  //   {
-  //     srNo: 3,
-  //     name: "Charlie Brown",
-  //     email: "charlie.brown@example.com",
-  //     date: "2024-12-03",
-  //     timeSlot: "11:00 AM",
-  //     appointmentType: "Consultation",
-  //   },
-  //   {
-  //     srNo: 4,
-  //     name: "Daisy Blue",
-  //     email: "daisy.blue@example.com",
-  //     date: "2024-12-04",
-  //     timeSlot: "02:15 PM",
-  //     appointmentType: "Consultation",
-  //   },
-  //   {
-  //     srNo: 5,
-  //     name: "Ethan Black",
-  //     email: "ethan.black@example.com",
-  //     date: "2024-12-05",
-  //     timeSlot: "03:30 PM",
-  //     appointmentType: "Consultation",
-  //   },
-  //   {
-  //     srNo: 6,
-  //     name: "Fiona Pink",
-  //     email: "fiona.pink@example.com",
-  //     date: "2024-12-06",
-  //     timeSlot: "09:00 AM",
-  //     appointmentType: "Consultation",
-  //   },
-  //   {
-  //     srNo: 7,
-  //     name: "Greg Yellow",
-  //     email: "greg.yellow@example.com",
-  //     date: "2024-12-07",
-  //     timeSlot: "12:45 PM",
-  //     appointmentType: "Consultation",
-  //   },
-  //   {
-  //     srNo: 8,
-  //     name: "Hannah Red",
-  //     email: "hannah.red@example.com",
-  //     date: "2024-12-08",
-  //     timeSlot: "04:00 PM",
-  //     appointmentType: "Follow-up",
-  //   },
-  //   {
-  //     srNo: 9,
-  //     name: "Ian Purple",
-  //     email: "ian.purple@example.com",
-  //     date: "2024-12-09",
-  //     timeSlot: "10:30 AM",
-  //     appointmentType: "Consultation",
-  //   },
-  //   {
-  //     srNo: 10,
-  //     name: "Julia Orange",
-  //     email: "julia.orange@example.com",
-  //     date: "2024-12-10",
-  //     timeSlot: "02:00 PM",
-  //     appointmentType: "Consultation",
-  //   },
-  // ];
 
   useEffect(() => {
-    getTherapistData();
+    getTherapistData(currentPage);
   }, []);
 
   function timeSlotFunction(startTime, appointmentType) {
@@ -173,6 +94,13 @@ const TherapistAppointments = () => {
 
     return endTimeFormatted;
   }
+
+  const handlePageChange = (pageNo) => {
+    if (pageNo >= 1 && pageNo <= totalPages) {
+      getTherapistData(pageNo);
+      setCurrentPage(pageNo);
+    }
+  };
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -366,7 +294,11 @@ const TherapistAppointments = () => {
                 </tbody>
               </table>
 
-              <Pagination />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
             </div>
           </div>
         </div>

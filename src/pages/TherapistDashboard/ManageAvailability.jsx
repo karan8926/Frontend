@@ -1,19 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
 import AvailabilityCalendar from "../../components/AvailabilityCalendar";
+import axios from "axios";
+import { baseUrl } from "../../App";
+import { toast } from "react-toastify";
 
 const ManageAvailability = () => {
   const [toggleModel, setToggleModel] = useState("");
+  const [minDate, setMinDate] = useState("");
   const [formData, setFormData] = useState({
     title: "",
     startTime: "",
     endTime: "",
   });
-  function handleChange() {}
-  function handleSubmit() {
-    console.log("add");
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   }
+  async function handleSubmit(e) {
+    e.preventDefault();
+    console.log(formData, "formdata");
+    // try {
+    //   const response = await axios.post(`${baseUrl}`);
+    //   toast.success("Availbility Added Successfully");
+    // } catch (error) {
+    //   toast.error(error);
+    // }
+  }
+  useEffect(() => {
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split("T")[0];
+    const formattedTime = currentDate
+      .toISOString()
+      .split("T")[1]
+      .substring(0, 5); // Get HH:mm
+    setMinDate(`${formattedDate}T${formattedTime}`);
+  }, []);
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -39,22 +65,22 @@ const ManageAvailability = () => {
                 <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
                   <div className="w-[40%] max-w-lg bg-white p-6 rounded-md flex flex-col">
                     <h2 className="text-xl font-semibold text-center mb-4">
-                      CREATE APPOINTMENT
+                      Add Availability
                     </h2>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                       <div>
                         <label
-                          htmlFor="availableDate"
+                          htmlFor="title"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Available Date
+                          Title
                         </label>
                         <input
-                          type="date"
-                          id="availableDate"
-                          name="availableDate"
-                          value={formData.availableDate}
+                          type="text"
+                          id="title"
+                          name="title"
+                          value={formData.title}
                           onChange={handleChange}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
@@ -62,43 +88,38 @@ const ManageAvailability = () => {
 
                       <div>
                         <label
-                          htmlFor="timeSlot"
+                          htmlFor="startTime"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Available Time Slots
+                          Start Date and Time:
                         </label>
                         <input
-                          type="time"
-                          id="timeSlot"
-                          name="timeSlot"
-                          value={formData.timeSlot}
+                          type="datetime-local"
+                          id="startTime"
+                          name="startTime"
+                          min={minDate}
+                          value={formData.startTime}
                           onChange={handleChange}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
                       </div>
                       <div>
                         <label
-                          htmlFor="appointmentType"
+                          htmlFor="endTime"
                           className="block text-sm font-medium text-gray-700"
                         >
-                          Appointment Type
+                          End Date and Time:
                         </label>
-                        <select
-                          id="appointmentType"
-                          name="appointmentType"
-                          value={formData.appointmentType}
+                        <input
+                          type="datetime-local"
+                          id="endTime"
+                          name="endTime"
+                          min={minDate}
+                          value={formData.endTime}
                           onChange={handleChange}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-                        >
-                          <option value="Consultation(45min)">
-                            Consultation (45min)
-                          </option>
-                          <option value="Follow-up(30min)">
-                            Follow-up (30min)
-                          </option>
-                        </select>
+                        />
                       </div>
-
                       <div className="flex justify-end mt-4">
                         <button
                           type="submit"

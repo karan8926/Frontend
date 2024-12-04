@@ -5,13 +5,13 @@ import Navbar from "../../components/Navbar";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { baseUrl } from "../../App";
-
+import { useNavigate } from "react-router-dom";
 const PatientList = () => {
   const [patientList, setPatientList] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [totalNoOfPatient, setTotalNoOfPatient] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const navigate = useNavigate();
   const fetchData = async (pageNo) => {
     try {
       const response = await axios.get(
@@ -35,6 +35,10 @@ const PatientList = () => {
       setCurrentPage(pageNo);
     }
   };
+  function showPatientDetails(id) {
+    navigate(`/admin/patientDetails/${id}`);
+    console.log(id, "abcd");
+  }
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -54,20 +58,20 @@ const PatientList = () => {
                     <th className="font-bold p-2 text-left">Email</th>
                     <th className="font-bold p-2 text-left">Number</th>
                     <th className="font-bold p-2 text-left">Type</th>
-                    {/* <th className="font-bold p-2 text-left">Date</th>
-                    <th className="font-bold p-2 text-left">Time</th> */}
                   </tr>
                 </thead>
                 <tbody>
                   {patientList.map((data, index) => (
-                    <tr key={index} className="border-t">
+                    <tr
+                      key={data._id}
+                      className="border-t cursor-pointer hover:bg-slate-200"
+                      onClick={() => showPatientDetails(data._id)}
+                    >
                       <td className="p-2">{index + 1}</td>
                       <td className="p-2">{data.name}</td>
                       <td className="p-2">{data.email}</td>
                       <td className="p-2">{data.phone_number}</td>
                       <td className="p-2">{data.type}</td>
-                      {/* <td className="p-2">{data.date}</td>
-                      <td className="p-2">{data.time}</td> */}
                     </tr>
                   ))}
                 </tbody>

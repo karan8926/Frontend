@@ -5,8 +5,10 @@ import Navbar from "../../components/Navbar";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { baseUrl } from "../../App";
+import { useNavigate } from "react-router-dom";
 
 const TherapistList = () => {
+  const navigate = useNavigate();
   const [toggleModel, setToggleModel] = useState(false);
   const [therapistList, setTherapistList] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -15,6 +17,7 @@ const TherapistList = () => {
   const [formData, setFormData] = useState({
     region: "",
     name: "",
+    specialty: "",
     number: "",
     email: "",
     password: "",
@@ -78,6 +81,10 @@ const TherapistList = () => {
     fetchData(currentPage);
   }, [currentPage]);
 
+  function showTherapistDetails(id) {
+    navigate(`/admin/therapistDetails/${id}`);
+    console.log(id, "abcd");
+  }
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -137,6 +144,32 @@ const TherapistList = () => {
                           onChange={handleChange}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="specialty"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Specialty
+                        </label>
+                        <select
+                          id="specialty"
+                          name="specialty"
+                          value={formData.specialty}
+                          onChange={handleChange}
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        >
+                          <option value="CognitiveBehavioralTherapy(CBT)">
+                            Cognitive Behavioral Therapy (CBT)
+                          </option>
+                          <option value="TraumaTherapy">Trauma Therapy</option>
+                          <option value="MarriageandFamilyTherapy(MFT)">
+                            Marriage and Family Therapy (MFT)
+                          </option>
+                          <option value="BehaviorTherapy(DBT)">
+                            Behavior Therapy (DBT)
+                          </option>
+                        </select>
                       </div>
 
                       <div>
@@ -221,15 +254,12 @@ const TherapistList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* <tr className="border-t">
-                    <td className="p-2">1</td>
-                    <td className="p-2">Adom</td>
-                    <td className="p-2">adom12@gmail.com</td>
-                    <td className="p-2">98989898989</td>
-                    <td className="p-2">US(WEST)</td>
-                  </tr> */}
                   {therapistList.map((data, index) => (
-                    <tr key={index} className="border-t">
+                    <tr
+                      key={data._id}
+                      className="border-t cursor-pointer hover:bg-slate-200"
+                      onClick={() => showTherapistDetails(data._id)}
+                    >
                       <td className="p-2">{index + 1}</td>
                       <td className="p-2">{data.name}</td>
                       <td className="p-2">{data.email}</td>

@@ -20,7 +20,7 @@ const TherapistAppointments = () => {
     timeSlot: "",
     // name: "",
     // email: "",
-    appointmentType: "setup",
+    appointmentType: "",
   });
 
   const handleChange = (e) => {
@@ -42,6 +42,7 @@ const TherapistAppointments = () => {
         appointmentType,
         specialty,
       });
+      getTherapistData();
       toast.success("Appointment Added SuccessFully");
     } catch (error) {
       console.log(error, "error");
@@ -61,10 +62,10 @@ const TherapistAppointments = () => {
   const getTherapistData = async (pageNo) => {
     try {
       const response = await axios.get(
-        `${baseUrl}api/getTherapistAvailability?therapistsId=${userId}&pageNo=${pageNo}`
+        `${baseUrl}api/getTherapistDetailsById?therapistId=${userId}&pageNo=${pageNo}`
       );
       console.log(response, "reponse are:----");
-      setAppointments(response.data.appointmentData);
+      setAppointments(response.data.result);
       setTotalPages(response.data.totalPages);
     } catch (err) {
       console.log(err);
@@ -278,7 +279,7 @@ const TherapistAppointments = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {appointments.map((data, index) => (
+                  {appointments?.map((data, index) => (
                     <tr key={index} className="border-t">
                       <td className="p-2">{index + 1}</td>
                       <td className="p-2">{data.therapistDetails[0].name}</td>

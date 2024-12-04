@@ -215,6 +215,7 @@ const TherapistList = () => {
                     <th className="font-bold p-2 text-left">sr no</th>
                     <th className="font-bold p-2 text-left">Name</th>
                     <th className="font-bold p-2 text-left">Email</th>
+                    <th className="font-bold p-2 text-left">Specialty</th>
                     <th className="font-bold p-2 text-left">Phone</th>
                     <th className="font-bold p-2 text-left">Region</th>
                   </tr>
@@ -232,6 +233,7 @@ const TherapistList = () => {
                       <td className="p-2">{index + 1}</td>
                       <td className="p-2">{data.name}</td>
                       <td className="p-2">{data.email}</td>
+                      <td className="p-2">{data.specialty}</td>
                       <td className="p-2">{data.number}</td>
                       <td className="p-2">{data.region}</td>
                     </tr>

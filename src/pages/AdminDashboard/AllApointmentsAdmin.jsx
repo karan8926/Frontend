@@ -113,9 +113,13 @@ const AllApointmentsAdmin = () => {
                     <tr key={index} className="border-t">
                       <td className="p-2">{index + 1}</td>
                       <td className="p-2">{data?.patientDetails[0]?.name}</td>
-                      <td className="p-2">{data?.patientDetails[0]?.email}</td>
+                      <td className="p-2 break-words max-w-xs">
+                        {data?.patientDetails[0]?.email}
+                      </td>
                       <td className="p-2">{data.therapistDetails[0].name}</td>
-                      <td className="p-2">{data.therapistDetails[0].email}</td>
+                      <td className="p-2 break-words max-w-xs">
+                        {data.therapistDetails[0].email}
+                      </td>
                       <td className="p-2">
                         {data.therapistDetails[0].specialty}
                       </td>

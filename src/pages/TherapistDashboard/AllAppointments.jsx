@@ -107,7 +107,7 @@ const AllAppointments = () => {
         <div className="flex-1 bg-gray-100 p-6">
           <div className="w-full overflow-hidden ">
             <div className="w-full h-[30%]  ">
-              <div className="w-full flex-grow ">
+              <div className="w-full flex-grow mb-4">
                 <h1 className="font-bold text-3xl">Scheduled Appointments</h1>
               </div>
               <table className="w-full table-auto">

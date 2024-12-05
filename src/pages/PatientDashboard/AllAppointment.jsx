@@ -133,7 +133,7 @@ const AllAppointment = () => {
         <div className="flex-1 bg-gray-100 p-6">
           <div className="w-full overflow-hidden ">
             <div className="w-full h-full">
-              <div className="w-full h-8">
+              <div className="w-full h-8 ">
                 <h1 className="text-black font-extrabold text-xl">
                   All Appointments
                 </h1>
@@ -147,6 +147,7 @@ const AllAppointment = () => {
                   <option value="" disabled>
                     Region
                   </option>
+                  <option value=" ">All</option>
                   {regions.map((region, index) => (
                     <option key={index} value={region}>
                       {region}
@@ -162,6 +163,8 @@ const AllAppointment = () => {
                   <option value="" disabled>
                     Specialities
                   </option>
+                  <option value=" ">All</option>
+
                   {specialty.map((specialty, index) => (
                     <option key={index} value={specialty}>
                       {specialty}
@@ -191,7 +194,7 @@ const AllAppointment = () => {
               {isLoading && <Loader />}
               {availabilityData && !isLoading ? (
                 availabilityData.length > 0 ? (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-4 max-h-[580px] overflow-y-auto">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-4 max-h-[580px] overflow-y-auto flex-wrap">
                     {availabilityData.map((item, index) => (
                       <CardForAppointment
                         key={item._id}
@@ -208,6 +211,7 @@ const AllAppointment = () => {
                         therapistEmail={item.therapistDetails[0].email}
                         userEmail={userEmail}
                         patientNumber={patientNumber}
+                        specialty={item.therapistDetails[0].specialty}
                       />
                     ))}
                   </div>

@@ -75,6 +75,11 @@ const ManageAvailability = () => {
       .split("T")[1]
       .substring(0, 5); // Get HH:mm
     setMinDate(`${formattedDate}T${formattedTime}`);
+    setFormData({
+      ...formData,
+      startTime: `${formattedDate}T${formattedTime}`, // Set default start time
+      endTime: `${formattedDate}T${formattedTime}`, // Set default end time
+    });
     getCalendarData();
   }, []);
   return (
@@ -125,7 +130,6 @@ const ManageAvailability = () => {
                           <option value="NotAvailable">Not Available</option>
                         </select>
                       </div>
-
                       <div>
                         <label
                           htmlFor="startTime"

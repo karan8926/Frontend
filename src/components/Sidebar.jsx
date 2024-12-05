@@ -3,10 +3,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-  const [userType, setUserType] = useState(userDetails.userType);
+  const [userType, setUserType] = useState(null);
   const [activeItem, setActiveItem] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+  useEffect(() => {
+    setUserType(userDetails.userType);
+  }, []);
   const menulist = {
     patient: [
       {

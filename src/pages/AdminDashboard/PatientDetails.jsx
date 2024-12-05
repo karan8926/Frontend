@@ -87,7 +87,7 @@ const PatientDetails = () => {
         <div className="flex-1 bg-gray-100 p-6">
           <div className="w-full overflow-hidden ">
             <div className="w-full h-[30%]  ">
-              <div className="flex flex-grow mb-2">
+              <div className="w-full h-8 mb-2">
                 <h1 className="font-bold text-3xl">Patient Detailed Data</h1>
               </div>
               <table className="w-full table-auto">

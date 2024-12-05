@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../App";
 import { toast } from "react-toastify";
@@ -30,13 +30,17 @@ const UserLoggedin = () => {
           accessToken: PatientResult.data.accessToken,
         })
       );
+
+      navigate(`/patient/allAppointment`);
+      window.location.reload();
+
       toast.success("logged in successfully");
-      navigate("/patient/allAppointment");
     } catch (error) {
       toast.error("Authentication failed");
       console.log(error);
     }
   };
+
   return (
     <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
       <div>

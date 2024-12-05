@@ -46,6 +46,7 @@ const TherapistAndAdminLoggedin = (props) => {
       } else if (userType === "therapist") {
         navigate("/therapist/allAppointment");
       }
+      window.location.reload();
     } catch (error) {
       toast.error("Authentication failed");
       console.error(error);

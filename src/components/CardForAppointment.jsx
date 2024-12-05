@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import header from "../assets/header.jpg";
+import medicalImage from "../assets/medicalPlaceholder.png";
 import { baseUrl } from "../App";
 import axios from "axios";
 import { IoMdArrowRoundForward } from "react-icons/io";
@@ -15,6 +15,7 @@ const CardForAppointment = (props) => {
     patientNumber,
     region,
     therapistEmail,
+    specialty,
   } = props;
   const formattedDate = new Date(date).toISOString().split("T")[0];
   function DateTime(data) {
@@ -52,10 +53,10 @@ const CardForAppointment = (props) => {
   };
 
   return (
-    <div className="w-[26rem] tracking-wide border-2 border-gray-300 p-6 shadow-xl bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg hover:shadow-2xl transition-all">
-      <div className="w-full h-[50%] overflow-hidden rounded-t-lg">
+    <div className="w-[26rem] md:w-[20rem] tracking-wide border-2 border-gray-300 p-6 shadow-xl bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg hover:shadow-2xl transition-all">
+      <div className="w-full h-auto  overflow-hidden rounded-t-lg">
         <img
-          src={header}
+          src={medicalImage}
           alt="Therapist"
           className="w-full h-full object-cover"
         />
@@ -64,6 +65,12 @@ const CardForAppointment = (props) => {
         <h2 className="text-start font-bold text-2xl text-gray-800 mb-2">
           {name}
         </h2>
+        <div className="flex items-center space-x-2">
+          <h3 className="text-start font-medium text-lg text-gray-500">
+            <span className="text-gray-700 font-semibold">Specialty:</span>{" "}
+            {specialty}
+          </h3>
+        </div>
         <div className="flex items-center space-x-2">
           <h3 className="text-start font-medium text-lg text-gray-500">
             <span className="text-gray-700 font-semibold">Email:</span>{" "}

@@ -26,6 +26,7 @@ const CardForAppointment = (props) => {
 
     return `${month}/${day}/${year}`;
   }
+
   const handleBookAppointment = async () => {
     try {
       const requestBody = {
@@ -53,7 +54,7 @@ const CardForAppointment = (props) => {
   };
 
   return (
-    <div className="w-[26rem] md:w-[20rem] tracking-wide border-2 border-gray-300 p-6 shadow-xl bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg hover:shadow-2xl transition-all">
+    <div className="w-[20rem] tracking-wide border-2 border-gray-300 p-6 shadow-xl bg-gradient-to-r from-blue-100 to-blue-200 rounded-lg hover:shadow-2xl transition-all">
       <div className="w-full h-auto  overflow-hidden rounded-t-lg">
         <img
           src={medicalImage}

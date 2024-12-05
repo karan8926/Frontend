@@ -81,6 +81,10 @@ const ManageAvailability = () => {
       endTime: `${formattedDate}T${formattedTime}`, // Set default end time
     });
     getCalendarData();
+    setTimeout(() => {
+      document.getElementById("startTime")?.focus();
+      document.getElementById("endTime")?.focus();
+    }, 100);
   }, []);
   return (
     <div className="w-full h-screen flex ">

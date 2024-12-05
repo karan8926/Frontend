@@ -16,8 +16,8 @@ const ManageAvailability = () => {
   const userId = userDetails.userId;
   const [formData, setFormData] = useState({
     availability: "",
-    startTime: "",
-    endTime: "",
+    startTime: new Date().toISOString().split("T")[0],
+    endTime: new Date().toISOString().split("T")[0],
     therapistId: userId,
   });
   function handleChange(e) {
@@ -76,11 +76,7 @@ const ManageAvailability = () => {
       .split("T")[1]
       .substring(0, 5); // Get HH:mm
     setMinDate(`${formattedDate}T${formattedTime}`);
-    setFormData({
-      ...formData,
-      startTime: `${formattedDate}T${formattedTime}`, // Set default start time
-      endTime: `${formattedDate}T${formattedTime}`, // Set default end time
-    });
+
     getCalendarData();
   }, []);
   return (

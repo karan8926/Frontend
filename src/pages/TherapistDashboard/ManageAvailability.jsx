@@ -6,6 +6,7 @@ import axios from "axios";
 import { baseUrl } from "../../App";
 import { toast } from "react-toastify";
 import moment from "moment";
+import DatePicker from "react-datepicker";
 
 const ManageAvailability = () => {
   const [toggleModel, setToggleModel] = useState("");
@@ -81,10 +82,6 @@ const ManageAvailability = () => {
       endTime: `${formattedDate}T${formattedTime}`, // Set default end time
     });
     getCalendarData();
-    setTimeout(() => {
-      document.getElementById("startTime")?.focus();
-      document.getElementById("endTime")?.focus();
-    }, 100);
   }, []);
   return (
     <div className="w-full h-screen flex ">
@@ -141,7 +138,7 @@ const ManageAvailability = () => {
                         >
                           Start Date and Time:
                         </label>
-                        <input
+                        {/* <input
                           type="datetime-local"
                           id="startTime"
                           name="startTime"
@@ -149,6 +146,16 @@ const ManageAvailability = () => {
                           value={formData.startTime}
                           onChange={handleChange}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        /> */}
+                        <DatePicker
+                          selected={new Date(formData.startTime)}
+                          onChange={(date) =>
+                            setFormData({ ...formData, startTime: date })
+                          }
+                          showTimeSelect
+                          dateFormat="Pp"
+                          timeIntervals={15}
+                          minDate={new Date()}
                         />
                       </div>
                       <div>
@@ -158,7 +165,7 @@ const ManageAvailability = () => {
                         >
                           End Date and Time:
                         </label>
-                        <input
+                        {/* <input
                           type="datetime-local"
                           id="endTime"
                           name="endTime"
@@ -166,6 +173,16 @@ const ManageAvailability = () => {
                           value={formData.endTime}
                           onChange={handleChange}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        /> */}
+                        <DatePicker
+                          selected={new Date(formData.endTime)}
+                          onChange={(date) =>
+                            setFormData({ ...formData, endTime: date })
+                          }
+                          showTimeSelect
+                          dateFormat="Pp"
+                          timeIntervals={15}
+                          minDate={new Date()}
                         />
                       </div>
                       <div className="flex justify-end mt-4">

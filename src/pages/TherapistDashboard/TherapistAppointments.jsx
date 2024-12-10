@@ -257,14 +257,14 @@ const TherapistAppointments = () => {
                   {appointments?.map((data, index) => (
                     <tr key={index} className="border-t">
                       <td className="p-2">{index + 1}</td>
-                      <td className="p-2">{data.therapistDetails[0].name}</td>
-                      <td className="p-2">{data.therapistDetails[0].email}</td>
-                      <td className="p-2">{DateTime(data.date)}</td>
+                      <td className="p-2">{data?.therapistDetails[0]?.name}</td>
+                      <td className="p-2">{data?.therapistDetails[0]?.email}</td>
+                      <td className="p-2">{DateTime(data?.date)}</td>
                       <td className="p-2">
-                        {data.time}-
-                        {timeSlotFunction(data.time, data.appointmentType)}
+                        {data?.time}-
+                        {timeSlotFunction(data?.time, data?.appointmentType)}
                       </td>
-                      <td className="p-2">{data.appointmentType}</td>
+                      <td className="p-2">{data?.appointmentType}</td>
                     </tr>
                   ))}
                 </tbody>

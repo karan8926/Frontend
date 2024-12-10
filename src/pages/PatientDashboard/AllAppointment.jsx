@@ -148,7 +148,7 @@ const AllAppointment = () => {
                     Region
                   </option>
                   <option value=" ">All</option>
-                  {regions.map((region, index) => (
+                  {regions?.map((region, index) => (
                     <option key={index} value={region}>
                       {region}
                     </option>
@@ -165,7 +165,7 @@ const AllAppointment = () => {
                   </option>
                   <option value=" ">All</option>
 
-                  {specialty.map((specialty, index) => (
+                  {specialty?.map((specialty, index) => (
                     <option key={index} value={specialty}>
                       {specialty}
                     </option>
@@ -195,7 +195,7 @@ const AllAppointment = () => {
               {availabilityData && !isLoading ? (
                 availabilityData.length > 0 ? (
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 pt-4 max-h-[580px] overflow-y-auto flex-wrap">
-                    {availabilityData.map((item, index) => (
+                    {availabilityData?.map((item, index) => (
                       <CardForAppointment
                         key={item._id}
                         therapistsId={item.therapistsId}
@@ -207,11 +207,11 @@ const AllAppointment = () => {
                           item.time,
                           item.appointmentType
                         )}
-                        region={item.therapistDetails[0].region}
-                        therapistEmail={item.therapistDetails[0].email}
+                        region={item?.therapistDetails[0]?.region}
+                        therapistEmail={item?.therapistDetails[0]?.email}
                         userEmail={userEmail}
                         patientNumber={patientNumber}
-                        specialty={item.therapistDetails[0].specialty}
+                        specialty={item?.therapistDetails[0]?.specialty}
                       />
                     ))}
                   </div>

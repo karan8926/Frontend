@@ -24,7 +24,8 @@ const Navbar = () => {
       >
         <RxAvatar className="size-[4rem] " />
 
-        <h3 className=" w-full p-2 rounded-xl text-center  text-black font-extrabold text-2xl">
+        <h3 className=" w-full p-2 rounded-xl text-center  text-gray-600 font-extrabold text-2xl">
+          <span>Hi,</span>
           {userName}
         </h3>
       </div>

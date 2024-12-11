@@ -24,7 +24,7 @@ const AllRoutes = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Signup />}></Route>
+      {/* <Route path="/" element={<Signup />}></Route> */}
       {/* different signin routing */}
 
       <Route path="/signin" element={<Signin />}></Route>
@@ -36,14 +36,18 @@ const AllRoutes = () => {
           "admin".match(userType) ? (
             <AllApointmentsAdmin />
           ) : (
-            <Navigate to="/signin" />
+            <Navigate to="/patient/signin" />
           )
         }
       ></Route>
       <Route
         path="/admin/patientsList"
         element={
-          "admin".match(userType) ? <PatientList /> : <Navigate to="/signin" />
+          "admin".match(userType) ? (
+            <PatientList />
+          ) : (
+            <Navigate to="/patient/signin" />
+          )
         }
       ></Route>
       <Route
@@ -52,7 +56,7 @@ const AllRoutes = () => {
           "admin".match(userType) ? (
             <TherapistList />
           ) : (
-            <Navigate to="/signin" />
+            <Navigate to="/patient/signin" />
           )
         }
       ></Route>
@@ -62,7 +66,7 @@ const AllRoutes = () => {
           "admin".match(userType) ? (
             <ManageAvailabilityByAdmin />
           ) : (
-            <Navigate to="/signin" />
+            <Navigate to="/patient/signin" />
           )
         }
       ></Route>
@@ -73,7 +77,7 @@ const AllRoutes = () => {
           "admin".match(userType) ? (
             <PatientDetails />
           ) : (
-            <Navigate to="/signin" />
+            <Navigate to="/patient/signin" />
           )
         }
       ></Route>
@@ -83,7 +87,7 @@ const AllRoutes = () => {
           "admin".match(userType) ? (
             <TherapistDetails />
           ) : (
-            <Navigate to="/signin" />
+            <Navigate to="/patient/signin" />
           )
         }
       ></Route>
@@ -96,7 +100,7 @@ const AllRoutes = () => {
           "therapist".match(userType) ? (
             <AllAppointments />
           ) : (
-            <Navigate to="/signin" />
+            <Navigate to="/patient/signin" />
           )
         }
       ></Route>
@@ -106,7 +110,7 @@ const AllRoutes = () => {
           "therapist".match(userType) ? (
             <TherapistAppointments />
           ) : (
-            <Navigate to="/signin" />
+            <Navigate to="/patient/signin" />
           )
         }
       ></Route>
@@ -116,7 +120,7 @@ const AllRoutes = () => {
           "therapist".match(userType) ? (
             <ManageAvailability />
           ) : (
-            <Navigate to="/signin" />
+            <Navigate to="/patient/signin" />
           )
         }
       ></Route>
@@ -128,7 +132,7 @@ const AllRoutes = () => {
           "patient".match(userType) ? (
             <AllAppointment />
           ) : (
-            <Navigate to="/signin" />
+            <Navigate to="/patient/signin" />
           )
         }
       ></Route>
@@ -138,7 +142,7 @@ const AllRoutes = () => {
           "patient".match(userType) ? (
             <MyAppointments />
           ) : (
-            <Navigate to="/signin" />
+            <Navigate to="/patient/signin" />
           )
         }
       ></Route>
@@ -148,7 +152,7 @@ const AllRoutes = () => {
           "patient".match(userType) ? <Profile /> : <Navigate to="/signin" />
         }
       ></Route>
-      <Route path="*" element={<Navigate to="/signin" />} />
+      <Route path="*" element={<Navigate to="/patient/signin" />} />
     </Routes>
   );
 };

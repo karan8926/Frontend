@@ -85,6 +85,10 @@ const TherapistList = () => {
     navigate(`/admin/therapistDetails/${id}`);
     console.log(id, "abcd");
   }
+
+  function manageAvailability(id) {
+    navigate("/admin/manageAvailability", { state: { id } });
+  }
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -272,14 +276,51 @@ const TherapistList = () => {
                     <tr
                       key={data._id}
                       className="border-t cursor-pointer hover:bg-slate-200"
-                      onClick={() => showTherapistDetails(data._id)}
                     >
-                      <td className="p-2">{index + 1}</td>
-                      <td className="p-2">{data.name}</td>
-                      <td className="p-2">{data.email}</td>
-                      <td className="p-2">{data.specialty}</td>
-                      <td className="p-2">{data.number}</td>
-                      <td className="p-2">{data.region}</td>
+                      <td
+                        className="p-2"
+                        onClick={() => showTherapistDetails(data._id)}
+                      >
+                        {index + 1}
+                      </td>
+                      <td
+                        className="p-2"
+                        onClick={() => showTherapistDetails(data._id)}
+                      >
+                        {data.name}
+                      </td>
+                      <td
+                        className="p-2"
+                        onClick={() => showTherapistDetails(data._id)}
+                      >
+                        {data.email}
+                      </td>
+                      <td
+                        className="p-2"
+                        onClick={() => showTherapistDetails(data._id)}
+                      >
+                        {data.specialty}
+                      </td>
+                      <td
+                        className="p-2"
+                        onClick={() => showTherapistDetails(data._id)}
+                      >
+                        {data.number}
+                      </td>
+                      <td
+                        className="p-2"
+                        onClick={() => showTherapistDetails(data._id)}
+                      >
+                        {data.region}
+                      </td>
+                      <td
+                        className="p-2"
+                        onClick={() => manageAvailability(data._id)}
+                      >
+                        <button className="bg-blue-500 text-white rounded-md p-[0.4rem]">
+                          Manage Availability
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>

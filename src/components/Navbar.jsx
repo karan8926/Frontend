@@ -8,7 +8,9 @@ const Navbar = () => {
   function logout(e) {
     e.preventDefault();
     localStorage.clear();
-    navigate("/signin");
+    "patient".match(userDetails.userType)
+      ? navigate("/patient/signin")
+      : navigate("/signin");
   }
   function handleProfile() {
     navigate(`/${userDetails.userType}/profile/${userDetails.userId}`);

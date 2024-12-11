@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* In your global stylesheet (e.g., styles.css) */
+.react-datepicker__time-container {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.react-datepicker__time-list {
+  padding-right: 0.5rem;
+}

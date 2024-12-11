@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
-import Sidebar from "../../components/Sidebar";
-import Navbar from "../../components/Navbar";
-import AvailabilityCalendar from "../../components/AvailabilityCalendar";
-import axios from "axios";
-import { baseUrl } from "../../App";
+import Sidebar from "./Sidebar";
+import Navbar from "./Navbar";
 import { toast } from "react-toastify";
 import moment from "moment";
+import { baseUrl } from "../App";
+import axios from "axios";
 import DatePicker from "react-datepicker";
+import AvailabilityCalendar from "./AvailabilityCalendar";
+import { useLocation } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 
-const ManageAvailability = () => {
+const ManageAvailabilityByAdmin = () => {
+  const location = useLocation();
   const [toggleModel, setToggleModel] = useState("");
   const [minDate, setMinDate] = useState("");
   const [eventListData, setEventListData] = useState([]);
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-  const userId = userDetails.userId;
+  const userId = location.state.id;
+  console.log(userId, "user ka id");
   const [formData, setFormData] = useState({
     availability: "",
     startTime: new Date().toISOString().split("T")[0],
@@ -53,18 +55,12 @@ const ManageAvailability = () => {
       const response = await axios.get(
         `${baseUrl}api/getCalendarAvailabilityById?therapistId=${userId}`
       );
-      console.log(response.data.data);
-      // const {title,start,end}=
       const mappedData = response?.data?.data.map((data) => ({
         title: data.availability,
         start: moment(data.startTime).toDate(),
         end: moment(data.endTime).toDate(),
       }));
       setEventListData(mappedData);
-      console.log(
-        response.data.data,
-        "res data999999999999999222222222222222222222"
-      );
     } catch (error) {
       toast.error(error);
     }
@@ -181,7 +177,7 @@ const ManageAvailability = () => {
                           dateFormat="Pp"
                           timeIntervals={15}
                           minDate={new Date()}
-                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md "
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
                       </div>
                       <div className="flex justify-end mt-4">
@@ -214,4 +210,4 @@ const ManageAvailability = () => {
   );
 };
 
-export default ManageAvailability;
+export default ManageAvailabilityByAdmin;

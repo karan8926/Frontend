@@ -9,7 +9,12 @@ import {
   isSameMonth,
   isSameDay,
 } from "date-fns";
-const PatientDashboardCalendar = ({ selectedDate, onDateSelect,currentMonth,setCurrentMonth }) => {
+const PatientDashboardCalendar = ({
+  selectedDate,
+  onDateSelect,
+  currentMonth,
+  setCurrentMonth,
+}) => {
   // const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const renderHeader = () => (

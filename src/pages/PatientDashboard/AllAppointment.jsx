@@ -10,7 +10,7 @@ import Pagination from "../../components/Pagination";
 import PatientDashboardCalendar from "../../components/PatientDashboardCalendar";
 import Loader from "../../components/Loader";
 const AllAppointment = () => {
-  const [availabilityData, setAvailabilityData] = useState(null);
+  const [availabilityData, setAvailabilityData] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -337,39 +337,47 @@ const AllAppointment = () => {
                     <div className="overflow-y-auto h-[32rem]">
                       <table className="table-auto w-full">
                         <tbody>
-                          {availabilityData?.map((data, index) => (
-                            <tr
-                              key={index}
-                              className="border-2 odd:bg-gray-200 text-lg"
-                            >
-                              <td className="font-normal p-4 pl-[2rem] w-[30%]">
-                                {dayDate(data?.date)}
-                              </td>
-                              <td className="font-normal p-4 w-[20%]">
-                                {data?.time}
-                              </td>
-                              <td className="font-normal p-4 w-[25%]">
-                                {data?.appointmentType}
-                              </td>
-                              <td
-                                className="font-normal p-4 pr-[4rem] w-[25%] "
-                                onClick={() => {
-                                  setToggleModel(true),
-                                    setSelectedData({
-                                      date: data?.date,
-                                      time: data?.time,
-                                      therapistsId:
-                                        data?.therapistDetails[0]._id,
-                                    });
-                                }}
-                              >
-                                <button className="bg-green-300 flex items-center w-full p-4 rounded-md text-gray-700 h-10">
-                                  <TiTick />
-                                  Select
-                                </button>
-                              </td>
-                            </tr>
-                          ))}
+                          {isLoading && <Loader />}
+                          {availabilityData && !isLoading ? (
+                            availabilityData.length > 0 ? (
+                              availabilityData?.map((data, index) => (
+                                <tr
+                                  key={index}
+                                  className="border-2 odd:bg-gray-200 text-lg"
+                                >
+                                  <td className="font-normal p-4 pl-[2rem] w-[30%]">
+                                    {dayDate(data?.date)}
+                                  </td>
+                                  <td className="font-normal p-4 w-[20%]">
+                                    {data?.time}
+                                  </td>
+                                  <td className="font-normal p-4 w-[25%]">
+                                    {data?.appointmentType}
+                                  </td>
+                                  <td
+                                    className="font-normal p-4 pr-[4rem] w-[25%] "
+                                    onClick={() => {
+                                      setToggleModel(true),
+                                        setSelectedData({
+                                          date: data?.date,
+                                          time: data?.time,
+                                          therapistsId:
+                                            data?.therapistDetails[0]._id,
+                                        });
+                                    }}
+                                  >
+                                    <button className="bg-green-300 flex items-center w-full p-4 rounded-md text-gray-700 h-10">
+                                      <TiTick />
+                                      Select
+                                    </button>
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
+                              <h1 className="text-center">No data Available</h1>
+                            )
+                          ) : null}
+
                           <tr></tr>
                         </tbody>
                       </table>

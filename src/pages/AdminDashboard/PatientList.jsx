@@ -6,11 +6,20 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { baseUrl } from "../../App";
 import { useNavigate } from "react-router-dom";
+import { TbRefresh } from "react-icons/tb";
 const PatientList = () => {
   const [patientList, setPatientList] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [totalNoOfPatient, setTotalNoOfPatient] = useState(0);
+  const [toggleModel, setToggleModel] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [accessCode, setAccessCode] = useState("");
+  const [formData, setFormData] = useState({
+    accessCode: "",
+    name: "",
+    phone_number: "",
+    email: "",
+  });
   const navigate = useNavigate();
   const fetchData = async (pageNo) => {
     try {
@@ -35,10 +44,57 @@ const PatientList = () => {
       setCurrentPage(pageNo);
     }
   };
+  const handleChange = (e) => {
+    const { value, name } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // console.log(formData);
+    try {
+      const { name, email, phone_number } = formData;
+      const createPatient = await axios.post(`${baseUrl}api/patient-signup`, {
+        name,
+        email,
+        phone_number,
+        accessCode,
+      });
+      setToggleModel(false);
+      toast.success("Access code generated successfully");
+    } catch (error) {
+      toast.error(error.response.data.error, "failed to add");
+      console.log(error, "error value");
+      setToggleModel(true);
+    }
+    fetchData(currentPage);
+    setFormData({
+      accessCode: "",
+      name: "",
+      number: "",
+      email: "",
+    });
+  };
   function showPatientDetails(id) {
     navigate(`/admin/patientDetails/${id}`);
     console.log(id, "abcd");
   }
+
+  async function generateAccessCode() {
+    try {
+      const accessCode = await axios.get(`${baseUrl}api/getUniqueAccessCode`);
+      console.log(accessCode.data.accessToken, "accessCode");
+      setAccessCode(accessCode?.data?.accessToken);
+    } catch (error) {
+      console.log(error, "error value");
+    }
+  }
+
+  useEffect(() => {
+    generateAccessCode();
+  }, []);
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -50,6 +106,110 @@ const PatientList = () => {
               <div className="w-full h-8 ">
                 <h1 className="font-bold text-3xl">Patients</h1>
               </div>
+              <div className="flex justify-end ">
+                <button
+                  onClick={() => setToggleModel(true)}
+                  className="bg-blue-600 rounded-md px-4 py-2 text-white"
+                >
+                  ADD PATIENT
+                </button>
+              </div>
+              {toggleModel && (
+                <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
+                  <div className="w-[40%] max-w-lg bg-white p-6  rounded-md flex flex-col">
+                    <h2 className="text-xl font-semibold text-center mb-4">
+                      Add Patient
+                    </h2>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                      <div>
+                        <label
+                          htmlFor="name"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Access Code
+                        </label>
+                        <div className="flex items-center border border-gray-300 rounded-md w-full h-10 px-3 py-2">
+                          <h3 className="flex-grow">{accessCode}</h3>
+                          <TbRefresh
+                            className="text-gray-600 size-8 cursor-pointer"
+                            onClick={() => generateAccessCode()}
+                          />
+                        </div>
+
+                        {/* <button
+                          className="cursor-pointer bg-red-500 text-white"
+                          onClick={generateAccessCode}
+                        >
+                          Generate Access-code
+                        </button> */}
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="name"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Name
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          value={formData.name}
+                          onChange={handleChange}
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="email"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Email
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        />
+                      </div>
+                      <div>
+                        <label
+                          htmlFor="phone_number"
+                          className="block text-sm font-medium text-gray-700"
+                        >
+                          Phone Number
+                        </label>
+                        <input
+                          type="tel"
+                          id="phone_number"
+                          name="phone_number"
+                          value={formData.phone_number}
+                          onChange={handleChange}
+                          className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                        />
+                      </div>
+                      <div className="flex justify-end mt-4">
+                        <button
+                          type="submit"
+                          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+                        >
+                          Submit
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setToggleModel(false)}
+                          className="ml-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700"
+                        >
+                          Close
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              )}
               <table className="w-full table-auto">
                 <thead>
                   <tr className="h-10">

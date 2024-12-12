@@ -13,7 +13,7 @@ const AllAppointment = () => {
   const [availabilityData, setAvailabilityData] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [loadingBookAppointment, setLoadingBookAppointment] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [calenderView, setCalenderView] = useState(false);
   const [specialty, setSpecialty] = useState([]);
@@ -164,7 +164,7 @@ const AllAppointment = () => {
   async function handleBookAppointment(e) {
     e.preventDefault();
     console.log(formData, "formData");
-    setIsLoading(true);
+    setLoadingBookAppointment(true);
     try {
       const requestBody = {
         therapistsId: selectedData.therapistsId,
@@ -191,7 +191,7 @@ const AllAppointment = () => {
         email: "",
         phone: "",
       });
-      setIsLoading(false);
+      setLoadingBookAppointment(false);
       TherapistAvailability(currentPage);
       setToggleModel(false);
     } catch (error) {
@@ -398,7 +398,7 @@ const AllAppointment = () => {
 
         {toggleModel && (
           <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
-            {isLoading ? (
+            {loadingBookAppointment ? (
               <Loader />
             ) : (
               <div className="w-[40%] max-w-lg bg-white p-6 rounded-md flex flex-col">

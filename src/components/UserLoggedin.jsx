@@ -19,7 +19,7 @@ const UserLoggedin = () => {
         reqbody
       );
       console.log(PatientResult, "PatientResult");
-      localStorage.setItem(
+      sessionStorage.setItem(
         "userDetails",
         JSON.stringify({
           userType: PatientResult.data.result.type,

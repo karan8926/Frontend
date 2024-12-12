@@ -7,7 +7,7 @@ import { baseUrl } from "../../App";
 import axios from "axios";
 
 const AllAppointments = () => {
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const userId = userDetails.userId;
   const [appointments, setAppointments] = useState([]);
   const [updateDataId, setUpdateDataId] = useState("");

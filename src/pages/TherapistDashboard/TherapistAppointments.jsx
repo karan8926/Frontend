@@ -7,7 +7,7 @@ import { baseUrl } from "../../App";
 import { toast } from "react-toastify";
 
 const TherapistAppointments = () => {
-  const therapistDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const therapistDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   console.log(therapistDetails, "ther data=33333333333333333333");
   const [toggleModel, setToggleModel] = useState(false);
   const [email, setEmail] = useState(therapistDetails.userEmail);

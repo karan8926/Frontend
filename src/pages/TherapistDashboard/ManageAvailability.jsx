@@ -13,7 +13,7 @@ const ManageAvailability = () => {
   const [toggleModel, setToggleModel] = useState("");
   const [minDate, setMinDate] = useState("");
   const [eventListData, setEventListData] = useState([]);
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const userId = userDetails.userId;
   const [formData, setFormData] = useState({
     availability: "",

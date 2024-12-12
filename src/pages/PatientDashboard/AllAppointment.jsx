@@ -21,7 +21,7 @@ const AllAppointment = () => {
   const [selectedRegion, setSelectedRegion] = useState("");
   const [selectedTherapist, setSelectedTherapist] = useState("");
   const [minDate, setMinDate] = useState("");
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const userEmail = userDetails?.userEmail;
   const [selectedSpecialty, setSelectSpecialty] = useState("");
   const [seletectedDateValue, setSelectedDateValue] = useState("");

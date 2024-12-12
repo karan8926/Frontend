@@ -116,35 +116,47 @@ const TherapistDetails = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {therapistDetailedData?.map((data, index) => (
-                    <tr key={index} className="border-t">
-                      <td className="p-2">{index + 1}</td>
-                      <td className="p-2">{data?.patientDetails[0]?.name}</td>
-                      <td className="p-2">{data?.patientDetails[0]?.email}</td>
-                      <td className="p-2">{data.therapistDetails[0].name}</td>
-                      <td className="p-2">{data.therapistDetails[0].email}</td>
-                      <td className="p-2">
-                        {data.therapistDetails[0].specialty}
-                      </td>
-                      <td className="p-2">{data.therapistDetails[0].region}</td>
-                      {/* <td className="p-2">{data.name}</td> */}
-                      <td className="p-2">{DateTime(data.date)}</td>
-                      <td className="p-2">
-                        {data.time}-
-                        {timeSlotFunction(data.time, data.appointmentType)}
-                      </td>
-                      <td className="p-2">
-                        {/* Status Label with background color and fixed width */}
-                        <span
-                          className={`p-2 text-white rounded ${getStatusColor(
-                            data.status
-                          )} w-32 text-center inline-block`}
-                        >
-                          {data.status}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                  {therapistDetailedData > 0 ? (
+                    therapistDetailedData?.map((data, index) => (
+                      <tr key={index} className="border-t">
+                        <td className="p-2">{index + 1}</td>
+                        <td className="p-2">{data?.patientDetails[0]?.name}</td>
+                        <td className="p-2">
+                          {data?.patientDetails[0]?.email}
+                        </td>
+                        <td className="p-2">{data.therapistDetails[0].name}</td>
+                        <td className="p-2">
+                          {data.therapistDetails[0].email}
+                        </td>
+                        <td className="p-2">
+                          {data.therapistDetails[0].specialty}
+                        </td>
+                        <td className="p-2">
+                          {data.therapistDetails[0].region}
+                        </td>
+                        {/* <td className="p-2">{data.name}</td> */}
+                        <td className="p-2">{DateTime(data.date)}</td>
+                        <td className="p-2">
+                          {data.time}-
+                          {timeSlotFunction(data.time, data.appointmentType)}
+                        </td>
+                        <td className="p-2">
+                          {/* Status Label with background color and fixed width */}
+                          <span
+                            className={`p-2 text-white rounded ${getStatusColor(
+                              data.status
+                            )} w-32 text-center inline-block`}
+                          >
+                            {data.status}
+                          </span>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <div>
+                      <h3>No data Available</h3>
+                    </div>
+                  )}
                 </tbody>
               </table>
               <Pagination

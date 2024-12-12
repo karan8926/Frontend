@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { RxAvatar } from "react-icons/rx";
 const Navbar = () => {
   const navigate = useNavigate();
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const [userName, setUserName] = useState(null);
   function logout(e) {
     e.preventDefault();
-    localStorage.clear();
+    sessionStorage.clear();
     "patient".match(userDetails.userType)
       ? navigate("/patient/signin")
       : navigate("/signin");

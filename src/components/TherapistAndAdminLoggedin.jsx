@@ -27,7 +27,7 @@ const TherapistAndAdminLoggedin = (props) => {
 
       const response = await axios.post(endpoint, reqbody);
       console.log(response, "response from admin");
-      localStorage.setItem(
+      sessionStorage.setItem(
         "userDetails",
         JSON.stringify({
           userType: response.data.data.type,

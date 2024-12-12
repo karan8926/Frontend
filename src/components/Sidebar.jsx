@@ -2,12 +2,21 @@ import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Sidebar = () => {
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const [userType, setUserType] = useState(null);
   const [activeItem, setActiveItem] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
+    if (userDetails === null) {
+      if (location.pathname.split("/")[1] === "admin") {
+        navigate("/signin");
+        window.location.reload();
+      } else {
+        navigate("/patient/signin");
+        window.location.reload();
+      }
+    }
     setUserType(userDetails.userType);
   }, []);
   const menulist = {

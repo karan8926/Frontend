@@ -18,7 +18,7 @@ import Profile from "../pages/Profile";
 import PatientSigninPage from "../pages/PatientSigninPage";
 import ManageAvailabilityByAdmin from "../components/ManageAvailabilityByAdmin";
 const AllRoutes = () => {
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
 
   const [userType, setUserType] = useState(userDetails?.userType);
 

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { baseUrl } from "../App";
 import { toast } from "react-toastify";
@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 const UserLoggedin = () => {
   const navigate = useNavigate();
   const [accessCode, setAccessCode] = useState("");
-
+  const inputRef = useRef();
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -41,6 +41,9 @@ const UserLoggedin = () => {
     }
   };
 
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
   return (
     <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
       <div>
@@ -51,6 +54,7 @@ const UserLoggedin = () => {
           Access Code
         </label>
         <input
+          ref={inputRef}
           type="text"
           name="accessCode"
           id="accessCode"

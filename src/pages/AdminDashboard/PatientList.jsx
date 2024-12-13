@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Pagination from "../../components/Pagination";
 import Sidebar from "../../components/Sidebar";
 import Navbar from "../../components/Navbar";
@@ -18,6 +18,7 @@ const PatientList = () => {
   const [addPatientLoader, setAddPatientLoader] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
+  const inputRef = useRef(null);
   const [formData, setFormData] = useState({
     accessCode: "",
     name: "",
@@ -75,6 +76,7 @@ const PatientList = () => {
       setToggleModel(false);
       setAddPatientLoader(false);
       setAddPatientLoader;
+      inputRef.current.focus();
       toast.success("Access code generated successfully");
     } catch (error) {
       toast.error(error.response.data.error, "failed to add");
@@ -107,6 +109,12 @@ const PatientList = () => {
   useEffect(() => {
     generateAccessCode();
   }, []);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [toggleModel]);
   // form Validation
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -184,6 +192,7 @@ const PatientList = () => {
                             type="text"
                             id="name"
                             name="name"
+                            ref={inputRef}
                             value={formData.name}
                             onChange={handleChange}
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"

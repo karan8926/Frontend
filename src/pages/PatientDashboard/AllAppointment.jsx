@@ -228,14 +228,18 @@ const AllAppointment = () => {
                 </h1>
               </div>
               <div className="w-full p-2 flex items-center space-x-4 ">
+                <label htmlFor="region" className="text-black font-bold">
+                  Region
+                </label>
                 <select
                   className="w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4"
                   value={selectedRegion}
+                  id="region"
                   onChange={(e) => setSelectedRegion(e.target.value)}
                 >
-                  <option value="" disabled>
+                  {/* <option value="" disabled>
                     Region
-                  </option>
+                  </option> */}
                   <option value=" ">All</option>
                   {regions?.map((region, index) => (
                     <option key={index} value={region}>
@@ -244,6 +248,12 @@ const AllAppointment = () => {
                   ))}
                 </select>
 
+                <label
+                  htmlFor="appointmentType"
+                  className="text-black font-bold"
+                >
+                  Appointment Type
+                </label>
                 <select
                   id="appointmentType"
                   name="appointmentType"
@@ -251,9 +261,9 @@ const AllAppointment = () => {
                   onChange={(e) => setAppointmentType(e.target.value)}
                   className="w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4"
                 >
-                  <option value="" disabled>
+                  {/* <option value="" disabled>
                     Appointment Type
-                  </option>
+                  </option> */}
                   <option value=" ">All</option>
                   <option value="Consultation(45min)">
                     Consultation (45min)

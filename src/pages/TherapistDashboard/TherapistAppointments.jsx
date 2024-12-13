@@ -20,7 +20,7 @@ const TherapistAppointments = () => {
     timeSlot: "",
     // name: "",
     // email: "",
-    appointmentType: "",
+    appointmentType: "Consultation(45min)",
   });
 
   const handleChange = (e) => {
@@ -219,7 +219,7 @@ const TherapistAppointments = () => {
                           </option>
                         </select>
                       </div>
-                      
+
                       <div className="flex justify-end mt-4">
                         <button
                           type="submit"
@@ -258,7 +258,9 @@ const TherapistAppointments = () => {
                     <tr key={index} className="border-t">
                       <td className="p-2">{index + 1}</td>
                       <td className="p-2">{data?.therapistDetails[0]?.name}</td>
-                      <td className="p-2">{data?.therapistDetails[0]?.email}</td>
+                      <td className="p-2">
+                        {data?.therapistDetails[0]?.email}
+                      </td>
                       <td className="p-2">{DateTime(data?.date)}</td>
                       <td className="p-2">
                         {data?.time}-

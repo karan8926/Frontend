@@ -17,8 +17,8 @@ const ManageAvailability = () => {
   const userId = userDetails.userId;
   const [formData, setFormData] = useState({
     availability: "",
-    startTime: new Date().toISOString().split("T")[0],
-    endTime: new Date().toISOString().split("T")[0],
+    startTime: new Date().toISOString(),
+    endTime: new Date().toISOString(),
     therapistId: userId,
   });
   function handleChange(e) {
@@ -151,7 +151,7 @@ const ManageAvailability = () => {
                           }
                           showTimeSelect
                           dateFormat="Pp"
-                          timeIntervals={15}
+                          timeIntervals={60}
                           minDate={new Date()}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
@@ -179,7 +179,7 @@ const ManageAvailability = () => {
                           }
                           showTimeSelect
                           dateFormat="Pp"
-                          timeIntervals={15}
+                          timeIntervals={60}
                           minDate={new Date()}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md "
                         />

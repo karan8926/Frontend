@@ -147,7 +147,7 @@ const ManageAvailabilityByAdmin = () => {
                           }
                           showTimeSelect
                           dateFormat="Pp"
-                          timeIntervals={15}
+                          timeIntervals={60}
                           minDate={new Date()}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         />
@@ -175,7 +175,7 @@ const ManageAvailabilityByAdmin = () => {
                           }
                           showTimeSelect
                           dateFormat="Pp"
-                          timeIntervals={15}
+                          timeIntervals={60}
                           minDate={new Date()}
                           className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                         />

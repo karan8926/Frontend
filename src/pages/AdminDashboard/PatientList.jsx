@@ -181,7 +181,7 @@ const PatientList = () => {
                           Generate Access-code
                         </button> */}
                         </div>
-                        <div>
+                        {/* <div>
                           <label
                             htmlFor="name"
                             className="block text-sm font-medium text-gray-700"
@@ -198,7 +198,7 @@ const PatientList = () => {
                             className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                             required
                           />
-                        </div>
+                        </div> */}
                         <div>
                           <label
                             htmlFor="email"
@@ -220,7 +220,7 @@ const PatientList = () => {
                             required
                           />
                         </div>
-                        <div>
+                        {/* <div>
                           <label
                             htmlFor="phone_number"
                             className="block text-sm font-medium text-gray-700"
@@ -240,7 +240,7 @@ const PatientList = () => {
                             } rounded-md`}
                             required
                           />
-                        </div>
+                        </div> */}
                         <div className="flex justify-end mt-4">
                           <button
                             type="submit"

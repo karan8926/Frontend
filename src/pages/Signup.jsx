@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { baseUrl } from "../App";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -6,31 +6,46 @@ import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [email, setEmail] = useState("");
-  const [number, setNumber] = useState("");
-  const [name, setName] = useState("");
+  const [accessCode, setAccessCode] = useState("");
+  // const [number, setNumber] = useState("");
+  // const [name, setName] = useState("");
   const navigate = useNavigate();
 
+  // access code creation
+  async function generateAccessCode() {
+    try {
+      const accessCode = await axios.get(`${baseUrl}api/getUniqueAccessCode`);
+      console.log(accessCode.data.accessToken, "accessCode");
+      setAccessCode(accessCode?.data?.accessToken);
+    } catch (error) {
+      console.log(error, "error value");
+    }
+  }
   const handleSubmit = async (event) => {
     event.preventDefault();
     // Handle form submission logic here
-    console.log({ email, number, name });
+    console.log({ email });
     try {
       const formData = {
-        name,
-        phone_number: number,
+        // name,
+        // phone_number: number,
         email,
+        accessCode,
       };
       const response = await axios.post(
         `${baseUrl}api/patient-signup`,
         formData
       );
-      toast.success("Patient Registered successfully");
-      navigate("/signin");
+      toast.success("Access code sent on Your Email");
+      navigate("/patient/signin");
     } catch (error) {
       toast.error(error.response.data.error);
       console.log(error.response.data.error);
     }
   };
+  useEffect(() => {
+    generateAccessCode();
+  }, []);
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900 w-full h-screen">
@@ -42,7 +57,7 @@ const Signup = () => {
             </h1>
             <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
               <div>
-                <label
+                {/* <label
                   htmlFor="name"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
@@ -57,8 +72,8 @@ const Signup = () => {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required
-                />
-                <div>
+                /> */}
+                {/* <div>
                   <label
                     htmlFor="number"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -75,7 +90,7 @@ const Signup = () => {
                     onChange={(e) => setNumber(e.target.value)}
                     required
                   />
-                </div>
+                </div> */}
               </div>
               <div>
                 <label
@@ -127,7 +142,7 @@ const Signup = () => {
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
               >
-                Create an account
+                Request Access Code{" "}
               </button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Already have an account?{" "}

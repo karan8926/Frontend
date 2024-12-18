@@ -24,7 +24,7 @@ const AllRoutes = () => {
 
   return (
     <Routes>
-      {/* <Route path="/" element={<Signup />}></Route> */}
+      <Route path="/" element={<Signup />}></Route>
       {/* different signin routing */}
 
       <Route path="/signin" element={<Signin />}></Route>

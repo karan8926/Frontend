@@ -19,8 +19,8 @@ const ManageAvailabilityByAdmin = () => {
   console.log(userId, "user ka id");
   const [formData, setFormData] = useState({
     availability: "",
-    startTime: new Date().toISOString().split("T")[0],
-    endTime: new Date().toISOString().split("T")[0],
+    startTime: new Date().toISOString(),
+    endTime: new Date().toISOString(),
     therapistId: userId,
   });
   function handleChange(e) {
@@ -31,12 +31,31 @@ const ManageAvailabilityByAdmin = () => {
       [name]: value,
     });
   }
+
+  function formateDateTime(startTime) {
+    const year = startTime.getFullYear();
+    const month = String(startTime.getMonth() + 1).padStart(2, "0");
+    const day = String(startTime.getDate()).padStart(2, "0");
+    const hours = String(startTime.getHours()).padStart(2, "0");
+    const minutes = String(startTime.getMinutes()).padStart(2, "0");
+    const seconds = String(startTime.getSeconds()).padStart(2, "0");
+    const milliseconds = String(startTime.getMilliseconds()).padStart(3, "0");
+
+    const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
+    return formattedDateTime;
+  }
   async function handleSubmit(e) {
     e.preventDefault();
     try {
+      const { startTime, endTime, availability, therapistId } = formData;
       const response = await axios.post(
         `${baseUrl}api/addCalendarAvailability`,
-        formData
+        {
+          startTime: formateDateTime(startTime),
+          endTime: formateDateTime(endTime),
+          availability,
+          therapistId,
+        }
       );
       setFormData({
         availability: "",

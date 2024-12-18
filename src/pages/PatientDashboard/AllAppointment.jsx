@@ -29,7 +29,7 @@ const AllAppointment = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [dataFound, setDataFound] = useState(false);
   const [toggleModel, setToggleModel] = useState("");
-
+  const warningRef = useRef(false);
   const currentDate = new Date();
   const hasMounted = useRef(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -220,6 +220,37 @@ const AllAppointment = () => {
     // Form is valid if both email and phone are valid
     return isEmailValid && isPhoneValid;
   };
+
+  const validatedMonth = () => {
+    setCurrentMonth((prev) => {
+      // Get the current date and extract the current year and month
+      const currentDate = new Date();
+      const currentYear = currentDate.getFullYear();
+      const currentMonth = currentDate.getMonth();
+
+      // Calculate the new date by subtracting 30 days
+      const newDate = addDays(prev, -30);
+
+      // Check if the new date is from a completed month (before the current month)
+      const isCompletedMonth =
+        newDate.getFullYear() === currentYear &&
+        newDate.getMonth() < currentMonth;
+
+      if (isCompletedMonth) {
+        if (!warningRef.current) {
+          toast.warning(
+            "Please select a valid month, Don't select completed month."
+          );
+          warningRef.current = true;
+        }
+        return prev;
+      } else {
+        warningRef.current = false;
+        return newDate;
+      }
+    });
+  };
+
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -292,8 +323,9 @@ const AllAppointment = () => {
                   </h2>
                   <div className="space-x-2 w-full text-center mt-6  h-auto">
                     <button
-                      onClick={() =>
-                        setCurrentMonth((prev) => addDays(prev, -30))
+                      onClick={
+                        // setCurrentMonth((prev) => addDays(prev, -30))
+                        validatedMonth
                       }
                       className="w-[30%]   bg-purple-800 text-white text-lg h-12 rounded-md"
                     >
@@ -350,7 +382,7 @@ const AllAppointment = () => {
                         </tr>
                       </thead>
                     </table>
-                    <div className="overflow-y-auto h-[32rem]">
+                    <div className="overflow-y-auto h-[28rem]">
                       <table className="table-auto w-full">
                         <tbody>
                           {isLoading && <Loader />}

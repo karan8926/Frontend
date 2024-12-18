@@ -437,6 +437,7 @@ const AllAppointment = () => {
                       value={formData.name}
                       onChange={handleChange}
                       className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
+                      required
                     />
                   </div>
                   <div>
@@ -455,6 +456,7 @@ const AllAppointment = () => {
                       className={`mt-1 block w-full px-3 py-2 border ${
                         isEmailValid ? "border-gray-300" : "border-red-500"
                       } rounded-md`}
+                      required
                     />
                   </div>
                   <div>
@@ -473,6 +475,7 @@ const AllAppointment = () => {
                       className={`mt-1 block w-full px-3 py-2 border ${
                         isPhoneValid ? "border-gray-300" : "border-red-500"
                       } rounded-md`}
+                      required
                     />
                   </div>
                   <div className="flex justify-end mt-4">

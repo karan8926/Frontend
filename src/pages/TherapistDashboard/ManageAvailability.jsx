@@ -29,12 +29,31 @@ const ManageAvailability = () => {
       [name]: value,
     });
   }
+
+  function formateDateTime(startTime) {
+    const year = startTime.getFullYear();
+    const month = String(startTime.getMonth() + 1).padStart(2, "0");
+    const day = String(startTime.getDate()).padStart(2, "0");
+    const hours = String(startTime.getHours()).padStart(2, "0");
+    const minutes = String(startTime.getMinutes()).padStart(2, "0");
+    const seconds = String(startTime.getSeconds()).padStart(2, "0");
+    const milliseconds = String(startTime.getMilliseconds()).padStart(3, "0");
+
+    const formattedDateTime = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
+    return formattedDateTime;
+  }
   async function handleSubmit(e) {
     e.preventDefault();
+    const { startTime, endTime, availability, therapistId } = formData;
     try {
       const response = await axios.post(
         `${baseUrl}api/addCalendarAvailability`,
-        formData
+        {
+          startTime: formateDateTime(startTime),
+          endTime: formateDateTime(endTime),
+          availability,
+          therapistId,
+        }
       );
       setFormData({
         availability: "",

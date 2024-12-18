@@ -49,10 +49,16 @@ const AllAppointment = () => {
 
   function dayDate(timestamp) {
     const date = new Date(timestamp);
-    const day = date.toLocaleString("en-US", { weekday: "long" });
-    const month = date.toLocaleString("en-US", { month: "long" });
-    const dayOfMonth = date.getDate();
-    const year = date.getFullYear();
+    const day = date.toLocaleString("en-US", {
+      weekday: "long",
+      timeZone: "UTC",
+    });
+    const month = date.toLocaleString("en-US", {
+      month: "long",
+      timeZone: "UTC",
+    });
+    const dayOfMonth = date.getUTCDate();
+    const year = date.getUTCFullYear();
 
     return (
       day.slice(0, 3) + "," + month.slice(0, 3) + " " + dayOfMonth + "," + year

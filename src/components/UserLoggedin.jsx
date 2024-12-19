@@ -98,7 +98,7 @@ const UserLoggedin = () => {
       >
         Signin
       </button>
-      {/* <p className="text-sm font-light text-gray-500 dark:text-gray-400">
+      <p className="text-sm font-light text-gray-500 dark:text-gray-400">
         Don't have an account?{" "}
         <a
           href="/"
@@ -106,7 +106,7 @@ const UserLoggedin = () => {
         >
           Register here
         </a>
-      </p> */}
+      </p>
     </form>
   );
 };

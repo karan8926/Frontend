@@ -216,6 +216,7 @@ const AllAppointment = () => {
     return isEmailValid && isPhoneValid;
   };
 
+  const [colorForCompletedMonth, setColorCompletedMonth] = useState(false);
   const validatedMonth = () => {
     setCurrentMonth((prev) => {
       // Get the current date and extract the current year and month
@@ -236,6 +237,7 @@ const AllAppointment = () => {
           toast.warning(
             "Please select a valid month, Don't select completed month."
           );
+          setColorCompletedMonth(true);
           warningRef.current = true;
         }
         return prev;
@@ -322,7 +324,9 @@ const AllAppointment = () => {
                         // setCurrentMonth((prev) => addDays(prev, -30))
                         validatedMonth
                       }
-                      className="w-[30%]   bg-purple-800 text-white text-lg h-12 rounded-md"
+                      className={`w-[30%]    text-white text-lg h-12 rounded-md ${
+                        colorForCompletedMonth ? "bg-gray-500" : "bg-purple-800"
+                      }`}
                     >
                       {showMonth(currentMonth.getMonth() - 1)}
                     </button>
@@ -330,9 +334,12 @@ const AllAppointment = () => {
                       {showMonth(currentMonth.getMonth())}
                     </button>
                     <button
-                      onClick={() =>
-                        setCurrentMonth((prev) => addDays(prev, 30))
-                      }
+                      onClick={() => {
+                        setCurrentMonth((prev) => addDays(prev, 30)),
+                          setColorCompletedMonth((prev) => {
+                            return false;
+                          });
+                      }}
                       className="w-[30%]  bg-purple-800 text-white text-lg h-12 rounded-md"
                     >
                       {showMonth(currentMonth.getMonth() + 1)}

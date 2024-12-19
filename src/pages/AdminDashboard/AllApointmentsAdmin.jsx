@@ -112,9 +112,9 @@ const AllApointmentsAdmin = () => {
                   {appointments?.map((data, index) => (
                     <tr key={index} className="border-t">
                       <td className="p-2">{index + 1}</td>
-                      <td className="p-2">{data?.patientDetails[0]?.name}</td>
+                      <td className="p-2">{data?.appointment?.name}</td>
                       <td className="p-2 break-words max-w-xs">
-                        {data?.patientDetails[0]?.email}
+                        {data?.appointment?.email}
                       </td>
                       <td className="p-2">{data.therapistDetails[0]?.name}</td>
                       <td className="p-2 break-words max-w-xs">
@@ -123,7 +123,9 @@ const AllApointmentsAdmin = () => {
                       <td className="p-2">
                         {data.therapistDetails[0]?.specialty}
                       </td>
-                      <td className="p-2">{data.therapistDetails[0]?.region}</td>
+                      <td className="p-2">
+                        {data.therapistDetails[0]?.region}
+                      </td>
                       {/* <td className="p-2">{data.name}</td> */}
                       <td className="p-2">{DateTime(data.date)}</td>
                       <td className="p-2">

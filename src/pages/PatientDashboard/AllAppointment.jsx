@@ -83,16 +83,6 @@ const AllAppointment = () => {
   const TherapistAvailability = async (pageNo) => {
     setIsLoading(true);
     setAvailabilityData(null);
-    console.log(
-      {
-        selectedSpecialty,
-        selectedRegion,
-        seletectedDateValue,
-        currentMonth,
-        selectedDate,
-      },
-      "abcdnlnlnlnl99090"
-    );
     try {
       const response = await axios.get(
         `${baseUrl}api/getTherapistAvailability?status=none&specialty=${selectedSpecialty}&region=${selectedRegion}&date=${
@@ -100,7 +90,9 @@ const AllAppointment = () => {
         }&pageNo=${pageNo}&currentMonth=${currentMonth}&appointmentType=${appointmentType}`
       );
       console.log(response.data.appointmentData, "response from thera");
-      setAvailabilityData(response.data.appointmentData);
+      setAvailabilityData((prev) => {
+        return response.data.appointmentData;
+      });
       setTotalPages(response.data.totalPages);
       setIsLoading(false);
       setDataFound(response.data.appointmentData.length === 0);

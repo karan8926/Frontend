@@ -9,6 +9,7 @@ import { addDays } from "date-fns";
 import Pagination from "../../components/Pagination";
 import PatientDashboardCalendar from "../../components/PatientDashboardCalendar";
 import Loader from "../../components/Loader";
+import { useNavigate } from "react-router-dom";
 const AllAppointment = () => {
   const [availabilityData, setAvailabilityData] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -33,12 +34,13 @@ const AllAppointment = () => {
   const currentDate = new Date();
   const hasMounted = useRef(false);
   const [selectedDate, setSelectedDate] = useState(null);
+  const navigate = useNavigate();
   const [currentMonthData, setCurrentMonthData] = useState(
     currentDate.getMonth()
   );
   const [formData, setFormData] = useState({
     name: "",
-    email: "",
+    email: userEmail,
     phone: "",
   });
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -181,6 +183,7 @@ const AllAppointment = () => {
       );
       if (response.status === 200) {
         toast.success("Appointment booked successfully!");
+        navigate("/patient/myAppointmnet");
       } else {
         toast.error("Failed to book the appointment.");
       }

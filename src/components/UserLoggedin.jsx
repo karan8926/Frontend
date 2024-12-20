@@ -28,6 +28,7 @@ const UserLoggedin = () => {
           userId: PatientResult.data.result._id,
           userPhone: PatientResult.data.result.phone_number,
           accessToken: PatientResult.data.accessToken,
+          accessCode: PatientResult.data.result.accessCode,
         })
       );
 

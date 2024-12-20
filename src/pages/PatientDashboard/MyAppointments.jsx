@@ -69,7 +69,7 @@ const MyAppointments = () => {
   };
   return (
     <div className="w-full h-screen flex">
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="flex-1 flex flex-col">
         <Navbar />
         <div className="flex-1 bg-gray-100 p-6">

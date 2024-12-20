@@ -172,6 +172,7 @@ const AllAppointment = () => {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
+        accessCode: userDetails.accessCode,
       };
       console.log(requestBody, "request body");
       const response = await axios.post(
@@ -248,7 +249,7 @@ const AllAppointment = () => {
 
   return (
     <div className="w-full h-screen flex ">
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="flex-1 flex flex-col">
         <Navbar />
         <div className="flex-1 bg-gray-100 p-6">

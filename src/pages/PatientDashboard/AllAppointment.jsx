@@ -15,12 +15,9 @@ const AllAppointment = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [loadingBookAppointment, setLoadingBookAppointment] = useState(false);
-  const [startDate, setStartDate] = useState(new Date());
-  const [calenderView, setCalenderView] = useState(false);
   const [specialty, setSpecialty] = useState([]);
   const [regions, setRegions] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState("");
-  const [selectedTherapist, setSelectedTherapist] = useState("");
   const [minDate, setMinDate] = useState("");
   const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const userEmail = userDetails?.userEmail;
@@ -218,6 +215,7 @@ const AllAppointment = () => {
 
   const [colorForCompletedMonth, setColorCompletedMonth] = useState(false);
   const validatedMonth = () => {
+    setSelectedDate(null);
     setCurrentMonth((prev) => {
       // Get the current date and extract the current year and month
       const currentDate = new Date();
@@ -336,9 +334,10 @@ const AllAppointment = () => {
                     <button
                       onClick={() => {
                         setCurrentMonth((prev) => addDays(prev, 30)),
-                          setColorCompletedMonth((prev) => {
-                            return false;
-                          });
+                          setSelectedDate(null);
+                        setColorCompletedMonth((prev) => {
+                          return false;
+                        });
                       }}
                       className="w-[30%]  bg-purple-800 text-white text-lg h-12 rounded-md"
                     >
@@ -389,7 +388,7 @@ const AllAppointment = () => {
                         <tbody>
                           {isLoading && <Loader />}
                           {availabilityData && !isLoading ? (
-                            availabilityData.length > 0 ? (
+                            availabilityData?.length > 0 ? (
                               availabilityData?.map((data, index) => (
                                 <tr
                                   key={index}

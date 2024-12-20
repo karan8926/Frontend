@@ -5,18 +5,31 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
-  const [email, setEmail] = useState("");
   const [accessCode, setAccessCode] = useState("");
-  // const [number, setNumber] = useState("");
-  // const [name, setName] = useState("");
   const navigate = useNavigate();
+  const [isEmailValid, setIsEmailValid] = useState(true);
+  const [isPhoneValid, setIsPhoneValid] = useState(true);
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone_number: "",
+    accessCode: "",
+  });
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    setIsEmailValid(emailRegex.test(email));
+  };
 
+  const validatePhone = (phone) => {
+    const phoneRegex = /^\d{10}$/; // Example: Validate 10 digits
+    setIsPhoneValid(phoneRegex.test(phone));
+  };
   // access code creation
   async function generateAccessCode() {
     try {
       const accessCode = await axios.get(`${baseUrl}api/getUniqueAccessCode`);
       console.log(accessCode.data.accessToken, "accessCode");
-      setAccessCode(accessCode?.data?.accessToken);
+      setFormData({ ...formData, accessCode: accessCode?.data?.accessToken });
     } catch (error) {
       console.log(error, "error value");
     }
@@ -24,14 +37,7 @@ const Signup = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     // Handle form submission logic here
-    console.log({ email });
     try {
-      const formData = {
-        // name,
-        // phone_number: number,
-        email,
-        accessCode,
-      };
       const response = await axios.post(
         `${baseUrl}api/patient-signup`,
         formData
@@ -47,6 +53,23 @@ const Signup = () => {
     generateAccessCode();
   }, []);
 
+  function handleOnChange(e) {
+    const { name, value } = e.target;
+    console.log({ name, value }, "name + value");
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+    if (name === "email") {
+      validateEmail(value);
+    } else if (name === "phone_number") {
+      validatePhone(value);
+    }
+  }
+  const isFormValid = () => {
+    // Form is valid if both email and phone are valid
+    return isEmailValid && isPhoneValid;
+  };
   return (
     <section className="bg-gray-50 dark:bg-gray-900 w-full h-screen">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-[90vh] lg:h-[90vh] lg:py-0">
@@ -67,7 +90,7 @@ const Signup = () => {
             </h1>
             <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
               <div>
-                {/* <label
+                <label
                   htmlFor="name"
                   className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                 >
@@ -79,28 +102,30 @@ const Signup = () => {
                   id="name"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   placeholder="adom"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={formData.name}
+                  onChange={handleOnChange}
                   required
-                /> */}
-                {/* <div>
+                />
+                <div>
                   <label
-                    htmlFor="number"
+                    htmlFor="phone_number"
                     className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                   >
                     Your Number
                   </label>
                   <input
                     type="number"
-                    name="number"
-                    id="number"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    name="phone_number"
+                    id="phone_number"
+                    className={`mt-1 bg-gray-50 text-black block w-full px-3 py-2 border-4 ${
+                      isPhoneValid ? "border-gray-300" : "border-red-500"
+                    } rounded-md`}
                     placeholder="1234567890"
-                    value={number}
-                    onChange={(e) => setNumber(e.target.value)}
+                    value={formData.phone_number}
+                    onChange={handleOnChange}
                     required
                   />
-                </div> */}
+                </div>
               </div>
               <div>
                 <label
@@ -113,10 +138,12 @@ const Signup = () => {
                   type="email"
                   name="email"
                   id="email"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  className={`mt-1 bg-gray-50 text-black block w-full border-4 px-3 py-2 border ${
+                    isEmailValid ? "border-gray-300" : "border-red-500"
+                  } rounded-md`}
                   placeholder="name@company.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={handleOnChange}
                   required
                 />
               </div>
@@ -151,6 +178,7 @@ const Signup = () => {
               <button
                 type="submit"
                 className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                disabled={!isFormValid()}
               >
                 Request Access Code{" "}
               </button>

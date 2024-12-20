@@ -25,7 +25,7 @@ const Navbar = () => {
         onClick={handleProfile}
       >
         {/* <RxAvatar className="size-[4rem] " /> */}
-
+        <div className="size-[4rem]"></div>
         {/* <h3 className=" w-full p-2 rounded-xl text-center  text-gray-600 font-extrabold text-2xl">
           <span>Hi,</span>
           {userName}

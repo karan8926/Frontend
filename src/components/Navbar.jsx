@@ -24,12 +24,12 @@ const Navbar = () => {
         className="p-2 flex items-center cursor-pointer "
         onClick={handleProfile}
       >
-        <RxAvatar className="size-[4rem] " />
+        {/* <RxAvatar className="size-[4rem] " /> */}
 
-        <h3 className=" w-full p-2 rounded-xl text-center  text-gray-600 font-extrabold text-2xl">
+        {/* <h3 className=" w-full p-2 rounded-xl text-center  text-gray-600 font-extrabold text-2xl">
           <span>Hi,</span>
           {userName}
-        </h3>
+        </h3> */}
       </div>
       <div className="flex w-full justify-end ">
         <button

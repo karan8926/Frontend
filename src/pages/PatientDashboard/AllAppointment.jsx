@@ -233,9 +233,9 @@ const AllAppointment = () => {
 
       if (isCompletedMonth) {
         if (!warningRef.current) {
-          toast.warning(
-            "Please select a valid month, Don't select completed month."
-          );
+          // toast.warning(
+          //   "Please select a valid month, Don't select completed month."
+          // );
           setColorCompletedMonth(true);
           warningRef.current = true;
         }
@@ -247,6 +247,9 @@ const AllAppointment = () => {
     });
   };
 
+  useEffect(() => {
+    validatedMonth();
+  }, []);
   return (
     <div className="w-full h-screen flex ">
       {/* <Sidebar /> */}

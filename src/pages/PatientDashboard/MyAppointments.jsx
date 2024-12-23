@@ -5,9 +5,11 @@ import Pagination from "../../components/Pagination";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { baseUrl } from "../../App";
-
+import { IoArrowBack } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 const MyAppointments = () => {
   // const dateVA = new Date();
+  const navigate = useNavigate();
   const [nameval, setName] = useState("adom");
   const [emailval, setEmail] = useState("adom12@gmail");
   const [dateval, setDate] = useState("28-nov-24");
@@ -76,6 +78,12 @@ const MyAppointments = () => {
           <div className="w-full overflow-hidden ">
             <div className="w-full h-[30%]  ">
               <div className="w-full h-8 mb-4">
+                <button
+                  className="  bg-blue-500 text-white rounded-md p-1"
+                  onClick={() => navigate("/patient/allAppointment")}
+                >
+                  <IoArrowBack />
+                </button>
                 <h1 className="font-bold text-3xl">My Appointments</h1>
               </div>
               <table className="table-auto w-full ">

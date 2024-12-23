@@ -249,9 +249,33 @@ const AllAppointment = () => {
     });
   };
 
+  const [disableForPrev, setDisableForPrevious] = useState(false);
+  function disablePreviousMonth() {
+    const runningDate = new Date();
+    if (
+      currentMonth.getFullYear() === runningDate.getFullYear() &&
+      currentMonth.getMonth() === runningDate.getMonth() &&
+      currentMonth.getDate() === runningDate.getDate()
+    ) {
+      console.log(
+        { currentMonth, runningDate, isvalid: currentMonth === runningDate },
+        "currentMoth"
+      );
+      setDisableForPrevious((prev) => {
+        return true;
+      });
+    } else {
+      setDisableForPrevious((prev) => {
+        return false;
+      });
+    }
+
+    // setDisableForPrevious(isPreviousMonthCompleted);
+  }
+
   useEffect(() => {
-    validatedMonth();
-  }, []);
+    disablePreviousMonth();
+  }, [currentMonth]);
   return (
     <div className="w-full h-screen flex ">
       {/* <Sidebar /> */}
@@ -329,7 +353,9 @@ const AllAppointment = () => {
                         validatedMonth
                       }
                       className={`w-[30%]    text-white text-lg h-12 rounded-md ${
-                        colorForCompletedMonth ? "bg-gray-500" : "bg-purple-800"
+                        colorForCompletedMonth || disableForPrev
+                          ? "bg-gray-500"
+                          : "bg-purple-800"
                       }`}
                     >
                       {showMonth(currentMonth.getMonth() - 1)}

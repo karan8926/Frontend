@@ -7,9 +7,12 @@ import { toast } from "react-toastify";
 const UserLoggedin = () => {
   const navigate = useNavigate();
   const [accessCode, setAccessCode] = useState("");
+  const [formSubmitted, isFormSubmitted] = useState(false);
+
   const inputRef = useRef();
   const handleSubmit = async (event) => {
     event.preventDefault();
+    isFormSubmitted(true);
     try {
       const reqbody = {
         accessCode: accessCode,
@@ -95,6 +98,7 @@ const UserLoggedin = () => {
       </div>
       <button
         type="submit"
+        disabled={formSubmitted}
         className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
       >
         Signin

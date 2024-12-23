@@ -254,21 +254,28 @@ const TherapistAppointments = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {appointments?.map((data, index) => (
-                    <tr key={index} className="border-t">
-                      <td className="p-2">{index + 1}</td>
-                      <td className="p-2">{data?.therapistDetails[0]?.name}</td>
-                      <td className="p-2">
-                        {data?.therapistDetails[0]?.email}
-                      </td>
-                      <td className="p-2">{DateTime(data?.date)}</td>
-                      <td className="p-2">
-                        {data?.time}-
-                        {timeSlotFunction(data?.time, data?.appointmentType)}
-                      </td>
-                      <td className="p-2">{data?.appointmentType}</td>
-                    </tr>
-                  ))}
+                  {appointments?.length > 0
+                    ? appointments?.map((data, index) => (
+                        <tr key={index} className="border-t">
+                          <td className="p-2">{index + 1}</td>
+                          <td className="p-2">
+                            {data?.therapistDetails[0]?.name}
+                          </td>
+                          <td className="p-2">
+                            {data?.therapistDetails[0]?.email}
+                          </td>
+                          <td className="p-2">{DateTime(data?.date)}</td>
+                          <td className="p-2">
+                            {data?.time}-
+                            {timeSlotFunction(
+                              data?.time,
+                              data?.appointmentType
+                            )}
+                          </td>
+                          <td className="p-2">{data?.appointmentType}</td>
+                        </tr>
+                      ))
+                    : "No Data Available"}
                 </tbody>
               </table>
 

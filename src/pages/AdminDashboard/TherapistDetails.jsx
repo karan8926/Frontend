@@ -116,7 +116,7 @@ const TherapistDetails = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {therapistDetailedData > 0 ? (
+                  {therapistDetailedData?.length > 0 ? (
                     therapistDetailedData?.map((data, index) => (
                       <tr key={index} className="border-t">
                         <td className="p-2">{index + 1}</td>

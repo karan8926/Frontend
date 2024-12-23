@@ -21,6 +21,8 @@ const AllAppointment = () => {
   const [minDate, setMinDate] = useState("");
   const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const userEmail = userDetails?.userEmail;
+  const username = userDetails?.userName || " ";
+  const userphone = userDetails?.userPhone || " ";
   const [selectedSpecialty, setSelectSpecialty] = useState("");
   const [seletectedDateValue, setSelectedDateValue] = useState("");
   const [patientNumber, setPatientNumber] = useState(userDetails?.userPhone);
@@ -36,9 +38,9 @@ const AllAppointment = () => {
     currentDate.getMonth()
   );
   const [formData, setFormData] = useState({
-    name: "",
+    name: username,
     email: userEmail,
-    phone: "",
+    phone: userphone,
   });
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedData, setSelectedData] = useState(null);

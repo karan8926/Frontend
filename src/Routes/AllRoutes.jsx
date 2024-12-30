@@ -17,6 +17,8 @@ import TherapistDetails from "../pages/AdminDashboard/TherapistDetails";
 import Profile from "../pages/Profile";
 import PatientSigninPage from "../pages/PatientSigninPage";
 import ManageAvailabilityByAdmin from "../components/ManageAvailabilityByAdmin";
+import TherapistSigninPage from "../pages/TherapistSigninPage";
+
 const AllRoutes = () => {
   const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
 
@@ -25,9 +27,13 @@ const AllRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<Signup />}></Route>
-      {/* different signin routing */}
 
-      <Route path="/signin" element={<Signin />}></Route>
+      {["/admin/signin", "/signin"].map((path) => (
+        <Route key={path} path={path} element={<Signin />} />
+      ))}
+
+      <Route path="/therapist/signin" element={<TherapistSigninPage />}></Route>
+
       <Route path="/patient/signin" element={<PatientSigninPage />}></Route>
 
       <Route

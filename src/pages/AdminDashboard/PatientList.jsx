@@ -75,6 +75,7 @@ const PatientList = () => {
       });
       setToggleModel(false);
       setAddPatientLoader(false);
+      fetchData(currentPage);
       setAddPatientLoader;
       inputRef.current.focus();
       toast.success("Access code generated successfully");
@@ -83,7 +84,6 @@ const PatientList = () => {
       console.log(error, "error value");
       setToggleModel(true);
     }
-    fetchData(currentPage);
     setFormData({
       accessCode: "",
       name: "",

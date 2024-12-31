@@ -26,7 +26,7 @@ const AllRoutes = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Signup />}></Route>
+      {/* <Route path="/" element={<Signup />}></Route> */}
 
       {["/admin/signin", "/signin"].map((path) => (
         <Route key={path} path={path} element={<Signin />} />

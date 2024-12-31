@@ -1,6 +1,7 @@
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { useEffect, useState } from "react";
 
 const localizer = momentLocalizer(moment);
 
@@ -31,13 +32,35 @@ const myEventsList = [
   },
 ];
 
-
 function onSelectEventFunction() {
   console.log("i am available");
 }
 const AvailabilityCalendar = (props) => {
   const { eventListData } = props;
-  console.log(props, "pop");
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  console.log(window.innerWidth, "innerwidth");
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const getCalendarHeight = () => {
+    if (windowWidth <= 600) {
+      return 400; // Small screen
+    } else if (windowWidth <= 1260) {
+      return 500; // Medium screen (tablet)
+    } else {
+      return 600; // Large screen (desktop)
+    }
+  };
+
   return (
     <div>
       <Calendar
@@ -45,7 +68,7 @@ const AvailabilityCalendar = (props) => {
         events={eventListData}
         startAccessor="start"
         endAccessor="end"
-        style={{ height: 600 }}
+        style={{ height: getCalendarHeight() }}
         views={["month", "week", "day", "agenda"]}
         selectable={false}
         onSelectEvent={() => onSelectEventFunction()}

@@ -10,7 +10,7 @@ const Navbar = () => {
     sessionStorage.clear();
     "patient".match(userDetails.userType)
       ? navigate("/patient/signin")
-      : navigate("/signin");
+      : navigate(`/${userDetails.userType}/signin`);
   }
   function handleProfile() {
     navigate(`/${userDetails.userType}/profile/${userDetails.userId}`);

@@ -47,7 +47,7 @@ const TherapistList = () => {
       console.log(error, "error value");
       setToggleModel(true);
     }
-    fetchData(currentPage);
+    fetchData(searchTherapist, currentPage);
     setFormData({
       region: "",
       name: "",
@@ -59,14 +59,14 @@ const TherapistList = () => {
 
   const handlePageChange = (pageNo) => {
     if (pageNo >= 1 && pageNo <= totalPages) {
-      fetchData(pageNo);
+      fetchData(searchTherapist, pageNo);
       setCurrentPage(pageNo);
     }
   };
-  const fetchData = async (pageNo) => {
+  const fetchData = async (searchTherapist, pageNo) => {
     try {
       const response = await axios.get(
-        `${baseUrl}api/getTherapist/?pageNo=${pageNo}`
+        `${baseUrl}api/getTherapist/?pageNo=${pageNo}&searchTherapist=${searchTherapist}`
       );
       // console.log("response--", response.data.availability)
       setTherapistList(response.data.availability);
@@ -78,7 +78,7 @@ const TherapistList = () => {
   };
 
   useEffect(() => {
-    fetchData(currentPage);
+    fetchData(searchTherapist, currentPage);
   }, [currentPage]);
 
   function showTherapistDetails(id) {
@@ -89,6 +89,15 @@ const TherapistList = () => {
   function manageAvailability(id) {
     navigate("/admin/manageAvailability", { state: { id } });
   }
+
+  const [searchTherapist, setSearchTherapist] = useState("");
+  const handleSearch = (e) => {
+    setSearchTherapist((prev) => {
+      return e.target.value;
+    });
+    fetchData(e.target.value, currentPage);
+    // console.log(searchPatient, "patient");
+  };
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -100,13 +109,25 @@ const TherapistList = () => {
               <div className="flex flex-grow">
                 <h1 className="font-bold text-3xl">Therapist</h1>
               </div>
-              <div className="flex justify-end ">
-                <button
-                  onClick={() => setToggleModel(true)}
-                  className="bg-blue-600 rounded-md px-4 py-2 text-white"
-                >
-                  ADD
-                </button>
+              <div className="w-full flex justify-between">
+                <div className="w-full p-2 flex items-center space-x-4 ">
+                  <label htmlFor="region" className="text-black font-bold">
+                    Search Therapist
+                  </label>
+                  <input
+                    className="w-[15%] h-[2rem] bg-slate-200 outline-none text-black rounded-md pl-4"
+                    id="region"
+                    onChange={handleSearch}
+                  ></input>
+                </div>
+                <div className="">
+                  <button
+                    onClick={() => setToggleModel(true)}
+                    className="bg-blue-600 rounded-md px-4 py-2 text-white"
+                  >
+                    ADD
+                  </button>
+                </div>
               </div>
               {toggleModel && (
                 <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">

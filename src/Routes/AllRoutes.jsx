@@ -18,6 +18,7 @@ import Profile from "../pages/Profile";
 import PatientSigninPage from "../pages/PatientSigninPage";
 import ManageAvailabilityByAdmin from "../components/ManageAvailabilityByAdmin";
 import TherapistSigninPage from "../pages/TherapistSigninPage";
+import ThankYouMessage from "../pages/PatientDashboard/ThankYouMessage";
 
 const AllRoutes = () => {
   const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
@@ -39,7 +40,7 @@ const AllRoutes = () => {
       <Route
         path="/admin/allAppointment"
         element={
-          "admin".match(userType) ? (
+          userType === "admin" ? (
             <AllApointmentsAdmin />
           ) : (
             <Navigate to="/patient/signin" />
@@ -49,7 +50,7 @@ const AllRoutes = () => {
       <Route
         path="/admin/patientsList"
         element={
-          "admin".match(userType) ? (
+          userType === "admin" ? (
             <PatientList />
           ) : (
             <Navigate to="/patient/signin" />
@@ -59,7 +60,7 @@ const AllRoutes = () => {
       <Route
         path="/admin/therapistList"
         element={
-          "admin".match(userType) ? (
+          userType === "admin" ? (
             <TherapistList />
           ) : (
             <Navigate to="/patient/signin" />
@@ -69,7 +70,7 @@ const AllRoutes = () => {
       <Route
         path="/admin/manageAvailability"
         element={
-          "admin".match(userType) ? (
+          userType === "admin" ? (
             <ManageAvailabilityByAdmin />
           ) : (
             <Navigate to="/patient/signin" />
@@ -80,7 +81,7 @@ const AllRoutes = () => {
       <Route
         path="/admin/patientDetails/:id"
         element={
-          "admin".match(userType) ? (
+          userType === "admin" ? (
             <PatientDetails />
           ) : (
             <Navigate to="/patient/signin" />
@@ -90,7 +91,7 @@ const AllRoutes = () => {
       <Route
         path="/admin/therapistDetails/:id"
         element={
-          "admin".match(userType) ? (
+          userType === "admin" ? (
             <TherapistDetails />
           ) : (
             <Navigate to="/patient/signin" />
@@ -103,7 +104,7 @@ const AllRoutes = () => {
       <Route
         path="/therapist/allAppointment"
         element={
-          "therapist".match(userType) ? (
+          userType === "therapist" ? (
             <AllAppointments />
           ) : (
             <Navigate to="/patient/signin" />
@@ -113,7 +114,7 @@ const AllRoutes = () => {
       <Route
         path="/therapist/myAppointmnet"
         element={
-          "therapist".match(userType) ? (
+          userType === "therapist" ? (
             <TherapistAppointments />
           ) : (
             <Navigate to="/patient/signin" />
@@ -123,7 +124,7 @@ const AllRoutes = () => {
       <Route
         path="/therapist/manageAvailability"
         element={
-          "therapist".match(userType) ? (
+          userType === "therapist" ? (
             <ManageAvailability />
           ) : (
             <Navigate to="/patient/signin" />
@@ -135,7 +136,7 @@ const AllRoutes = () => {
       <Route
         path="/patient/allAppointment"
         element={
-          "patient".match(userType) ? (
+          userType === "patient" ? (
             <AllAppointment />
           ) : (
             <Navigate to="/patient/signin" />
@@ -145,8 +146,19 @@ const AllRoutes = () => {
       <Route
         path="/patient/myAppointmnet"
         element={
-          "patient".match(userType) ? (
+          userType === "patient" ? (
             <MyAppointments />
+          ) : (
+            <Navigate to="/patient/signin" />
+          )
+        }
+      ></Route>
+      {/* thank you message page */}
+      <Route
+        path="/patient/success"
+        element={
+          userType === "patient" ? (
+            <ThankYouMessage />
           ) : (
             <Navigate to="/patient/signin" />
           )
@@ -155,7 +167,7 @@ const AllRoutes = () => {
       <Route
         path={`/${userType}/profile/:id`}
         element={
-          "patient".match(userType) ? <Profile /> : <Navigate to="/signin" />
+          userType === "patient" ? <Profile /> : <Navigate to="/signin" />
         }
       ></Route>
       <Route path="*" element={<Navigate to="/patient/signin" />} />

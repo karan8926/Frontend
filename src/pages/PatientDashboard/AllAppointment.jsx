@@ -10,7 +10,9 @@ import Pagination from "../../components/Pagination";
 import PatientDashboardCalendar from "../../components/PatientDashboardCalendar";
 import Loader from "../../components/Loader";
 import { useNavigate } from "react-router-dom";
+import useDisableButton from "../../hooks/useDisableButton";
 const AllAppointment = () => {
+  const { isDisableButton, handleButtonDisability } = useDisableButton();
   const [availabilityData, setAvailabilityData] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -160,9 +162,14 @@ const AllAppointment = () => {
       validatePhone(value);
     }
   }
+  function logoutSessionAfterBooking() {
+    sessionStorage.clear();
+    "patient".match(userDetails.userType) && navigate("/patient/signin");
+  }
   async function handleBookAppointment(e) {
     e.preventDefault();
     console.log(formData, "formData");
+    handleButtonDisability();
     setLoadingBookAppointment(true);
     try {
       const requestBody = {
@@ -182,8 +189,11 @@ const AllAppointment = () => {
         requestBody
       );
       if (response.status === 200) {
-        toast.success("Appointment booked successfully!");
-        navigate("/patient/myAppointmnet");
+        // toast.success("Appointment booked successfully!");
+        setTimeout(() => {
+          logoutSessionAfterBooking();
+        }, 5000);
+        navigate("/patient/success");
       } else {
         toast.error("Failed to book the appointment.");
       }
@@ -547,7 +557,7 @@ const AllAppointment = () => {
                     <button
                       type="submit"
                       className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-                      disabled={isLoading || !isFormValid()}
+                      disabled={isLoading || !isFormValid() || isDisableButton}
                     >
                       Submit
                     </button>

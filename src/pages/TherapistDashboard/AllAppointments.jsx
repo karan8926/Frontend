@@ -5,6 +5,7 @@ import Sidebar from "../../components/Sidebar";
 import { toast } from "react-toastify";
 import { baseUrl } from "../../App";
 import axios from "axios";
+import useDisableButton from "../../hooks/useDisableButton";
 
 const AllAppointments = () => {
   const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
@@ -13,17 +14,21 @@ const AllAppointments = () => {
   const [updateDataId, setUpdateDataId] = useState("");
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [patientEmail, setPatientEmail] = useState(null);
+  const { isDisableButton, handleButtonDisability, handleResetButton } =
+    useDisableButton();
   const updateAppointmentStatus = async () => {
     try {
+      handleButtonDisability();
       console.log(newStatus, updateDataId, "newstatsus");
       const response = await axios.post(
         `${baseUrl}api/updateAppointmentStatus`,
-        { id: updateDataId, status: newStatus }
+        { id: updateDataId, status: newStatus, emailId: patientEmail }
       );
       console.log(response);
       toast.success("Status Updated SuccessFully");
       setShowModal(false);
+      handleResetButton();
       fetchAppointments();
     } catch (error) {
       console.error(error);
@@ -155,6 +160,7 @@ const AllAppointments = () => {
                           onClick={() => {
                             setShowModal(true); // Open the modal
                             setUpdateDataId(data._id);
+                            setPatientEmail(data?.patientDetails[0]?.email);
                           }}
                           className="p-2 bg-blue-500 text-white rounded"
                         >
@@ -204,6 +210,7 @@ const AllAppointments = () => {
               <button
                 onClick={updateAppointmentStatus}
                 className="p-2 bg-blue-500 text-white rounded"
+                disabled={isDisableButton}
               >
                 Save Changes
               </button>

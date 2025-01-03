@@ -29,7 +29,7 @@ const PatientList = () => {
   const fetchData = async (pageNo) => {
     try {
       const response = await axios.get(
-        `${baseUrl}api/getpatient/?pageNo=${pageNo}`
+        `${baseUrl}api/getpatient/?pageNo=${pageNo}&searchPatient=${searchPatient}`
       );
       setPatientList(response.data.patients);
       setTotalPages(response.data.noOfPages);
@@ -130,6 +130,12 @@ const PatientList = () => {
     // Form is valid if both email and phone are valid
     return isEmailValid && isPhoneValid;
   };
+
+  const [searchPatient, setSearchPatient] = useState("");
+  const handleSearch = () => {
+    fetchData(currentPage);
+    // console.log(searchPatient, "patient");
+  };
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -140,6 +146,25 @@ const PatientList = () => {
             <div className="w-full h-[30%]  ">
               <div className="w-full h-8 ">
                 <h1 className="font-bold text-3xl">Patients</h1>
+              </div>
+              <div className="w-full p-2 flex items-center space-x-4 ">
+                <label htmlFor="region" className="text-black font-bold">
+                  Search Patient
+                </label>
+                <input
+                  className="w-[15%] h-[2rem] bg-slate-200 outline-none text-black rounded-md pl-4"
+                  id="region"
+                  onChange={(e) => setSearchPatient(e.target.value)}
+                ></input>
+
+                <div className="flex justify-end">
+                  <button
+                    onClick={handleSearch}
+                    className="ml-auto h-[2rem] bg-blue-500 text-white rounded-md px-4"
+                  >
+                    Search
+                  </button>
+                </div>
               </div>
               <div className="flex justify-end ">
                 <button

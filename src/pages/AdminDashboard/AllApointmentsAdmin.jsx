@@ -10,17 +10,25 @@ const AllApointmentsAdmin = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [appointments, setAppointments] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(" ");
+  const [specialtyVal, setSpecialityVal] = useState();
+  const [regions, setRegions] = useState();
+  const [selectedSpeciality, setSelectedSpeciality] = useState("all");
+  const [selectedRegion, setSelectedRegion] = useState("all");
   const fetchData = async (pageNo) => {
+    // console.log(searchQuery, "searchQuery");
     try {
       const response = await axios.get(
-        `${baseUrl}api/allAppointment?pageNo=${pageNo}`
+        `${baseUrl}api/allAppointment?pageNo=${pageNo}&searchType=${searchType}&searchQuery=${searchQuery}&region=${selectedRegion}&speciality=${selectedSpeciality}`
       );
-      console.log(response, "reponse are:----");
+      // console.log(response, "reponse are:----");
       setAppointments(response.data.AppointmentData);
       setTotalPages(response.data.noOfPages);
     } catch (err) {
-      console.log(err);
-      toast.error("Error while Fetching Data");
+      // console.log(err.response.data.message);
+      setAppointments([]);
+      setTotalPages(1);
+      // toast.error(err.response.data.message);
     }
   };
   const getStatusColor = (status) => {
@@ -42,7 +50,8 @@ const AllApointmentsAdmin = () => {
 
   useEffect(() => {
     fetchData(currentPage);
-  }, []);
+    fetchDropdownData();
+  }, [selectedSpeciality, selectedRegion]);
 
   const handlePageChange = (pageNo) => {
     if (pageNo >= 1 && pageNo <= totalPages) {
@@ -78,6 +87,28 @@ const AllApointmentsAdmin = () => {
 
     return endTimeFormatted;
   }
+
+  function handleSearch() {
+    fetchData(currentPage);
+  }
+  const [searchType, setSearchType] = useState("patient");
+  function handleSearchTypeChange(e) {
+    setSearchType(e.target.value);
+  }
+
+  const fetchDropdownData = async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}api/getTherapistSpecialtyRegion`
+      );
+      if (response.data.success) {
+        setSpecialityVal(response.data.specialty || []);
+        setRegions(response.data.region || []);
+      }
+    } catch (error) {
+      console.error("Error fetching dropdown data:", error);
+    }
+  };
   return (
     <div className="w-full h-screen flex  ">
       <Sidebar />
@@ -89,6 +120,85 @@ const AllApointmentsAdmin = () => {
               <div className="w-full h-8 ">
                 <h1 className="font-bold text-3xl">Appointments</h1>
               </div>
+              <div className="flex w-full ">
+                <div className="w-full p-2 flex items-center space-x-4 ">
+                  <label htmlFor="region" className="text-black font-bold">
+                    {/* Search Patient */}
+                    <select
+                      id="search-type"
+                      className="block w-[90%] px-3 py-1 border border-gray-300 rounded-md"
+                      value={searchType}
+                      onChange={handleSearchTypeChange}
+                    >
+                      <option value="patient">Search Patient</option>
+                      <option value="therapist">Search Therapist</option>
+                    </select>
+                  </label>
+                  <input
+                    className="w-[40%] h-[2rem] bg-slate-200 outline-none text-black rounded-md pl-4"
+                    id="search-type"
+                    placeholder={
+                      searchType === "patient"
+                        ? "Enter Patient Name"
+                        : "Enter Therapist Name"
+                    }
+                    onChange={(e) =>
+                      setSearchQuery((prev) => e.target.value || " ")
+                    }
+                  ></input>
+
+                  <div className="flex justify-end">
+                    <button
+                      onClick={handleSearch}
+                      className="ml-auto h-[2rem] bg-blue-500 text-white rounded-md px-4"
+                    >
+                      Search
+                    </button>
+                  </div>
+                </div>
+                <div className="flex w-full">
+                  <div className="w-full p-2 flex items-center space-x-4 ">
+                    <label
+                      htmlFor="speciality"
+                      className="text-black font-bold"
+                    >
+                      <select
+                        id="speciality"
+                        className="block w-full px-3 py-1 border border-gray-300 rounded-md"
+                        value={selectedSpeciality}
+                        onChange={(e) => setSelectedSpeciality(e.target.value)}
+                      >
+                        <option value="all">Therapist Speciality(All)</option>
+                        {specialtyVal?.map((data) => (
+                          <option key={data} value={data}>
+                            {" "}
+                            {data}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                  <div className="w-full p-2 flex items-center space-x-4 ">
+                    <label htmlFor="region" className="text-black font-bold">
+                      <select
+                        id="region"
+                        className="block w-full px-3 py-1 border border-gray-300 rounded-md"
+                        value={selectedRegion}
+                        onChange={(e) => setSelectedRegion(e.target.value)}
+                      >
+                        <option value="all">Therapist Region(All)</option>
+                        {regions?.map((data) => (
+                          <option key={data} value={data}>
+                            {" "}
+                            {data}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  </div>
+                </div>
+              </div>
+
               <div className="min-w-[64rem] w-full  overflow-x-scroll">
                 <table className="w-full  table-auto ">
                   <thead>
@@ -122,43 +232,49 @@ const AllApointmentsAdmin = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {appointments?.map((data, index) => (
-                      <tr key={index} className="border-t">
-                        <td className="p-2 pr-4">{index + 1}</td>
-                        <td className="p-2 pr-4">{data?.appointment?.name}</td>
-                        <td className="p-2 pr-4 break-words max-w-xs">
-                          {data?.appointment?.email}
-                        </td>
-                        <td className="p-2 pr-4">
-                          {data.therapistDetails[0]?.name}
-                        </td>
-                        <td className="p-2 pr-4 break-words max-w-xs">
-                          {data.therapistDetails[0]?.email}
-                        </td>
-                        <td className="p-2 pr-4">
-                          {data.therapistDetails[0]?.specialty}
-                        </td>
-                        <td className="p-2 pr-4">
-                          {data.therapistDetails[0]?.region}
-                        </td>
-                        {/* <td className="p-2">{data.name}</td> */}
-                        <td className="p-2 pr-4">{DateTime(data.date)}</td>
-                        <td className="p-2 pr-4">
-                          {data.time}-
-                          {timeSlotFunction(data.time, data.appointmentType)}
-                        </td>
-                        <td className="p-2 pr-4">
-                          {/* Status Label with background color and fixed width */}
-                          <span
-                            className={`p-2 pr-4 text-white rounded ${getStatusColor(
-                              data.status
-                            )} w-32 text-center inline-block`}
-                          >
-                            {data.status}
-                          </span>
-                        </td>
-                      </tr>
-                    ))}
+                    {appointments.length ? (
+                      appointments?.map((data, index) => (
+                        <tr key={index} className="border-t">
+                          <td className="p-2 pr-4">{index + 1}</td>
+                          <td className="p-2 pr-4">
+                            {data?.appointment?.name}
+                          </td>
+                          <td className="p-2 pr-4 break-words max-w-xs">
+                            {data?.appointment?.email}
+                          </td>
+                          <td className="p-2 pr-4">
+                            {data.therapistDetails[0]?.name}
+                          </td>
+                          <td className="p-2 pr-4 break-words max-w-xs">
+                            {data.therapistDetails[0]?.email}
+                          </td>
+                          <td className="p-2 pr-4">
+                            {data.therapistDetails[0]?.specialty}
+                          </td>
+                          <td className="p-2 pr-4">
+                            {data.therapistDetails[0]?.region}
+                          </td>
+                          {/* <td className="p-2">{data.name}</td> */}
+                          <td className="p-2 pr-4">{DateTime(data.date)}</td>
+                          <td className="p-2 pr-4">
+                            {data.time}-
+                            {timeSlotFunction(data.time, data.appointmentType)}
+                          </td>
+                          <td className="p-2 pr-4">
+                            {/* Status Label with background color and fixed width */}
+                            <span
+                              className={`p-2 pr-4 text-white rounded ${getStatusColor(
+                                data.status
+                              )} w-32 text-center inline-block`}
+                            >
+                              {data.status}
+                            </span>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <h1>No Data Available</h1>
+                    )}
                   </tbody>
                 </table>
               </div>

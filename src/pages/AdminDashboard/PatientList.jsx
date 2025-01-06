@@ -292,9 +292,9 @@ const PatientList = () => {
                   <tr className="h-10">
                     <th className="font-bold p-2 text-left">sr no</th>
                     <th className="font-bold p-2 text-left">Name</th>
+                    <th className="font-bold p-2 text-left">Access</th>
                     <th className="font-bold p-2 text-left">Email</th>
                     <th className="font-bold p-2 text-left">Number</th>
-                    <th className="font-bold p-2 text-left">Type</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -306,9 +306,9 @@ const PatientList = () => {
                     >
                       <td className="p-2">{index + 1}</td>
                       <td className="p-2">{data.name}</td>
+                      <td className="p-2">{data.accessCode}</td>
                       <td className="p-2">{data.email}</td>
                       <td className="p-2">{data.phone_number}</td>
-                      <td className="p-2">{data.type}</td>
                     </tr>
                   ))}
                 </tbody>

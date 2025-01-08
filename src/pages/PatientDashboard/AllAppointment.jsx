@@ -39,6 +39,7 @@ const AllAppointment = () => {
   const [currentMonthData, setCurrentMonthData] = useState(
     currentDate.getMonth()
   );
+  const [therapistNames, setTherapistNames] = useState([]);
   const [formData, setFormData] = useState({
     name: username,
     email: userEmail,
@@ -77,6 +78,7 @@ const AllAppointment = () => {
       if (response.data.success) {
         setSpecialty(response.data.specialty || []);
         setRegions(response.data.region || []);
+        setTherapistNames(response.data.therapistName || []);
       }
     } catch (error) {
       console.error("Error fetching dropdown data:", error);
@@ -90,7 +92,7 @@ const AllAppointment = () => {
       const response = await axios.get(
         `${baseUrl}api/getTherapistAvailability?status=none&specialty=${selectedSpecialty}&region=${selectedRegion}&date=${
           selectedDate !== null ? selectedDate : " "
-        }&pageNo=${pageNo}&currentMonth=${currentMonth}&appointmentType=${appointmentType}`
+        }&pageNo=${pageNo}&currentMonth=${currentMonth}&appointmentType=${appointmentType}&name=${selectedTherapistName}`
       );
       console.log(response.data.appointmentData, "response from thera");
       setAvailabilityData((prev) => {
@@ -105,7 +107,12 @@ const AllAppointment = () => {
   };
 
   function searchButton() {
-    if (selectedRegion || appointmentType) {
+    if (
+      selectedRegion ||
+      appointmentType ||
+      selectedSpecialty ||
+      selectedTherapistName
+    ) {
       TherapistAvailability(currentPage);
     } else {
       toast.error("Add key to Search Data");
@@ -283,6 +290,12 @@ const AllAppointment = () => {
     // setDisableForPrevious(isPreviousMonthCompleted);
   }
 
+  const [selectType, setSelectType] = useState("Specialty");
+  const [selectedTherapistName, setSelectedTherapistName] = useState("");
+  function handleSelectTypeChange(e) {
+    console.log(e.target.value, "selectedType");
+    setSelectType(e.target.value);
+  }
   useEffect(() => {
     disablePreviousMonth();
   }, [currentMonth]);
@@ -320,6 +333,43 @@ const AllAppointment = () => {
                   ))}
                 </select>
 
+                <label htmlFor="region" className="text-black font-bold">
+                  Specialty
+                </label>
+                <select
+                  className="w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4"
+                  value={selectedSpecialty}
+                  id="specaily"
+                  onChange={(e) => setSelectSpecialty(e.target.value)}
+                >
+                  {/* <option value="" disabled>
+                    Region
+                  </option> */}
+                  <option value=" ">All</option>
+                  {specialty?.map((data, index) => (
+                    <option key={index} value={data}>
+                      {data}
+                    </option>
+                  ))}
+                </select>
+
+                {/* names */}
+                <label htmlFor="therapistName" className="text-black font-bold">
+                  Therapists
+                </label>
+                <select
+                  className="w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4 max-h-60 overflow-y-auto"
+                  value={selectedTherapistName}
+                  id="therapistName"
+                  onChange={(e) => setSelectedTherapistName(e.target.value)}
+                >
+                  <option value=" ">All</option>
+                  {therapistNames?.map((val, index) => (
+                    <option key={index} value={val?.name}>
+                      {val?.name}
+                    </option>
+                  ))}
+                </select>
                 <label
                   htmlFor="appointmentType"
                   className="text-black font-bold"
@@ -351,6 +401,7 @@ const AllAppointment = () => {
                   </button>
                 </div>
               </div>
+
               <div className="w-full mb-[2rem]  flex">
                 <div className="w-[35%]   h-auto">
                   <h2 className="font-medium text-center text-gray-600 text-xl">

@@ -32,7 +32,7 @@ const Sidebar = () => {
     ],
     therapist: [
       {
-        label: "All Appointment",
+        label: "Scheduled Appointment",
         path: "/therapist/allAppointment",
       },
       {
@@ -77,7 +77,7 @@ const Sidebar = () => {
   return (
     <div className="w-[15%] border-2 border-gray-300 h-full">
       <div className="w-full h-[6rem] border-2 border-gray-200 p-8 ">
-        <h1 className="font-bold text-xl">MY Project</h1>
+        <h1 className="font-bold text-xl">Schedule</h1>
       </div>
       <div className="p-4 space-y-8">
         {userMenuItems.map((item, index) => (

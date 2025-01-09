@@ -50,7 +50,7 @@ const AllAppointment = () => {
   const [appointmentType, setAppointmentType] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
-
+  const [searchMonth, setSearchMonth] = useState(null);
   function dayDate(timestamp) {
     const date = new Date(timestamp);
     const day = date.toLocaleString("en-US", {
@@ -92,7 +92,9 @@ const AllAppointment = () => {
       const response = await axios.get(
         `${baseUrl}api/getTherapistAvailability?status=none&specialty=${selectedSpecialty}&region=${selectedRegion}&date=${
           selectedDate !== null ? selectedDate : " "
-        }&pageNo=${pageNo}&currentMonth=${currentMonth}&appointmentType=${appointmentType}&name=${selectedTherapistName}`
+        }&pageNo=${pageNo}&currentMonth=${
+          searchMonth === null ? searchMonth : currentMonth
+        }&appointmentType=${appointmentType}&name=${selectedTherapistName}`
       );
       console.log(response.data.appointmentData, "response from thera");
       setAvailabilityData((prev) => {
@@ -258,6 +260,7 @@ const AllAppointment = () => {
           setColorCompletedMonth(true);
           warningRef.current = true;
         }
+        setSearchMonth(prev);
         return prev;
       } else {
         warningRef.current = false;
@@ -428,7 +431,8 @@ const AllAppointment = () => {
                     <button
                       onClick={() => {
                         setCurrentMonth((prev) => addDays(prev, 30)),
-                          setSelectedDate(null);
+                          setSearchMonth(currentMonth);
+                        setSelectedDate(null);
                         setColorCompletedMonth((prev) => {
                           return false;
                         });

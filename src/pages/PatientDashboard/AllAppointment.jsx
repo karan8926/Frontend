@@ -413,6 +413,7 @@ const AllAppointment = () => {
                         // setCurrentMonth((prev) => addDays(prev, -30))
                         validatedMonth
                       }
+                      disabled={colorForCompletedMonth || disableForPrev}
                       className={`w-[30%]    text-white text-lg h-12 rounded-md ${
                         colorForCompletedMonth || disableForPrev
                           ? "bg-gray-500"

@@ -171,7 +171,7 @@ const AllAppointments = () => {
                           onClick={() => {
                             setShowModal(true); // Open the modal
                             setUpdateDataId(data._id);
-                            setPatientEmail(data?.patientDetails[0]?.email);
+                            setPatientEmail(data?.appointment?.email);
                           }}
                           className="p-2 bg-blue-500 text-white rounded"
                         >

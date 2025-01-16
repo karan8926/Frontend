@@ -226,7 +226,7 @@ const AllAppointment = () => {
   };
 
   const validatePhone = (phone) => {
-    const phoneRegex = /^\d{10}$/; // Example: Validate 10 digits
+    const phoneRegex = /^\d{11}$/; // Example: Validate 10 digits
     setIsPhoneValid(phoneRegex.test(phone));
   };
 

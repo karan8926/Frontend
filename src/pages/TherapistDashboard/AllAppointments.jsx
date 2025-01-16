@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import { baseUrl } from "../../App";
 import axios from "axios";
 import useDisableButton from "../../hooks/useDisableButton";
+import Loader from "../../components/Loader";
 
 const AllAppointments = () => {
   const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
@@ -15,11 +16,13 @@ const AllAppointments = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [patientEmail, setPatientEmail] = useState(null);
+  const [loadingUpdateStatus, setLoadingUpdateStatus] = useState(false);
   const { isDisableButton, handleButtonDisability, handleResetButton } =
     useDisableButton();
   const updateAppointmentStatus = async () => {
     try {
       handleButtonDisability();
+      setLoadingUpdateStatus(true);
       console.log(newStatus, updateDataId, "newstatsus");
       const response = await axios.post(
         `${baseUrl}api/updateAppointmentStatus`,
@@ -27,6 +30,7 @@ const AllAppointments = () => {
       );
       console.log(response);
       toast.success("Status Updated SuccessFully");
+      setLoadingUpdateStatus(false);
       setShowModal(false);
       handleResetButton();
       fetchAppointments();
@@ -183,39 +187,43 @@ const AllAppointments = () => {
       </div>
       {showModal && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-md w-96">
-            <h3 className="font-bold text-xl mb-4">
-              Update Appointment Status
-            </h3>
-            <div>
-              <label className="block mb-2">Select Status:</label>
-              <select
-                value={newStatus}
-                onChange={(e) => setNewStatus(e.target.value)}
-                className="p-2 border rounded w-full mb-4"
-              >
-                <option value="">Select a status</option>
-                <option value="Confirmed">Confirmed</option>
-                <option value="Completed">Completed</option>
-                <option value="Cancelled">Cancelled</option>
-              </select>
+          {loadingUpdateStatus ? (
+            <Loader />
+          ) : (
+            <div className="bg-white p-6 rounded-md w-96">
+              <h3 className="font-bold text-xl mb-4">
+                Update Appointment Status
+              </h3>
+              <div>
+                <label className="block mb-2">Select Status:</label>
+                <select
+                  value={newStatus}
+                  onChange={(e) => setNewStatus(e.target.value)}
+                  className="p-2 border rounded w-full mb-4"
+                >
+                  <option value="">Select a status</option>
+                  <option value="Confirmed">Confirmed</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Cancelled">Cancelled</option>
+                </select>
+              </div>
+              <div className="flex justify-between">
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="p-2 bg-gray-400 text-white rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={updateAppointmentStatus}
+                  className="p-2 bg-blue-500 text-white rounded"
+                  disabled={isDisableButton}
+                >
+                  Save Changes
+                </button>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <button
-                onClick={() => setShowModal(false)}
-                className="p-2 bg-gray-400 text-white rounded"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={updateAppointmentStatus}
-                className="p-2 bg-blue-500 text-white rounded"
-                disabled={isDisableButton}
-              >
-                Save Changes
-              </button>
-            </div>
-          </div>
+          )}
         </div>
       )}
     </div>

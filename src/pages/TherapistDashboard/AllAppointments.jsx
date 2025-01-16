@@ -28,7 +28,13 @@ const AllAppointments = () => {
         `${baseUrl}api/updateAppointmentStatus`,
         { id: updateDataId, status: newStatus, emailId: patientEmail }
       );
-      console.log(response);
+      if (response.data === "Phone Number is Invalid") {
+        toast.error(response.data);
+        setLoadingUpdateStatus(false);
+        setShowModal(false);
+        handleResetButton();
+        return;
+      }
       toast.success("Status Updated SuccessFully");
       setLoadingUpdateStatus(false);
       setShowModal(false);
@@ -37,6 +43,7 @@ const AllAppointments = () => {
     } catch (error) {
       console.error(error);
       toast.error("Error updating appointment status");
+      setLoadingUpdateStatus(false);
     }
   };
   const fetchAppointments = async (pageNo) => {

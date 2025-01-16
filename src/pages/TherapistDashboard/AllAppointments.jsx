@@ -145,8 +145,8 @@ const AllAppointments = () => {
                   {appointments?.map((data, index) => (
                     <tr key={index} className="border-t">
                       <td className="p-2">{index + 1}</td>
-                      <td className="p-2">{data?.patientDetails[0]?.name}</td>
-                      <td className="p-2">{data?.patientDetails[0]?.email}</td>
+                      <td className="p-2">{data?.appointment?.name}</td>
+                      <td className="p-2">{data?.appointment?.email}</td>
                       <td className="p-2">{data?.appointmentType}</td>
                       <td className="p-2">
                         {data?.therapistDetails[0]?.specialty}

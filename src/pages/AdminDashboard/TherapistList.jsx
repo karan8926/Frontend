@@ -6,9 +6,12 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { baseUrl } from "../../App";
 import { useNavigate } from "react-router-dom";
+import useDebouncing from "../../hooks/useDebouncing";
 
 const TherapistList = () => {
   const navigate = useNavigate();
+  const [searchTherapist, setSearchTherapist] = useState("");
+  const debouncedQuery = useDebouncing(searchTherapist, 500);
   const [toggleModel, setToggleModel] = useState(false);
   const [therapistList, setTherapistList] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -90,14 +93,15 @@ const TherapistList = () => {
     navigate("/admin/manageAvailability", { state: { id } });
   }
 
-  const [searchTherapist, setSearchTherapist] = useState("");
-  const handleSearch = (e) => {
-    setSearchTherapist((prev) => {
-      return e.target.value;
-    });
-    fetchData(e.target.value, currentPage);
-    // console.log(searchPatient, "patient");
-  };
+  useEffect(() => {
+    if (debouncedQuery) {
+      console.log("debounced query");
+      fetchData(debouncedQuery, currentPage);
+    } else {
+      fetchData(searchTherapist, currentPage);
+    }
+  }, [debouncedQuery]);
+
   return (
     <div className="w-full h-screen flex ">
       <Sidebar />
@@ -117,7 +121,7 @@ const TherapistList = () => {
                   <input
                     className="w-[15%] h-[2rem] bg-slate-200 outline-none text-black rounded-md pl-4"
                     id="region"
-                    onChange={handleSearch}
+                    onChange={(e) => setSearchTherapist(e.target.value)}
                   ></input>
                 </div>
                 <div className="">

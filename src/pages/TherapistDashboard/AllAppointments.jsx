@@ -23,7 +23,7 @@ const AllAppointments = () => {
     try {
       handleButtonDisability();
       setLoadingUpdateStatus(true);
-      console.log(newStatus, updateDataId, "newstatsus");
+      
       const response = await axios.post(
         `${baseUrl}api/updateAppointmentStatus`,
         { id: updateDataId, status: newStatus, emailId: patientEmail }
@@ -51,7 +51,7 @@ const AllAppointments = () => {
       const response = await axios.get(
         `${baseUrl}api/getTherapistDetailsByIdAndStatus?therapistId=${userId}&pageNo=${pageNo}`
       );
-      console.log(response, "res94555555555555555555555555555555555555555555");
+      
       setAppointments(response.data.result);
       setTotalPages(response.data.totalPages);
     } catch (error) {

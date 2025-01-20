@@ -74,7 +74,6 @@ const AllAppointment = () => {
       const response = await axios.get(
         `${baseUrl}api/getTherapistSpecialtyRegion`
       );
-      console.log(response, "response data value");
       if (response.data.success) {
         setSpecialty(response.data.specialty || []);
         setRegions(response.data.region || []);
@@ -96,7 +95,6 @@ const AllAppointment = () => {
           searchMonth === null ? searchMonth : currentMonth
         }&appointmentType=${appointmentType}&name=${selectedTherapistName}`
       );
-      console.log(response.data.appointmentData, "response from thera");
       setAvailabilityData((prev) => {
         return response.data.appointmentData;
       });
@@ -135,12 +133,10 @@ const AllAppointment = () => {
   };
 
   const handleDateSelect = (date) => {
-    console.log(date, "date is---------=============");
     setSelectedDate(date);
   };
 
   function showMonth(month) {
-    console.log(month, "month999999999999999999999999999");
     const monthVal = [
       "January",
       "February",
@@ -160,7 +156,6 @@ const AllAppointment = () => {
 
   function handleChange(e) {
     const { name, value } = e.target;
-    console.log(name, value);
     setFormData({
       ...formData,
       [name]: value,
@@ -177,7 +172,6 @@ const AllAppointment = () => {
   }
   async function handleBookAppointment(e) {
     e.preventDefault();
-    console.log(formData, "formData");
     handleButtonDisability();
     setLoadingBookAppointment(true);
     try {
@@ -192,7 +186,6 @@ const AllAppointment = () => {
         phone: formData.phone,
         accessCode: userDetails.accessCode,
       };
-      console.log(requestBody, "request body");
       const response = await axios.post(
         `${baseUrl}api/book-appointment`,
         requestBody
@@ -277,10 +270,6 @@ const AllAppointment = () => {
       currentMonth.getMonth() === runningDate.getMonth() &&
       currentMonth.getDate() === runningDate.getDate()
     ) {
-      console.log(
-        { currentMonth, runningDate, isvalid: currentMonth === runningDate },
-        "currentMoth"
-      );
       setDisableForPrevious((prev) => {
         return true;
       });
@@ -296,7 +285,6 @@ const AllAppointment = () => {
   const [selectType, setSelectType] = useState("Specialty");
   const [selectedTherapistName, setSelectedTherapistName] = useState("");
   function handleSelectTypeChange(e) {
-    console.log(e.target.value, "selectedType");
     setSelectType(e.target.value);
   }
   useEffect(() => {

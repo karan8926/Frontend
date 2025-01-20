@@ -26,7 +26,6 @@ const MyAppointments = () => {
         `${baseUrl}api/getPatientById?pageNo=${pageNo}&patientId=${userId}`
       );
       setTotalPages(myAppointmentList.data.totalPages);
-      console.log(myAppointmentList, "list data==========================");
       setAppointmentData(myAppointmentList.data.result);
     } catch (error) {
       toast.error(error, "error");

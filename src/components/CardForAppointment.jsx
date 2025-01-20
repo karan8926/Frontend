@@ -36,7 +36,7 @@ const CardForAppointment = (props) => {
         patientEmail: userEmail,
         patientNumber: patientNumber,
       };
-      console.log(requestBody, "request body");
+      // console.log(requestBody, "request body");
       const response = await axios.post(
         `${baseUrl}api/book-appointment`,
         requestBody

@@ -16,7 +16,6 @@ const ManageAvailabilityByAdmin = () => {
   const [minDate, setMinDate] = useState("");
   const [eventListData, setEventListData] = useState([]);
   const userId = location.state.id;
-  console.log(userId, "user ka id");
   const [formData, setFormData] = useState({
     availability: "",
     startTime: new Date().toISOString(),
@@ -25,7 +24,6 @@ const ManageAvailabilityByAdmin = () => {
   });
   function handleChange(e) {
     const { name, value } = e.target;
-    console.log(name, value);
     setFormData({
       ...formData,
       [name]: value,

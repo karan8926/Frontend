@@ -26,7 +26,6 @@ const ManageAvailability = () => {
   });
   function handleChange(e) {
     const { name, value } = e.target;
-    console.log(name, value);
     setFormData({
       ...formData,
       [name]: value,
@@ -77,7 +76,6 @@ const ManageAvailability = () => {
       const response = await axios.get(
         `${baseUrl}api/getCalendarAvailabilityById?therapistId=${userId}`
       );
-      console.log(response.data.data);
       // const {title,start,end}=
       const mappedData = response?.data?.data.map((data) => ({
         title: data.availability,
@@ -85,10 +83,6 @@ const ManageAvailability = () => {
         end: moment(data.endTime).toDate(),
       }));
       setEventListData(mappedData);
-      console.log(
-        response.data.data,
-        "res data999999999999999222222222222222222222"
-      );
     } catch (error) {
       toast.error(error);
     }

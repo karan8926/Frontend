@@ -33,12 +33,12 @@ const myEventsList = [
 ];
 
 function onSelectEventFunction() {
-  console.log("i am available");
+  // console.log("i am available");
 }
 const AvailabilityCalendar = (props) => {
   const { eventListData } = props;
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  console.log(window.innerWidth, "innerwidth");
+  // console.log(window.innerWidth, "innerwidth");
   useEffect(() => {
     const handleResize = () => {
       setWindowWidth(window.innerWidth);

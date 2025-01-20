@@ -61,7 +61,6 @@ const Sidebar = () => {
     ],
   };
 
-  console.log(activeItem, "activeItem");
   const userMenuItems = menulist[userType] || [];
 
   const handleMenuItemClick = (e, path) => {

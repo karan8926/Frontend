@@ -23,7 +23,7 @@ const UserLoggedin = () => {
         `${baseUrl}api/patient-signin`,
         reqbody
       );
-      console.log(PatientResult, "PatientResult");
+      // console.log(PatientResult, "PatientResult");
       sessionStorage.setItem(
         "userDetails",
         JSON.stringify({

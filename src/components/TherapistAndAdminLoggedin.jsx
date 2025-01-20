@@ -26,7 +26,6 @@ const TherapistAndAdminLoggedin = (props) => {
           : `${baseUrl}api/therapist-login`;
 
       const response = await axios.post(endpoint, reqbody);
-      console.log(response, "response from admin");
       sessionStorage.setItem(
         "userDetails",
         JSON.stringify({

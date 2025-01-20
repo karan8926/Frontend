@@ -1,7 +1,7 @@
 import React from "react";
 
 const Pagination = (props) => {
-  console.log(props, "props value");
+  // console.log(props, "props value");
   const { onPageChange, totalPages, currentPage } = props;
   const getPaginationPages = () => {
     const pages = [];

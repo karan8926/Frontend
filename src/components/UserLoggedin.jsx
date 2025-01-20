@@ -8,12 +8,11 @@ import useDisableButton from "../hooks/useDisableButton";
 const UserLoggedin = () => {
   const navigate = useNavigate();
   const [accessCode, setAccessCode] = useState("");
-  const [formSubmitted, isFormSubmitted] = useState(false);
-  const { isDisableButton, handleButtonDisability } = useDisableButton();
+  const { isDisableButton, handleButtonDisability, handleResetButton } =
+    useDisableButton();
   const inputRef = useRef();
   const handleSubmit = async (event) => {
     event.preventDefault();
-    isFormSubmitted(true);
     handleButtonDisability();
     try {
       const reqbody = {
@@ -45,6 +44,7 @@ const UserLoggedin = () => {
       toast.error("Authentication failed");
       console.log(error);
     }
+    handleResetButton();
   };
 
   useEffect(() => {
@@ -100,7 +100,7 @@ const UserLoggedin = () => {
       </div>
       <button
         type="submit"
-        disabled={formSubmitted || isDisableButton}
+        disabled={isDisableButton}
         className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
       >
         Signin

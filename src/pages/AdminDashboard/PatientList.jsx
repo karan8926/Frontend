@@ -63,7 +63,6 @@ const PatientList = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(formData);
     setAddPatientLoader(true);
     try {
       const { name, email, phone_number } = formData;
@@ -93,13 +92,11 @@ const PatientList = () => {
   };
   function showPatientDetails(id) {
     navigate(`/admin/patientDetails/${id}`);
-    console.log(id, "abcd");
   }
 
   async function generateAccessCode() {
     try {
       const accessCode = await axios.get(`${baseUrl}api/getUniqueAccessCode`);
-      console.log(accessCode.data.accessToken, "accessCode");
       setAccessCode(accessCode?.data?.accessToken);
     } catch (error) {
       console.log(error, "error value");
@@ -134,7 +131,6 @@ const PatientList = () => {
   const [searchPatient, setSearchPatient] = useState("");
   const handleSearch = () => {
     fetchData(currentPage);
-    // console.log(searchPatient, "patient");
   };
   return (
     <div className="w-full h-screen flex ">

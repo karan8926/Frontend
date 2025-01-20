@@ -19,10 +19,6 @@ const TherapistDetails = () => {
       const response = await axios.get(
         `${baseUrl}api/getTherapistDetailsById?therapistId=${therapistId}&pageNo=${pageNo}`
       );
-      console.log(
-        response.data.result,
-        "response99999999999999999999999999999999333333333333333333333333333"
-      );
       setTherapistDetailedData(response.data.result);
       setTotalPages(response.data.totalPages);
     } catch (error) {

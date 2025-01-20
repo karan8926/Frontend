@@ -12,7 +12,6 @@ const PatientDetails = () => {
   const [patientId, setPatientId] = useState(location.pathname.split("/")[3]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  console.log(location.pathname.split("/")[3], "locations data");
   async function fetchTherapistDetailedData(pageNo) {
     try {
       const response = await axios.get(

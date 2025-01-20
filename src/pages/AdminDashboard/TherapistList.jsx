@@ -36,13 +36,11 @@ const TherapistList = () => {
   // post api add therapist here
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(formData);
     try {
       const therapistData = await axios.post(
         `${baseUrl}api/AddTherapist`,
         formData
       );
-      console.log("therapistData", therapistData);
       setToggleModel(false);
       toast.success("Therapist added successfully");
     } catch (error) {
@@ -71,7 +69,6 @@ const TherapistList = () => {
       const response = await axios.get(
         `${baseUrl}api/getTherapist/?pageNo=${pageNo}&searchTherapist=${searchTherapist}`
       );
-      // console.log("response--", response.data.availability)
       setTherapistList(response.data.availability);
       setTotalPages(response.data.noOfPages);
     } catch (err) {
@@ -86,7 +83,6 @@ const TherapistList = () => {
 
   function showTherapistDetails(id) {
     navigate(`/admin/therapistDetails/${id}`);
-    console.log(id, "abcd");
   }
 
   function manageAvailability(id) {
@@ -95,7 +91,6 @@ const TherapistList = () => {
 
   useEffect(() => {
     if (debouncedQuery) {
-      console.log("debounced query");
       fetchData(debouncedQuery, currentPage);
     } else {
       fetchData(searchTherapist, currentPage);

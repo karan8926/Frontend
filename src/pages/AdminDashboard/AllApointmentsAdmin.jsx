@@ -16,16 +16,13 @@ const AllApointmentsAdmin = () => {
   const [selectedSpeciality, setSelectedSpeciality] = useState("all");
   const [selectedRegion, setSelectedRegion] = useState("all");
   const fetchData = async (pageNo) => {
-    // console.log(searchQuery, "searchQuery");
     try {
       const response = await axios.get(
         `${baseUrl}api/allAppointment?pageNo=${pageNo}&searchType=${searchType}&searchQuery=${searchQuery}&region=${selectedRegion}&speciality=${selectedSpeciality}`
       );
-      // console.log(response, "reponse are:----");
       setAppointments(response.data.AppointmentData);
       setTotalPages(response.data.noOfPages);
     } catch (err) {
-      // console.log(err.response.data.message);
       setAppointments([]);
       setTotalPages(1);
       // toast.error(err.response.data.message);

@@ -8,9 +8,12 @@ import { toast } from "react-toastify";
 import moment from "moment";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import useDisableButton from "../../hooks/useDisableButton";
 
 const ManageAvailability = () => {
-  const [toggleModel, setToggleModel] = useState("");
+  const { isDisableButton, handleButtonDisability, handleResetButton } =
+    useDisableButton();
+  const [toggleModel, setToggleModel] = useState(false);
   const [minDate, setMinDate] = useState("");
   const [eventListData, setEventListData] = useState([]);
   const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
@@ -44,6 +47,7 @@ const ManageAvailability = () => {
   }
   async function handleSubmit(e) {
     e.preventDefault();
+    handleButtonDisability();
     const { startTime, endTime, availability, therapistId } = formData;
     try {
       const response = await axios.post(
@@ -66,6 +70,7 @@ const ManageAvailability = () => {
     } catch (error) {
       toast.error(error);
     }
+    handleResetButton();
   }
   async function getCalendarData() {
     try {
@@ -207,6 +212,7 @@ const ManageAvailability = () => {
                         <button
                           type="submit"
                           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+                          disabled={isDisableButton}
                         >
                           Submit
                         </button>

@@ -5,10 +5,12 @@ import Navbar from "../../components/Navbar";
 import axios from "axios";
 import { baseUrl } from "../../App";
 import { toast } from "react-toastify";
+import useDisableButton from "../../hooks/useDisableButton";
 
 const TherapistAppointments = () => {
   const therapistDetails = JSON.parse(sessionStorage.getItem("userDetails"));
-  console.log(therapistDetails, "ther data=33333333333333333333");
+  const { isDisableButton, handleButtonDisability, handleResetButton } =
+    useDisableButton();
   const [toggleModel, setToggleModel] = useState(false);
   const [email, setEmail] = useState(therapistDetails.userEmail);
   const [userId, setUserId] = useState(therapistDetails.userId);
@@ -33,7 +35,7 @@ const TherapistAppointments = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(email, "email da data");
+      handleButtonDisability();
       const { availableDate, timeSlot, appointmentType, specialty } = formData;
       const data = await axios.post(`${baseUrl}api/AddTherapistAvailability`, {
         email: email,
@@ -43,12 +45,12 @@ const TherapistAppointments = () => {
         specialty,
       });
       getTherapistData();
+      handleResetButton();
       toast.success("Appointment Added SuccessFully");
     } catch (error) {
       console.log(error, "error");
     }
 
-    console.log(formData);
     setToggleModel(false);
   };
   function DateTime(data) {
@@ -64,7 +66,6 @@ const TherapistAppointments = () => {
       const response = await axios.get(
         `${baseUrl}api/getTherapistDetailsById?therapistId=${userId}&pageNo=${pageNo}`
       );
-      console.log(response, "reponse are:----");
       setAppointments(response.data.result);
       setTotalPages(response.data.totalPages);
     } catch (err) {
@@ -224,6 +225,7 @@ const TherapistAppointments = () => {
                         <button
                           type="submit"
                           className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+                          disabled={isDisableButton}
                         >
                           Submit
                         </button>

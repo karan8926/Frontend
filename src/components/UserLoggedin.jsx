@@ -1,13 +1,13 @@
-import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { baseUrl } from "../App";
-import { toast } from "react-toastify";
-import useDisableButton from "../hooks/useDisableButton";
+import axios from 'axios';
+import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { baseUrl } from '../App';
+import { toast } from 'react-toastify';
+import useDisableButton from '../hooks/useDisableButton';
 
 const UserLoggedin = () => {
   const navigate = useNavigate();
-  const [accessCode, setAccessCode] = useState("");
+  const [accessCode, setAccessCode] = useState('');
   const { isDisableButton, handleButtonDisability, handleResetButton } =
     useDisableButton();
   const inputRef = useRef();
@@ -24,12 +24,12 @@ const UserLoggedin = () => {
       );
       // console.log(PatientResult, "PatientResult");
       sessionStorage.setItem(
-        "userDetails",
+        'userDetails',
         JSON.stringify({
           userType: PatientResult.data.result.type,
           userEmail: PatientResult.data.result.email,
           userName: PatientResult.data.result.name,
-          userId: PatientResult.data.result._id,
+          userId: PatientResult.data.result.id,
           userPhone: PatientResult.data.result.phone_number,
           accessToken: PatientResult.data.accessToken,
           accessCode: PatientResult.data.result.accessCode,
@@ -39,9 +39,9 @@ const UserLoggedin = () => {
       navigate(`/patient/allAppointment`);
       window.location.reload();
 
-      toast.success("logged in successfully");
+      toast.success('logged in successfully');
     } catch (error) {
-      toast.error("Authentication failed");
+      toast.error(error.response.data.error);
       console.log(error);
     }
     handleResetButton();
@@ -51,27 +51,27 @@ const UserLoggedin = () => {
     inputRef.current.focus();
   }, []);
   return (
-    <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit}>
+    <form className='space-y-4 md:space-y-6' onSubmit={handleSubmit}>
       <div>
         <label
-          htmlFor="accessCode"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          htmlFor='accessCode'
+          className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
         >
           Access Code
         </label>
         <input
           ref={inputRef}
-          type="text"
-          name="accessCode"
-          id="accessCode"
-          placeholder="••••••••"
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          type='text'
+          name='accessCode'
+          id='accessCode'
+          placeholder='••••••••'
+          className='bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500'
           value={accessCode}
           onChange={(e) => setAccessCode(e.target.value)}
           required
         />
       </div>
-      <div className="flex items-start">
+      <div className='flex items-start'>
         {/* <div className="flex items-center h-5">
                   <input
                     id="terms"
@@ -99,9 +99,9 @@ const UserLoggedin = () => {
                 </div> */}
       </div>
       <button
-        type="submit"
+        type='submit'
         disabled={isDisableButton}
-        className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+        className='w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'
       >
         Signin
       </button>

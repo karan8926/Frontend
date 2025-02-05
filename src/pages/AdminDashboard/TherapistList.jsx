@@ -294,48 +294,48 @@ const TherapistList = () => {
                 <tbody>
                   {therapistList.map((data, index) => (
                     <tr
-                      key={data._id}
+                      key={data.id}
                       className="border-t cursor-pointer hover:bg-slate-200"
                     >
                       <td
                         className="p-2"
-                        onClick={() => showTherapistDetails(data._id)}
+                        onClick={() => showTherapistDetails(data.id)}
                       >
                         {index + 1}
                       </td>
                       <td
                         className="p-2"
-                        onClick={() => showTherapistDetails(data._id)}
+                        onClick={() => showTherapistDetails(data.id)}
                       >
                         {data.name}
                       </td>
                       <td
                         className="p-2"
-                        onClick={() => showTherapistDetails(data._id)}
+                        onClick={() => showTherapistDetails(data.id)}
                       >
                         {data.email}
                       </td>
                       <td
                         className="p-2"
-                        onClick={() => showTherapistDetails(data._id)}
+                        onClick={() => showTherapistDetails(data.id)}
                       >
                         {data.specialty}
                       </td>
                       <td
                         className="p-2"
-                        onClick={() => showTherapistDetails(data._id)}
+                        onClick={() => showTherapistDetails(data.id)}
                       >
                         {data.number}
                       </td>
                       <td
                         className="p-2"
-                        onClick={() => showTherapistDetails(data._id)}
+                        onClick={() => showTherapistDetails(data.id)}
                       >
                         {data.region}
                       </td>
                       <td
                         className="p-2"
-                        onClick={() => manageAvailability(data._id)}
+                        onClick={() => manageAvailability(data.id)}
                       >
                         <button className="bg-blue-500 text-white rounded-md p-[0.4rem]">
                           Manage Availability

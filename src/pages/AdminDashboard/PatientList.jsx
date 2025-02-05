@@ -296,9 +296,9 @@ const PatientList = () => {
                 <tbody>
                   {patientList.map((data, index) => (
                     <tr
-                      key={data._id}
+                      key={data.id}
                       className="border-t cursor-pointer hover:bg-slate-200"
-                      onClick={() => showPatientDetails(data._id)}
+                      onClick={() => showPatientDetails(data?.id)}
                     >
                       <td className="p-2">{index + 1}</td>
                       <td className="p-2">{data.name}</td>

@@ -23,7 +23,7 @@ const AllAppointments = () => {
     try {
       handleButtonDisability();
       setLoadingUpdateStatus(true);
-      
+
       const response = await axios.post(
         `${baseUrl}api/updateAppointmentStatus`,
         { id: updateDataId, status: newStatus, emailId: patientEmail }
@@ -51,7 +51,7 @@ const AllAppointments = () => {
       const response = await axios.get(
         `${baseUrl}api/getTherapistDetailsByIdAndStatus?therapistId=${userId}&pageNo=${pageNo}`
       );
-      
+
       setAppointments(response.data.result);
       setTotalPages(response.data.totalPages);
     } catch (error) {
@@ -116,55 +116,57 @@ const AllAppointments = () => {
     }
   };
   return (
-    <div className='w-full h-screen flex '>
+    <div className="w-full h-screen flex ">
       <Sidebar />
-      <div className='flex-1 flex flex-col'>
+      <div className="flex-1 flex flex-col">
         <Navbar />
-        <div className='flex-1 bg-gray-100 p-6'>
-          <div className='w-full overflow-hidden '>
-            <div className='w-full h-[30%]  '>
-              <div className='w-full flex-grow mb-4'>
-                <h1 className='font-bold text-3xl'>Scheduled Appointments</h1>
+        <div className="flex-1 bg-gray-100 p-6">
+          <div className="w-full overflow-hidden ">
+            <div className="w-full h-[30%]  ">
+              <div className="w-full flex-grow mb-4">
+                <h1 className="font-bold text-3xl">Scheduled Appointments</h1>
               </div>
-              <table className='w-full table-auto'>
+              <table className="w-full table-auto">
                 <thead>
-                  <tr className='h-10'>
-                    <th className='font-bold p-2 text-left'>sr no</th>
-                    <th className='font-bold p-2 text-left'>Patient Name</th>
-                    <th className='font-bold p-2 text-left'>Patient Email</th>
-                    <th className='font-bold p-2 text-left'>
+                  <tr className="h-10">
+                    <th className="font-bold p-2 text-left">sr no</th>
+                    <th className="font-bold p-2 text-left">Patient Name</th>
+                    <th className="font-bold p-2 text-left">Patient Email</th>
+                    <th className="font-bold p-2 text-left">
                       Appointment Type
                     </th>
-                    <th className='font-bold p-2 text-left'>Specialty</th>
-                    <th className='font-bold p-2 text-left'>Date</th>
-                    <th className='font-bold p-2 text-left'>Time Slot</th>
-                    <th className='font-bold p-2 text-left'>Status</th>
+                    <th className="font-bold p-2 text-left">Specialty</th>
+                    <th className="font-bold p-2 text-left">Date</th>
+                    <th className="font-bold p-2 text-left">Time Slot</th>
+                    <th className="font-bold p-2 text-left">Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {appointments?.map((data, index) => (
-                    <tr key={index} className='border-t'>
-                      <td className='p-2'>{index + 1}</td>
-                      <td className='p-2'>{data?.appointment_name}</td>
-                      <td className='p-2'>{data?.appointment_email}</td>
-                      <td className='p-2'>{data?.appointmentType}</td>
-                      <td className='p-2'>{data?.specialty}</td>
-                      <td className='p-2'>{DateTime(data?.date)}</td>
-                      <td className='p-2'>
-                        {data.time}-
-                        {timeSlotFunction(data?.time, data?.appointmentType)}
-                      </td>
-                      <td className='p-2'>
-                        {/* Status Label with background color and fixed width */}
-                        <span
-                          className={`p-2 text-white rounded ${getStatusColor(
-                            data.status
-                          )} w-32 text-center inline-block`}
-                        >
-                          {data?.status}
-                        </span>
-                      </td>
-                      <td className='p-2'>
+                  {appointments
+                    ?.filter((data) => data.status !== "Cancelled")
+                    ?.map((data, index) => (
+                      <tr key={index} className="border-t">
+                        <td className="p-2">{index + 1}</td>
+                        <td className="p-2">{data?.appointment_name}</td>
+                        <td className="p-2">{data?.appointment_email}</td>
+                        <td className="p-2">{data?.appointmentType}</td>
+                        <td className="p-2">{data?.specialty}</td>
+                        <td className="p-2">{DateTime(data?.date)}</td>
+                        <td className="p-2">
+                          {data.time}-
+                          {timeSlotFunction(data?.time, data?.appointmentType)}
+                        </td>
+                        <td className="p-2">
+                          {/* Status Label with background color and fixed width */}
+                          <span
+                            className={`p-2 text-white rounded ${getStatusColor(
+                              data.status
+                            )} w-32 text-center inline-block`}
+                          >
+                            {data?.status}
+                          </span>
+                        </td>
+                        {/* <td className='p-2'>
                         <button
                           onClick={() => {
                             setShowModal(true); // Open the modal
@@ -175,9 +177,9 @@ const AllAppointments = () => {
                         >
                           Update Status
                         </button>
-                      </td>
-                    </tr>
-                  ))}
+                      </td> */}
+                      </tr>
+                    ))}
                 </tbody>
               </table>
 
@@ -191,37 +193,37 @@ const AllAppointments = () => {
         </div>
       </div>
       {showModal && (
-        <div className='fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50'>
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
           {loadingUpdateStatus ? (
             <Loader />
           ) : (
-            <div className='bg-white p-6 rounded-md w-96'>
-              <h3 className='font-bold text-xl mb-4'>
+            <div className="bg-white p-6 rounded-md w-96">
+              <h3 className="font-bold text-xl mb-4">
                 Update Appointment Status
               </h3>
               <div>
-                <label className='block mb-2'>Select Status:</label>
+                <label className="block mb-2">Select Status:</label>
                 <select
                   value={newStatus}
                   onChange={(e) => setNewStatus(e.target.value)}
-                  className='p-2 border rounded w-full mb-4'
+                  className="p-2 border rounded w-full mb-4"
                 >
-                  <option value=''>Select a status</option>
-                  <option value='Confirmed'>Confirmed</option>
-                  <option value='Completed'>Completed</option>
-                  <option value='Cancelled'>Cancelled</option>
+                  <option value="">Select a status</option>
+                  <option value="Confirmed">Confirmed</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Cancelled">Cancelled</option>
                 </select>
               </div>
-              <div className='flex justify-between'>
+              <div className="flex justify-between">
                 <button
                   onClick={() => setShowModal(false)}
-                  className='p-2 bg-gray-400 text-white rounded'
+                  className="p-2 bg-gray-400 text-white rounded"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={updateAppointmentStatus}
-                  className='p-2 bg-blue-500 text-white rounded'
+                  className="p-2 bg-blue-500 text-white rounded"
                   disabled={isDisableButton}
                 >
                   Save Changes

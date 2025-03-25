@@ -1,18 +1,28 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { baseUrl } from '../../App';
-import axios from 'axios';
-import { toast } from 'react-toastify';
-import Sidebar from '../../components/Sidebar';
-import Navbar from '../../components/Navbar';
-import { TiTick } from 'react-icons/ti';
-import { addDays, addMonths } from 'date-fns';
-import Pagination from '../../components/Pagination';
-import PatientDashboardCalendar from '../../components/PatientDashboardCalendar';
-import Loader from '../../components/Loader';
-import { useNavigate } from 'react-router-dom';
-import useDisableButton from '../../hooks/useDisableButton';
-import moment from 'moment';
+import React, { useEffect, useRef, useState } from "react";
+import { baseUrl } from "../../App";
+import axios from "axios";
+import { toast } from "react-toastify";
+import Sidebar from "../../components/Sidebar";
+import Navbar from "../../components/Navbar";
+import { TiTick } from "react-icons/ti";
+import { addDays, addMonths } from "date-fns";
+import Pagination from "../../components/Pagination";
+import PatientDashboardCalendar from "../../components/PatientDashboardCalendar";
+import Loader from "../../components/Loader";
+import { useNavigate } from "react-router-dom";
+import useDisableButton from "../../hooks/useDisableButton";
+import moment from "moment";
 const AllAppointment = () => {
+  const sessionData = sessionStorage.getItem("userDetails");
+  const { therapistNameAddedByAdmin, regionAddedByAdmin } =
+    JSON.parse(sessionData);
+  console.log(therapistNameAddedByAdmin, regionAddedByAdmin, "sessionData");
+  const [selectedTherapistName, setSelectedTherapistName] = useState(
+    therapistNameAddedByAdmin !== "All" ? therapistNameAddedByAdmin : ""
+  );
+  const [selectedRegion, setSelectedRegion] = useState(
+    regionAddedByAdmin !== "All" ? regionAddedByAdmin : ""
+  );
   const { isDisableButton, handleButtonDisability } = useDisableButton();
   const [availabilityData, setAvailabilityData] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -20,18 +30,17 @@ const AllAppointment = () => {
   const [loadingBookAppointment, setLoadingBookAppointment] = useState(false);
   const [specialty, setSpecialty] = useState([]);
   const [regions, setRegions] = useState([]);
-  const [selectedRegion, setSelectedRegion] = useState('');
-  const [minDate, setMinDate] = useState('');
-  const userDetails = JSON.parse(sessionStorage.getItem('userDetails'));
+  const [minDate, setMinDate] = useState("");
+  const userDetails = JSON.parse(sessionStorage.getItem("userDetails"));
   const userEmail = userDetails?.userEmail;
-  const username = userDetails?.userName || ' ';
-  const userphone = userDetails?.userPhone || ' ';
-  const [selectedSpecialty, setSelectSpecialty] = useState('');
-  const [seletectedDateValue, setSelectedDateValue] = useState('');
+  const username = userDetails?.userName || " ";
+  const userphone = userDetails?.userPhone || " ";
+  const [selectedSpecialty, setSelectSpecialty] = useState("");
+  const [seletectedDateValue, setSelectedDateValue] = useState("");
   const [patientNumber, setPatientNumber] = useState(userDetails?.userPhone);
   const [isLoading, setIsLoading] = useState(false);
   const [dataFound, setDataFound] = useState(false);
-  const [toggleModel, setToggleModel] = useState('');
+  const [toggleModel, setToggleModel] = useState("");
   const warningRef = useRef(false);
   const currentDate = new Date();
   const hasMounted = useRef(false);
@@ -48,7 +57,7 @@ const AllAppointment = () => {
   });
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedData, setSelectedData] = useState(null);
-  const [appointmentType, setAppointmentType] = useState('');
+  const [appointmentType, setAppointmentType] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
   const [searchMonth, setSearchMonth] = useState(null);
@@ -81,7 +90,7 @@ const AllAppointment = () => {
         setTherapistNames(response.data.therapistName || []);
       }
     } catch (error) {
-      console.error('Error fetching dropdown data:', error);
+      console.error("Error fetching dropdown data:", error);
     }
   };
 
@@ -91,7 +100,7 @@ const AllAppointment = () => {
     try {
       const response = await axios.get(
         `${baseUrl}api/getTherapistAvailability?status=none&specialty=${selectedSpecialty}&region=${selectedRegion}&date=${
-          selectedDate !== null ? selectedDate : ' '
+          selectedDate !== null ? selectedDate : " "
         }&pageNo=${pageNo}&currentMonth=${
           searchMonth === null ? searchMonth : currentMonth
         }&appointmentType=${appointmentType}&name=${selectedTherapistName}`
@@ -103,7 +112,7 @@ const AllAppointment = () => {
       setIsLoading(false);
       setDataFound(response.data.appointmentData.length === 0);
     } catch (error) {
-      console.error('Error fetching dropdown data:', error);
+      console.error("Error fetching dropdown data:", error);
     }
   };
 
@@ -116,12 +125,12 @@ const AllAppointment = () => {
     ) {
       TherapistAvailability(currentPage);
     } else {
-      toast.error('Add key to Search Data');
+      toast.error("Add key to Search Data");
     }
   }
   useEffect(() => {
     fetchDropdownData();
-    const currentDate = new Date().toISOString().split('T')[0];
+    const currentDate = new Date().toISOString().split("T")[0];
     setMinDate(currentDate);
     TherapistAvailability(currentPage);
   }, [selectedDate, currentMonth]);
@@ -139,18 +148,18 @@ const AllAppointment = () => {
 
   function showMonth(month) {
     const monthVal = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
     return monthVal[(month + 12) % 12];
   }
@@ -161,15 +170,15 @@ const AllAppointment = () => {
       ...formData,
       [name]: value,
     });
-    if (name === 'email') {
+    if (name === "email") {
       validateEmail(value);
-    } else if (name === 'phone') {
+    } else if (name === "phone") {
       validatePhone(value);
     }
   }
   function logoutSessionAfterBooking() {
     sessionStorage.clear();
-    'patient'.match(userDetails.userType) && navigate('/patient/signin');
+    "patient".match(userDetails.userType) && navigate("/patient/signin");
   }
   async function handleBookAppointment(e) {
     e.preventDefault();
@@ -187,7 +196,7 @@ const AllAppointment = () => {
         phone: formData.phone,
         accessCode: userDetails.accessCode,
       };
-      console.log(requestBody, 'requestBody');
+      console.log(requestBody, "requestBody");
       const response = await axios.post(
         `${baseUrl}api/book-appointment`,
         requestBody
@@ -197,14 +206,14 @@ const AllAppointment = () => {
         setTimeout(() => {
           logoutSessionAfterBooking();
         }, 5000);
-        navigate('/patient/success');
+        navigate("/patient/success");
       } else {
-        toast.error('Failed to book the appointment.');
+        toast.error("Failed to book the appointment.");
       }
       setFormData({
-        name: '',
-        email: '',
-        phone: '',
+        name: "",
+        email: "",
+        phone: "",
       });
       setLoadingBookAppointment(false);
       TherapistAvailability(currentPage);
@@ -273,13 +282,13 @@ const AllAppointment = () => {
       currentMonth.getFullYear(),
       currentMonth.getMonth(),
       currentMonth.getDate(),
-      'currentMONTH'
+      "currentMONTH"
     );
     console.log(
       runningDate.getFullYear(),
       runningDate.getMonth(),
       runningDate.getDate(),
-      'running Month'
+      "running Month"
     );
     console.log(
       currentMonth.getFullYear() === runningDate.getFullYear() &&
@@ -301,8 +310,7 @@ const AllAppointment = () => {
     // setDisableForPrevious(isPreviousMonthCompleted);
   }
 
-  const [selectType, setSelectType] = useState('Specialty');
-  const [selectedTherapistName, setSelectedTherapistName] = useState('');
+  const [selectType, setSelectType] = useState("Specialty");
   function handleSelectTypeChange(e) {
     setSelectType(e.target.value);
   }
@@ -310,52 +318,57 @@ const AllAppointment = () => {
     disablePreviousMonth();
   }, [currentMonth]);
   return (
-    <div className='w-full h-screen flex '>
+    <div className="w-full h-screen flex ">
       {/* <Sidebar /> */}
-      <div className='flex-1 flex flex-col'>
+      <div className="flex-1 flex flex-col">
         <Navbar />
-        <div className='flex-1 bg-gray-100 p-6'>
-          <div className='w-full overflow-hidden '>
-            <div className='w-full h-full'>
-              <div className='w-full h-8  '>
-                <h1 className='text-gray-600 font-extrabold text-4xl'>
+        <div className="flex-1 bg-gray-100 p-6">
+          <div className="w-full overflow-hidden ">
+            <div className="w-full h-full">
+              <div className="w-full h-8  ">
+                <h1 className="text-gray-600 font-extrabold text-4xl">
                   Schedule Appointment For :
                 </h1>
               </div>
-              <div className='w-full p-2 flex items-center space-x-4 '>
-                <label htmlFor='region' className='text-black font-bold'>
+              <div className="w-full p-2 flex items-center space-x-4 ">
+                <label htmlFor="region" className="text-black font-bold">
                   Region
                 </label>
                 <select
-                  className='w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4'
+                  className="w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4"
                   value={selectedRegion}
-                  id='region'
+                  id="region"
                   onChange={(e) => setSelectedRegion(e.target.value)}
                 >
-                  {/* <option value="" disabled>
-                    Region
-                  </option> */}
-                  <option value=' '>All</option>
-                  {regions?.map((region, index) => (
-                    <option key={index} value={region?.region}>
-                      {region?.region}
+                  {regionAddedByAdmin === "All" ? (
+                    <>
+                      <option value=" ">All</option>
+                      {regions?.map((region, index) => (
+                        <option key={index} value={region?.region || ""}>
+                          {region?.region || "Unknown Region"}
+                        </option>
+                      ))}
+                    </>
+                  ) : (
+                    <option value={regionAddedByAdmin}>
+                      {regionAddedByAdmin}
                     </option>
-                  ))}
+                  )}
                 </select>
 
-                <label htmlFor='region' className='text-black font-bold'>
+                <label htmlFor="region" className="text-black font-bold">
                   Specialty
                 </label>
                 <select
-                  className='w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4'
+                  className="w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4"
                   value={selectedSpecialty}
-                  id='specaily'
+                  id="specaily"
                   onChange={(e) => setSelectSpecialty(e.target.value)}
                 >
                   {/* <option value="" disabled>
                     Region
                   </option> */}
-                  <option value=' '>All</option>
+                  <option value=" ">All</option>
                   {specialty?.map((data, index) => (
                     <option key={index} value={data?.specialty}>
                       {data?.specialty}
@@ -364,60 +377,68 @@ const AllAppointment = () => {
                 </select>
 
                 {/* names */}
-                <label htmlFor='therapistName' className='text-black font-bold'>
+                <label htmlFor="therapistName" className="text-black font-bold">
                   Therapists
                 </label>
                 <select
-                  className='w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4 max-h-60 overflow-y-auto'
+                  className="w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4 max-h-60 overflow-y-auto"
                   value={selectedTherapistName}
-                  id='therapistName'
+                  id="therapistName"
                   onChange={(e) => setSelectedTherapistName(e.target.value)}
                 >
-                  <option value=' '>All</option>
-                  {therapistNames?.map((val, index) => (
-                    <option key={index} value={val?.name}>
-                      {val?.name}
+                  {therapistNameAddedByAdmin === "All" ? (
+                    <>
+                      <option value=" ">All</option>
+                      {therapistNames?.map((val, index) => (
+                        <option key={index} value={val?.name}>
+                          {val?.name}
+                        </option>
+                      ))}
+                    </>
+                  ) : (
+                    <option value={therapistNameAddedByAdmin}>
+                      {therapistNameAddedByAdmin}
                     </option>
-                  ))}
+                  )}
                 </select>
                 <label
-                  htmlFor='appointmentType'
-                  className='text-black font-bold'
+                  htmlFor="appointmentType"
+                  className="text-black font-bold"
                 >
                   Appointment Type
                 </label>
                 <select
-                  id='appointmentType'
-                  name='appointmentType'
+                  id="appointmentType"
+                  name="appointmentType"
                   value={appointmentType}
                   onChange={(e) => setAppointmentType(e.target.value)}
-                  className='w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4'
+                  className="w-[15%] h-[2rem] bg-slate-300 rounded-md pl-4"
                 >
                   {/* <option value="" disabled>
                     Appointment Type
                   </option> */}
-                  <option value=' '>All</option>
-                  <option value='Consultation(45min)'>
+                  <option value=" ">All</option>
+                  <option value="Consultation(45min)">
                     Consultation (45min)
                   </option>
-                  <option value='Follow-up(30min)'>Follow-up (30min)</option>
+                  <option value="Follow-up(30min)">Follow-up (30min)</option>
                 </select>
-                <div className='flex justify-end'>
+                <div className="flex justify-end">
                   <button
                     onClick={() => searchButton()}
-                    className='ml-auto h-[2.5rem] bg-blue-500 text-white rounded-md px-4'
+                    className="ml-auto h-[2.5rem] bg-blue-500 text-white rounded-md px-4"
                   >
                     Search
                   </button>
                 </div>
               </div>
 
-              <div className='w-full mb-[2rem]  flex'>
-                <div className='w-[35%]   h-auto'>
-                  <h2 className='font-medium text-center text-gray-600 text-xl'>
+              <div className="w-full mb-[2rem]  flex">
+                <div className="w-[35%]   h-auto">
+                  <h2 className="font-medium text-center text-gray-600 text-xl">
                     All Appointments In :
                   </h2>
-                  <div className='space-x-2 w-full text-center mt-6  h-auto'>
+                  <div className="space-x-2 w-full text-center mt-6  h-auto">
                     <button
                       onClick={
                         // setCurrentMonth((prev) => addDays(prev, -30))
@@ -426,13 +447,13 @@ const AllAppointment = () => {
                       disabled={colorForCompletedMonth || disableForPrev}
                       className={`w-[30%]    text-white text-lg h-12 rounded-md ${
                         colorForCompletedMonth || disableForPrev
-                          ? 'bg-gray-500'
-                          : 'bg-purple-800'
+                          ? "bg-gray-500"
+                          : "bg-purple-800"
                       }`}
                     >
                       {showMonth(currentMonth.getMonth() - 1)}
                     </button>
-                    <button className='w-[30%]  bg-green-300 text-black text-lg h-12 rounded-md'>
+                    <button className="w-[30%]  bg-green-300 text-black text-lg h-12 rounded-md">
                       {showMonth(currentMonth.getMonth())}
                     </button>
                     <button
@@ -445,12 +466,12 @@ const AllAppointment = () => {
                           return false;
                         });
                       }}
-                      className='w-[30%]  bg-purple-800 text-white text-lg h-12 rounded-md'
+                      className="w-[30%]  bg-purple-800 text-white text-lg h-12 rounded-md"
                     >
                       {showMonth(currentMonth.getMonth() + 1)}
                     </button>
                   </div>
-                  <h3 className='font-medium text-center text-gray-600 text-xl p-4'>
+                  <h3 className="font-medium text-center text-gray-600 text-xl p-4">
                     Or Select Date:
                   </h3>
                   <div>
@@ -464,33 +485,33 @@ const AllAppointment = () => {
                 </div>
 
                 {/* right */}
-                <div className='w-[65%] pl-[3rem] '>
-                  <h2 className='font-medium text-center text-gray-600 text-xl'>
-                    All Times in{' '}
-                    <span className='font-semibold text-gray-800 text-xl'>
+                <div className="w-[65%] pl-[3rem] ">
+                  <h2 className="font-medium text-center text-gray-600 text-xl">
+                    All Times in{" "}
+                    <span className="font-semibold text-gray-800 text-xl">
                       America
-                    </span>{' '}
+                    </span>{" "}
                     Timezone
                   </h2>
-                  <div className='mt-2 h-[32rem]'>
-                    <table className='table-auto w-full'>
+                  <div className="mt-2 h-[32rem]">
+                    <table className="table-auto w-full">
                       <thead>
-                        <tr className='h-10 text-lg'>
-                          <th className='font-bold p-4 pl-[2rem] w-[30%] text-left'>
+                        <tr className="h-10 text-lg">
+                          <th className="font-bold p-4 pl-[2rem] w-[30%] text-left">
                             Date
                           </th>
-                          <th className='font-bold p-4 text-left w-[20%]'>
+                          <th className="font-bold p-4 text-left w-[20%]">
                             Time
                           </th>
-                          <th className='font-bold p-4 text-left w-[25%]'>
+                          <th className="font-bold p-4 text-left w-[25%]">
                             Length
                           </th>
-                          <th className='font-bold p-4 text-left'></th>
+                          <th className="font-bold p-4 text-left"></th>
                         </tr>
                       </thead>
                     </table>
-                    <div className='overflow-y-auto h-[28rem]'>
-                      <table className='table-auto w-full'>
+                    <div className="overflow-y-auto h-[28rem]">
+                      <table className="table-auto w-full">
                         <tbody>
                           {isLoading && <Loader />}
                           {availabilityData && !isLoading ? (
@@ -498,32 +519,32 @@ const AllAppointment = () => {
                               availabilityData?.map((data, index) => (
                                 <tr
                                   key={index}
-                                  className='border-2 odd:bg-gray-200 text-lg'
+                                  className="border-2 odd:bg-gray-200 text-lg"
                                 >
-                                  <td className='font-normal p-4 pl-[2rem] w-[30%]'>
+                                  <td className="font-normal p-4 pl-[2rem] w-[30%]">
                                     {/* {dayDate(data?.date)} */}
                                     {data?.formattedDate}
                                   </td>
-                                  <td className='font-normal p-4 w-[20%]'>
+                                  <td className="font-normal p-4 w-[20%]">
                                     {data?.time}
                                   </td>
-                                  <td className='font-normal p-4 w-[25%]'>
+                                  <td className="font-normal p-4 w-[25%]">
                                     {data?.appointmentType}
                                   </td>
                                   <td
-                                    className='font-normal p-4 pr-[4rem] w-[25%] '
+                                    className="font-normal p-4 pr-[4rem] w-[25%] "
                                     onClick={() => {
                                       setToggleModel(true),
                                         setSelectedData({
                                           date: moment(data?.date)
                                             .local()
-                                            .format('YYYY-MM-DD'),
+                                            .format("YYYY-MM-DD"),
                                           time: data?.time,
                                           therapistsId: data?.therapistsId,
                                         });
                                     }}
                                   >
-                                    <button className='bg-green-300 flex items-center w-full p-4 rounded-md text-gray-700 h-10'>
+                                    <button className="bg-green-300 flex items-center w-full p-4 rounded-md text-gray-700 h-10">
                                       <TiTick />
                                       Select
                                     </button>
@@ -531,7 +552,7 @@ const AllAppointment = () => {
                                 </tr>
                               ))
                             ) : (
-                              <h1 className='text-center'>No data Available</h1>
+                              <h1 className="text-center">No data Available</h1>
                             )
                           ) : null}
 
@@ -554,83 +575,83 @@ const AllAppointment = () => {
         </div>
 
         {toggleModel && (
-          <div className='fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50'>
+          <div className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50">
             {loadingBookAppointment ? (
               <Loader />
             ) : (
-              <div className='w-[40%] max-w-lg bg-white p-6 rounded-md flex flex-col'>
-                <h2 className='text-xl font-semibold text-center '>
+              <div className="w-[40%] max-w-lg bg-white p-6 rounded-md flex flex-col">
+                <h2 className="text-xl font-semibold text-center ">
                   Book Appointment
                 </h2>
 
-                <form onSubmit={handleBookAppointment} className='space-y-4'>
+                <form onSubmit={handleBookAppointment} className="space-y-4">
                   <div>
                     <label
-                      htmlFor='name'
-                      className='block text-sm font-medium text-gray-700'
+                      htmlFor="name"
+                      className="block text-sm font-medium text-gray-700"
                     >
                       Name
                     </label>
                     <input
-                      type='text'
-                      id='name'
-                      name='name'
+                      type="text"
+                      id="name"
+                      name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className='mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md'
+                      className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
                       required
                     />
                   </div>
                   <div>
                     <label
-                      htmlFor='name'
-                      className='block text-sm font-medium text-gray-700'
+                      htmlFor="name"
+                      className="block text-sm font-medium text-gray-700"
                     >
                       Email
                     </label>
                     <input
-                      type='email'
-                      id='email'
-                      name='email'
+                      type="email"
+                      id="email"
+                      name="email"
                       value={formData.email}
                       onChange={handleChange}
                       className={`mt-1 block w-full px-3 py-2 border ${
-                        isEmailValid ? 'border-gray-300' : 'border-red-500'
+                        isEmailValid ? "border-gray-300" : "border-red-500"
                       } rounded-md`}
                       required
                     />
                   </div>
                   <div>
                     <label
-                      htmlFor='phone'
-                      className='block text-sm font-medium text-gray-700'
+                      htmlFor="phone"
+                      className="block text-sm font-medium text-gray-700"
                     >
                       Phone
                     </label>
                     <input
-                      type='number'
-                      id='phone'
-                      name='phone'
+                      type="number"
+                      id="phone"
+                      name="phone"
                       value={formData.phone}
                       onChange={handleChange}
                       className={`mt-1 block w-full px-3 py-2 border ${
-                        isPhoneValid ? 'border-gray-300' : 'border-red-500'
+                        isPhoneValid ? "border-gray-300" : "border-red-500"
                       } rounded-md`}
                       required
                     />
                   </div>
-                  <div className='flex justify-end mt-4'>
+                  <div className="flex justify-end mt-4">
                     <button
-                      type='submit'
-                      className='px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700'
+                      type="submit"
+                      className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
                       disabled={isLoading || !isFormValid() || isDisableButton}
                     >
                       Submit
                     </button>
                     <button
-                      type='button'
+                      type="button"
                       onClick={() => setToggleModel(false)}
-                      className='ml-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700'
+                      className="ml-2 px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-700"
                     >
                       Close
                     </button>

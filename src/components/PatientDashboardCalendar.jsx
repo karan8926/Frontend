@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   format,
   startOfMonth,
@@ -10,28 +10,27 @@ import {
   isSameDay,
   isBefore,
   startOfDay,
-} from 'date-fns';
+} from "date-fns";
 const PatientDashboardCalendar = ({
   selectedDate,
   onDateSelect,
   currentMonth,
   setCurrentMonth,
 }) => {
-  // const [currentMonth, setCurrentMonth] = useState(new Date());
   const renderHeader = () => (
-    <div className='flex justify-between items-center py-4 px-6 bg-gray-100 border-b'>
+    <div className="flex justify-between items-center py-4 px-6 bg-gray-100 border-b">
       <button
         onClick={() => setCurrentMonth((prev) => addDays(prev, -30))}
-        className='text-gray-500 hover:text-gray-700'
+        className="text-gray-500 hover:text-gray-700"
       >
         &lt; Prev
       </button>
-      <h2 className='text-lg font-semibold'>
-        {format(currentMonth, 'MMMM yyyy')}
+      <h2 className="text-lg font-semibold">
+        {format(currentMonth, "MMMM yyyy")}
       </h2>
       <button
         onClick={() => setCurrentMonth((prev) => addDays(prev, 30))}
-        className='text-gray-500 hover:text-gray-700'
+        className="text-gray-500 hover:text-gray-700"
       >
         Next &gt;
       </button>
@@ -39,11 +38,11 @@ const PatientDashboardCalendar = ({
   );
 
   const renderDaysOfWeek = () => {
-    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     return (
-      <div className='grid grid-cols-7 text-center bg-gray-50'>
+      <div className="grid grid-cols-7 text-center bg-gray-50">
         {days.map((day) => (
-          <div key={day} className='py-2 font-medium text-gray-600'>
+          <div key={day} className="py-2 font-medium text-gray-600">
             {day}
           </div>
         ))}
@@ -111,14 +110,14 @@ const PatientDashboardCalendar = ({
               key={currentDay}
               className={`p-2 border border-gray-400 text-center cursor-pointer ${
                 isSameDay(currentDay, selectedDate)
-                  ? 'bg-blue-500 text-white'
-                  : 'hover:bg-blue-100'
+                  ? "bg-blue-500 text-white"
+                  : "hover:bg-blue-100"
               } ${
-                isPast ? 'bg-gray-200 text-gray-500 pointer-events-none' : ''
+                isPast ? "bg-gray-200 text-gray-500 pointer-events-none" : ""
               }`} // Inactive past days
               onClick={() => !isPast && onDateSelect(currentDay)} // Disable click for past days
             >
-              {format(currentDay, 'd')}
+              {format(currentDay, "d")}
             </div>
           );
         } else {
@@ -126,14 +125,14 @@ const PatientDashboardCalendar = ({
           week.push(
             <div
               key={currentDay}
-              className='p-2 border border-gray-400 text-center'
+              className="p-2 border border-gray-400 text-center"
             ></div>
           );
         }
         day = addDays(day, 1);
       }
       dates.push(
-        <div key={day} className='grid grid-cols-7 h-[4rem] '>
+        <div key={day} className="grid grid-cols-7 h-[4rem] ">
           {week}
         </div>
       );
@@ -142,7 +141,7 @@ const PatientDashboardCalendar = ({
   };
 
   return (
-    <div className='w-full p-4 mx-auto shadow-lg rounded-lg overflow-hidden border h-auto'>
+    <div className="w-full p-4 mx-auto shadow-lg rounded-lg overflow-hidden border h-auto">
       {/* {renderHeader()} */}
       {renderDaysOfWeek()}
       {renderDates()}

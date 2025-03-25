@@ -18,12 +18,16 @@ const PatientList = () => {
   const [addPatientLoader, setAddPatientLoader] = useState("");
   const [isEmailValid, setIsEmailValid] = useState(true);
   const [isPhoneValid, setIsPhoneValid] = useState(true);
+  const [showRegions, setShowRegions] = useState([]);
+  const [showTherapist, setShowTherapist] = useState([]);
   const inputRef = useRef(null);
   const [formData, setFormData] = useState({
     accessCode: "",
     name: "",
     phone_number: "",
     email: "",
+    addRegion: "All",
+    addTherapistName: "All",
   });
   const navigate = useNavigate();
   const fetchData = async (pageNo) => {
@@ -31,11 +35,12 @@ const PatientList = () => {
       const response = await axios.get(
         `${baseUrl}api/getpatient/?pageNo=${pageNo}&searchPatient=${searchPatient}`
       );
+      console.log(response, "res12");
       setPatientList(response.data.patients);
       setTotalPages(response.data.noOfPages);
       setTotalNoOfPatient(response.data.noOfPatient);
     } catch (err) {
-      console.log(err);
+      console.log(err, "error is");
       toast.error("Error while Fetching Data");
     }
   };
@@ -51,6 +56,7 @@ const PatientList = () => {
   };
   const handleChange = (e) => {
     const { value, name } = e.target;
+    console.log({ value, name });
     setFormData({
       ...formData,
       [name]: value,
@@ -63,31 +69,37 @@ const PatientList = () => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(formData, "formData-----");
     setAddPatientLoader(true);
     try {
-      const { name, email, phone_number } = formData;
+      const { name, email, phone_number, addRegion, addTherapistName } =
+        formData;
       const createPatient = await axios.post(`${baseUrl}api/patient-signup`, {
         name,
         email,
         phone_number,
         accessCode,
+        regionAddedByAdmin: addRegion,
+        therapistNameAddedByAdmin: addTherapistName,
       });
       setToggleModel(false);
       setAddPatientLoader(false);
       fetchData(currentPage);
-      setAddPatientLoader;
       inputRef.current.focus();
       toast.success("Access code generated successfully");
     } catch (error) {
       toast.error(error.response.data.error, "failed to add");
       console.log(error, "error value");
       setToggleModel(true);
+      setAddPatientLoader(false);
     }
     setFormData({
       accessCode: "",
       name: "",
       number: "",
       email: "",
+      addRegion: "",
+      addTherapistName: "",
     });
   };
   function showPatientDetails(id) {
@@ -103,8 +115,32 @@ const PatientList = () => {
     }
   }
 
+  const fetchDropdownData = async () => {
+    try {
+      const response = await axios.get(
+        `${baseUrl}api/getTherapistSpecialtyRegion`
+      );
+      if (response.data.success) {
+        setShowRegions(response.data.region || []);
+      }
+    } catch (error) {
+      console.error("Error fetching dropdown data:", error);
+    }
+  };
+  const fetchTherapistData = async () => {
+    try {
+      const response = await axios.get(`${baseUrl}api/showAllTherapistsNames`);
+      console.log(response.data.therapistaData, "res99");
+      setShowTherapist(response.data.therapistaData);
+    } catch (err) {
+      console.log(err);
+      toast.error("Error while Fetching Data");
+    }
+  };
   useEffect(() => {
     generateAccessCode();
+    fetchDropdownData();
+    fetchTherapistData();
   }, []);
 
   useEffect(() => {
@@ -194,32 +230,8 @@ const PatientList = () => {
                               onClick={() => generateAccessCode()}
                             />
                           </div>
-
-                          {/* <button
-                          className="cursor-pointer bg-red-500 text-white"
-                          onClick={generateAccessCode}
-                        >
-                          Generate Access-code
-                        </button> */}
                         </div>
-                        {/* <div>
-                          <label
-                            htmlFor="name"
-                            className="block text-sm font-medium text-gray-700"
-                          >
-                            Name
-                          </label>
-                          <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            ref={inputRef}
-                            value={formData.name}
-                            onChange={handleChange}
-                            className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md"
-                            required
-                          />
-                        </div> */}
+
                         <div>
                           <label
                             htmlFor="email"
@@ -241,27 +253,50 @@ const PatientList = () => {
                             required
                           />
                         </div>
-                        {/* <div>
+                        <div>
                           <label
-                            htmlFor="phone_number"
+                            htmlFor="addRegion"
                             className="block text-sm font-medium text-gray-700"
                           >
-                            Phone Number
+                            Select Region
                           </label>
-                          <input
-                            type="number"
-                            id="phone_number"
-                            name="phone_number"
-                            value={formData.phone_number}
+                          <select
+                            className="w-full h-[2rem]  rounded-md pl-4 outline-none"
+                            value={formData.addRegion}
+                            id="region"
+                            name="addRegion"
                             onChange={handleChange}
-                            className={`mt-1 block w-full px-3 py-2 border ${
-                              isPhoneValid
-                                ? "border-gray-300"
-                                : "border-red-500"
-                            } rounded-md`}
-                            required
-                          />
-                        </div> */}
+                          >
+                            <option value="All">All</option>
+                            {showRegions?.map((region, index) => (
+                              <option key={index} value={region?.region}>
+                                {region?.region}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label
+                            htmlFor="addTherapistName"
+                            className="block text-sm font-medium text-gray-700"
+                          >
+                            Select Therapist
+                          </label>
+                          <select
+                            className="w-full h-[2rem]  rounded-md pl-4 outline-none"
+                            value={formData.addTherapistName}
+                            id="addTherapistName"
+                            name="addTherapistName"
+                            onChange={handleChange}
+                          >
+                            <option value="All">All</option>
+                            {showTherapist?.map((region, index) => (
+                              <option key={index} value={region?.name}>
+                                {region?.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
                         <div className="flex justify-end mt-4">
                           <button
                             type="submit"
